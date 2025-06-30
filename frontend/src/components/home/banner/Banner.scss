@@ -1,0 +1,50 @@
+.banner {
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)),
+    url("/images/home/banner.png");
+  background-repeat: no-repeat;
+  height: 800px;
+  background-size: cover;
+  background-position: center;
+  width: full;
+  padding: 20px;
+  text-align: center;
+  animation: BannerzoomOut 2s ease-out forwards;
+  display: flex;
+    flex-direction: column;
+
+  .banner-content-wrapper {
+    width: 1280px;
+    margin: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: start;
+    .banner-content {
+      h2 {
+        width: 90%;
+        text-align: left;
+        font-size: 70px;
+        font-weight: 700;
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+// animations
+@keyframes BannerzoomOut {
+  0% {
+    background-size: 110%;
+  }
+  100% {
+    background-size: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .banner {
+    background-image: url("/images/home/banner.png");
+    padding: 10px;
+  }
+}
