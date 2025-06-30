@@ -3,6 +3,7 @@ import "./header.scss";
 import { FaUser } from 'react-icons/fa';
 
 const Header = ({bg} : {bg:string}) => {
+    console.log('header rendered');
 
     const navLinks = [
         { name: "Rent", path: "/main/rent" },
@@ -23,7 +24,7 @@ const Header = ({bg} : {bg:string}) => {
            <ul className="flex items-center space-x-[24px] justify-between ">
                {navLinks.map(link => (
                    <li key={link.name}>
-                       <a href={link.path}>{link.name}</a>
+                       <Link to={link.path}>{link.name}</Link>
                    </li>
                ))}
                <div className="user-profile"><FaUser/></div>

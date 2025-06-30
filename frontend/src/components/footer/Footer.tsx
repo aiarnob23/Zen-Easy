@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./Footer.scss";
 
 const Footer = () => {
@@ -10,10 +11,10 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-slate-300">Company</h3>
             <ul className="space-y-2">
-              <li><a href="/about" className=" hover-primary">About Us</a></li>
-              <li><a href="/careers" className=" hover-primary">Careers</a></li>
-              <li><a href="/news" className=" hover-primary">News</a></li>
-              <li><a href="/contact" className=" hover-primary">Contact</a></li>
+              <li><Link to="/main/about-us" className=" hover-primary">About Us</Link></li>
+              <li><Link to="/careers" className=" hover-primary">Careers</Link></li>
+              <li><Link to="/news" className=" hover-primary">News</Link></li>
+              <li><Link to="/contact" className=" hover-primary">Contact</Link></li>
             </ul>
           </div>
 
@@ -21,10 +22,10 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-slate-300">Products</h3>
             <ul className="space-y-2">
-              <li><a href="/products" className=" hover-primary">Our Products</a></li>
-              <li><a href="/features" className=" hover-primary">Features</a></li>
-              <li><a href="/pricing" className=" hover-primary">Pricing</a></li>
-              <li><a href="/demo" className=" hover-primary">Demo</a></li>
+              <li><Link to="/products" className=" hover-primary">Our Products</Link></li>
+              <li><Link to="/features" className=" hover-primary">Features</Link></li>
+              <li><Link to="/pricing" className=" hover-primary">Pricing</Link></li>
+              <li><Link to="/demo" className=" hover-primary">Demo</Link></li>
             </ul>
           </div>
 
@@ -32,10 +33,10 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-slate-300">Support</h3>
             <ul className="space-y-2">
-              <li><a href="/help" className=" hover-primary">Help Center</a></li>
-              <li><a href="/documentation" className=" hover-primary">Documentation</a></li>
-              <li><a href="/community" className=" hover-primary">Community</a></li>
-              <li><a href="/support" className=" hover-primary">Contact Support</a></li>
+              <li><Link to="/help" className=" hover-primary">Help Center</Link></li>
+              <li><Link to="/documentation" className=" hover-primary">Documentation</Link></li>
+              <li><Link to="/community" className=" hover-primary">Community</Link></li>
+              <li><Link to="/support" className=" hover-primary">Contact Support</Link></li>
             </ul>
           </div>
 
@@ -43,11 +44,11 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-slate-300">Stay Connected</h3>
             <div className="flex space-x-4 mb-4">
-              <a href="#" className=" hover-primary">
+              <Link to="#" className=" hover-primary">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                 </svg>
-              </a>
+              </Link>
             </div>
             <div className="space-y-2">
               <p className="text-sm ">Subscribe to our newsletter</p>
@@ -73,15 +74,15 @@ const Footer = () => {
                 © {new Date().getFullYear()} Your Company Name. All rights reserved.
               </p>
               <div className="flex space-x-4">
-                <a href="/privacy" className="text-sm  hover-primary">
+                <Link to="/privacy" className="text-sm  hover-primary">
                   Privacy Policy
-                </a>
-                <a href="/terms" className="text-sm  hover-primary">
+                </Link>
+                <Link to="/terms" className="text-sm  hover-primary">
                   Terms of Service
-                </a>
-                <a href="/cookies" className="text-sm  hover-primary">
+                </Link>
+                <Link to="/cookies" className="text-sm  hover-primary">
                   Cookie Policy
-                </a>
+                </Link>
               </div>
             </div>
             
