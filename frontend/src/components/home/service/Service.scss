@@ -11,6 +11,7 @@
     font-weight: 600;
     color: #000;
   }
+
   .service-list {
     width: 100%;
     display: flex;
@@ -51,7 +52,19 @@
           color: #000;
           font-size: 20px;
         }
+
+        // Animation for service cards
+        &.service-card {
+          opacity: 0;
+          transform: translateX(-100px);
+          transition: none;
+
+          &.animate {
+            animation: slideInFromLeft 0.8s ease-out forwards;
+          }
+        }
       }
+      //hover bg color
       li::after {
         content: "";
         position: absolute;
@@ -72,5 +85,17 @@
         transform-origin: bottom left;
       }
     }
+  }
+}
+
+// Keyframe animation for slide-in effect
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
   }
 }

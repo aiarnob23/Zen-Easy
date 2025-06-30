@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Header from "../../header/Header";
 import "./Banner.scss";
 
@@ -20,8 +21,8 @@ const Banner = () => {
             </p>
         </div>
         <div className="banner-action-wrapper">
-          <button className="btn-primary">Find Service</button>
-          <button className="btn-primary">Offer Service</button>
+          <Link to="/main/find-service" className="button btn-primary">Find Service</Link>
+          <Link to="/main/offer-service" className="button btn-primary">Offer Service</Link>
         </div>
       </div>
     </div>

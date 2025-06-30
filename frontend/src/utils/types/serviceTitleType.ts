@@ -1,0 +1,1 @@
+export type TSserviceTitle = "Maid" | "Tutor" | "Electrician" | "IT Consultant" | "Painter" | "Plumber";
