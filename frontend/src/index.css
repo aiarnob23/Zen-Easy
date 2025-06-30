@@ -7,8 +7,43 @@
 
 :root {
   --primary: #E4ED64;
+  --bg-primary: #fff9ea;
 }
+
+
 
 .primary {
   color: var(--primary);
 }
+
+.bg-primary {
+  background-color: #fff9ea;
+}
+
+.btn-primary{
+  background-color: var(--primary);
+  color: #000;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.3s, transform 0.3s;
+  transition-delay: 0.1s; 
+  
+}
+.btn-primary:hover {
+  background-color: #000000;
+  color: white;
+}
+
+
+/* animations */
+@keyframes slideFromBottom {
+ 0% {
+   transform: translateY(100px);
+   opacity: 0;
+ }
+ 100% {
+   transform: translateY(0);
+   opacity: 1;
+ }
+}
+

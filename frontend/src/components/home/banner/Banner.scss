@@ -1,16 +1,15 @@
 .banner {
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)),
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)),
     url("/images/home/banner.png");
   background-repeat: no-repeat;
   height: 800px;
   background-size: cover;
   background-position: center;
   width: full;
-  padding: 20px;
   text-align: center;
-  animation: BannerzoomOut 2s ease-out forwards;
+  animation: BannerzoomOut 3s ease-out forwards;
   display: flex;
-    flex-direction: column;
+  flex-direction: column;
 
   .banner-content-wrapper {
     width: 1280px;
@@ -18,7 +17,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: center;
     align-items: start;
     .banner-content {
       h2 {
@@ -27,7 +26,35 @@
         font-size: 70px;
         font-weight: 700;
         color: #ffffff;
+        transform: translateY(100px);
+        opacity: 0;
+        animation: slideFromBottom 1.2s ease-out forwards;
+        animation-delay: 0s;
       }
+      p {
+        width: 80%;
+        text-align: left;
+        font-size: 20px;
+        font-weight: 400;
+        color: #d8d8d8;
+        margin-top: 10px;
+        transform: translateY(100px);
+        opacity: 0;
+        animation: slideFromBottom 1.2s ease-out forwards;
+        animation-delay: 0.5s;
+      }
+    }
+  }
+  .banner-action-wrapper {
+    margin: 40px 0px 60px;
+    display: flex;
+    gap: 40px;
+
+    button {
+      font-size: 18px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 24px;
     }
   }
 }
@@ -35,7 +62,7 @@
 // animations
 @keyframes BannerzoomOut {
   0% {
-    background-size: 110%;
+    background-size: 120%;
   }
   100% {
     background-size: 100%;
