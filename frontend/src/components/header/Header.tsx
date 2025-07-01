@@ -27,7 +27,7 @@ const Header = ({bg} : {bg:string}) => {
                        <Link to={link.path}>{link.name}</Link>
                    </li>
                ))}
-               <div className="user-profile"><FaUser/></div>
+               <Link to='/main/profile' className="user-profile"><FaUser/></Link>
            </ul>
         </nav>
     </div>
