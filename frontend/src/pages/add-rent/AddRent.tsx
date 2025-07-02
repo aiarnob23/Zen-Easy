@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./AddRent.scss";
+import { serverBaseUrl } from "../../utils/baseUrl";
 
 const AddRent = () => {
   const userEmail = "airnob23@gmail.com";
 
+  const [error, setError] = useState<any>(null);
   const [imageFields, setImageFields] = useState([1, 2, 3]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
@@ -126,16 +128,40 @@ const AddRent = () => {
   const onSubmit = async () => {
     if (!validateForm()) return;
 
-    setIsSubmitting(true);
-    await delay(3);
+    //image urls generate
+    if (selectedImages.filter(Boolean).length === 0) {
+      setError("Please add at lease one image!");
+      alert(error);
+      return;
+    }
 
+    setIsSubmitting(true);
+    try {
+      const imageFormData = new FormData();
+      selectedImages.filter(Boolean).forEach((image,index)=>{
+        imageFormData.append(`propertyImage`, image);
+      })
+
+      const imageUploadResponse = await serverBaseUrl.post('/image/upload',
+        imageFormData,{
+          headers:{
+            'Content-Type':'multipart/form-data',
+          },
+          withCredentials:true,
+        }
+      );
+      console.log(imageUploadResponse);
+
+    } catch (error) {
+      console.log(error);
+    }
     console.log("Form data:", formData);
     console.log("Selected images:", selectedImages);
 
     setIsSubmitting(false);
   };
 
-  // "Add More Images" logic
+  // logic -----add more images------
   const isAddMoreImagesDisabled =
     selectedImages.filter(Boolean).length < 3 && imageFields.length === 3;
 
