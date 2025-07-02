@@ -57,3 +57,70 @@
     transform: translateX(0);
   }
 }
+
+
+/* Custom Scrollbar Styles */
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+  border-radius: 10px;
+  border: 1px solid rgba(228, 237, 100, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--primary), #d4dc4a);
+  border-radius: 10px;
+  border: 2px solid var(--bg-primary);
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #d4dc4a, #000000);
+  transform: scale(1.05);
+  border-color: rgba(228, 237, 100, 0.3);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #000000;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--bg-primary);
+}
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) var(--bg-primary);
+}
+
+/* Enhanced scrollbar for better UX */
+::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Smooth scrolling behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optional: Hide scrollbar on mobile while keeping functionality */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    border: 1px solid var(--bg-primary);
+  }
+}

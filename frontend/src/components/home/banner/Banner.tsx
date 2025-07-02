@@ -21,7 +21,7 @@ const Banner = () => {
             </p>
         </div>
         <div className="banner-action-wrapper">
-          <Link to="/main/find-service" className="button btn-primary">Find Service</Link>
+          <Link to="/main/add-rent" className="button btn-primary">Post Rent Ad</Link>
           <Link to="/main/offer-service" className="button btn-primary">Offer Service</Link>
         </div>
       </div>

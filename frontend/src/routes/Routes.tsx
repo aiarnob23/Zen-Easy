@@ -6,6 +6,7 @@ import OfferService from "../pages/offer-service/OfferService";
 import AboutUs from "../pages/about-us/AboutUs";
 import RentPage from "../pages/rent/Rent";
 import GeneralProfile from "../pages/general-profile/GeneralProfile";
+import AddRent from "../pages/add-rent/AddRent";
 
 const router = createBrowserRouter([
    {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
         {
             path:"/main/profile",
             element:<GeneralProfile/>
+        },
+        {
+            path:"/main/add-rent",
+            element:<AddRent/>
         },
 
     ]
