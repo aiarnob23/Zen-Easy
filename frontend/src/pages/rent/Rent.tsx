@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Rent.scss";
-import { getRentPosts } from "../../services/rentService";
+import { getRentPosts } from "../../services/rentServices";
 import OrbitalSpinner from "../../components/ui/LoadingSpinner";
 import debounce from "lodash.debounce";
 import { rentCategories } from "../../utils/constants";

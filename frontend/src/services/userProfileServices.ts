@@ -1,25 +1,14 @@
 import { serverBaseUrl } from "../utils/baseUrl";
-import { fakeData } from "../utils/fake";
 
-// self profile data
-export const getUserProfileDetails = async () => {
-  // try {
-  //     const response = await fetch(`${serverBaseUrl}/profile/self`, {
-  //         method: 'GET',
-  //         credentials: 'include',
-  //         headers: {
-  //             'Content-Type': 'application/json'
-  //         }
-  //     });
-  //     if (!response.ok) {
-  //         throw new Error(`Error: ${response.status}`);
-  //     }
-  //     return await response.json();
-  // } catch (error) {
-  //     console.error('Failed to fetch self profile details:', error);
-  //     throw error;
-  // }
-  const data = fakeData.User;
-
-  return {success:true, res : data};
+// profile info
+export const getUserProfileDetails = async (id:string) => {
+  try {
+    const response = await serverBaseUrl.get(
+      `/user/find-info/${id}`
+    );
+    return { success: response?.data?.success, res: response?.data?.data };
+  } catch (error) {
+    console.log(error);
+    return { success: false, res: [] };
+  }
 };

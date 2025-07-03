@@ -124,7 +124,7 @@ const AddRent = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
+  // -------------------handle onsubmit-----------------
   const onSubmit = async () => {
     if (!validateForm()) return;
 
@@ -138,20 +138,21 @@ const AddRent = () => {
     setIsSubmitting(true);
     try {
       const imageFormData = new FormData();
-      selectedImages.filter(Boolean).forEach((image,index)=>{
+      selectedImages.filter(Boolean).forEach((image, index) => {
         imageFormData.append(`propertyImage`, image);
-      })
+      });
 
-      const imageUploadResponse = await serverBaseUrl.post('/image/upload',
-        imageFormData,{
-          headers:{
-            'Content-Type':'multipart/form-data',
+      const imageUploadResponse = await serverBaseUrl.post(
+        "/image/upload-properties",
+        imageFormData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
           },
-          withCredentials:true,
+          withCredentials: true,
         }
       );
       console.log(imageUploadResponse);
-
     } catch (error) {
       console.log(error);
     }

@@ -2,13 +2,17 @@ export type TUser = {
   name: string;
   profileImage?: string;
   nid?: string;
-  address: string;
+  address: {
+    street: string;
+    city: string;
+    postalCode: string;
+  };
   whatsapp?: string;
   email: string;
   dateOfBirth: Date;
   gender: "Male" | "Female";
   nationality: string;
-  occupation: string;
+  occupation?: string;
   professionalProfiles?: string[];
   socialMedia?: {
     facebook?: string;
@@ -16,4 +20,6 @@ export type TUser = {
     linkedin?: string;
   };
   rentPosts?: string[];
+  otp?:string;
+  isVerified?:boolean;
 };

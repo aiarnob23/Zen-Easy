@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { rentRoutes } from "./app/modules/rent/rent.route";
 import { imageRoutes } from "./app/modules/image/image.route";
+import { userRoutes } from "./app/modules/user/user.route";
 
 
 
@@ -23,6 +24,7 @@ app.use(
 //routes
 app.use("/api/v1/rent", rentRoutes);
 app.use("/api/v1/image", imageRoutes);
+app.use("/api/v1/user", userRoutes);
 app.get("/", (req: Request, res: Response) => {
   res.send("Zen Easy BD server is running...");
 });

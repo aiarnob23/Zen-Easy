@@ -6,13 +6,14 @@ import { getUserProfileDetails } from "../../services/userProfileServices";
 const GeneralProfile = () => {
   const [userProfile, setUserProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState<any>("fj8934hfqwi932m4r8f4");
+  const [userId, setUserId] = useState<any>("686645ffc1000ef0cebccfc1");
 
   useEffect(() => {
     const getUserProfile = async () => {
       try {
-        const result = await getUserProfileDetails();
+        const result = await getUserProfileDetails(userId);
         if (result.success) {
+          console.log(result.res);
           setUserProfile(result.res);
         }
       } catch (error) {
@@ -131,7 +132,9 @@ const GeneralProfile = () => {
                 </div>
                 <div className="info-item address-item">
                   <span className="info-label">Address</span>
-                  <span className="info-value">{userProfile?.address || "Not provided"}</span>
+                  <span className="info-value">{userProfile?.address?.street || "Not provided"}</span>
+                  <span className="info-value">{userProfile?.address?.city || "Not provided"}</span>
+                  <span className="info-value">{userProfile?.address?.postalCode || "Not provided"}</span>
                 </div>
               </div>
 
