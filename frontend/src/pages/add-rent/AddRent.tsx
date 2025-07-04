@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./AddRent.scss";
-import { serverBaseUrl } from "../../utils/baseUrl";
+import { useAddRent } from "../../hooks/useAddRent";
 
 const AddRent = () => {
   const userEmail = "airnob23@gmail.com";
 
-  const [error, setError] = useState<any>(null);
   const [imageFields, setImageFields] = useState([1, 2, 3]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
+
+  // Form data state
   const [formData, setFormData] = useState({
     email: userEmail,
     category: "",
@@ -23,18 +24,11 @@ const AddRent = () => {
     postalCode: "",
     details: "",
   });
+
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const delay = (d: number): Promise<string> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve("done");
-      }, d * 1000);
-    });
-  };
+  const { addRentProperty, loading, error, success } = useAddRent();
 
-  // ----------------- image uploading handles-----
   const handleAddMoreImages = () => {
     if (imageFields.length < 5) {
       setImageFields([...imageFields, imageFields.length + 1]);
@@ -45,12 +39,10 @@ const AddRent = () => {
     const newImages = [...selectedImages];
     const newPreviewUrls = [...imagePreviewUrls];
 
-    // same image or not
     if (newPreviewUrls[index]) {
       URL.revokeObjectURL(newPreviewUrls[index]);
     }
 
-    // image preview
     if (file) {
       newImages[index] = file;
       newPreviewUrls[index] = URL.createObjectURL(file);
@@ -63,32 +55,33 @@ const AddRent = () => {
     setImagePreviewUrls(newPreviewUrls);
   };
 
+  // Handle removing a dynamic image field
   const handleRemoveImageField = (indexToRemove: number) => {
     if (imageFields.length > 3) {
       setImageFields(imageFields.filter((_, index) => index !== indexToRemove));
 
-      const newImages = selectedImages.filter(
-        (_, index) => index !== indexToRemove
-      );
-      const newPreviewUrls = imagePreviewUrls.filter((_, index) => {
-        if (index === indexToRemove && imagePreviewUrls[index]) {
-          URL.revokeObjectURL(imagePreviewUrls[index]);
-        }
-        return index !== indexToRemove;
-      });
+      const newImages = [...selectedImages];
+      const newPreviewUrls = [...imagePreviewUrls];
+
+      if (newPreviewUrls[indexToRemove]) {
+        URL.revokeObjectURL(newPreviewUrls[indexToRemove]);
+      }
+
+      newImages.splice(indexToRemove, 1);
+      newPreviewUrls.splice(indexToRemove, 1);
 
       setSelectedImages(newImages);
       setImagePreviewUrls(newPreviewUrls);
     }
   };
 
+  // Handle input changes
   const handleInputChange = (field: string, value: any) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
 
-    // Clear error when user starts typing
     if (errors[field]) {
       setErrors((prev) => ({
         ...prev,
@@ -97,7 +90,7 @@ const AddRent = () => {
     }
   };
 
-  // -------------validate form -----------------
+  //--------- Validation-----------
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
@@ -124,45 +117,21 @@ const AddRent = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  // -------------------handle onsubmit-----------------
-  const onSubmit = async () => {
-    if (!validateForm()) return;
 
-    //image urls generate
-    if (selectedImages.filter(Boolean).length === 0) {
-      setError("Please add at lease one image!");
-      alert(error);
+  // ------------------Handle form submission------------------
+  const handleSubmitClick = async () => {
+    if (!validateForm()) return; 
+
+    const filteredImages = selectedImages.filter(Boolean);
+    if (filteredImages.length === 0) {
+      alert("Please add at least one image!");
       return;
     }
-
-    setIsSubmitting(true);
-    try {
-      const imageFormData = new FormData();
-      selectedImages.filter(Boolean).forEach((image, index) => {
-        imageFormData.append(`propertyImage`, image);
-      });
-
-      const imageUploadResponse = await serverBaseUrl.post(
-        "/image/upload-properties",
-        imageFormData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
-      console.log(imageUploadResponse);
-    } catch (error) {
-      console.log(error);
-    }
-    console.log("Form data:", formData);
-    console.log("Selected images:", selectedImages);
-
-    setIsSubmitting(false);
+    await addRentProperty({ ...formData, selectedImages: filteredImages });
   };
 
-  // logic -----add more images------
+// ---------------------------------------
+
   const isAddMoreImagesDisabled =
     selectedImages.filter(Boolean).length < 3 && imageFields.length === 3;
 
@@ -184,7 +153,7 @@ const AddRent = () => {
 
           <div className="rent-form">
             <div className="form-grid">
-              {/* Property Category */}
+              {/* Property Category Select */}
               <div className="form-group full-width">
                 <label htmlFor="category">Property Category</label>
                 <select
@@ -208,7 +177,7 @@ const AddRent = () => {
                 )}
               </div>
 
-              {/* Rent Amount */}
+              {/* Rent Amount Input */}
               <div className="form-group">
                 <label htmlFor="cost">Rent Amount (BDT)</label>
                 <input
@@ -224,7 +193,7 @@ const AddRent = () => {
                 )}
               </div>
 
-              {/* Payment Frequency */}
+              {/* Payment Frequency Select */}
               <div className="form-group">
                 <label htmlFor="rentPaymentFrequency">Payment Frequency</label>
                 <select
@@ -248,7 +217,7 @@ const AddRent = () => {
                 )}
               </div>
 
-              {/* Available From */}
+              {/* Available From  */}
               <div className="form-group">
                 <label htmlFor="rentStartDate">Available From</label>
                 <DatePicker
@@ -269,14 +238,14 @@ const AddRent = () => {
                     errors.rentStartDate ? "error" : ""
                   }`}
                   placeholderText="Select a date"
-                  minDate={new Date()}
+                  minDate={new Date()} 
                 />
                 {errors.rentStartDate && (
                   <span className="error-message">{errors.rentStartDate}</span>
                 )}
               </div>
 
-              {/* Contact Number */}
+              {/* Contact Number Input */}
               <div className="form-group">
                 <label htmlFor="contactInfo">Contact Number</label>
                 <input
@@ -294,7 +263,7 @@ const AddRent = () => {
                 )}
               </div>
 
-              {/* Full Address */}
+              {/* Full Address Input */}
               <div className="form-group full-width">
                 <label htmlFor="addressLine">Full Address</label>
                 <input
@@ -312,7 +281,7 @@ const AddRent = () => {
                 )}
               </div>
 
-              {/* City */}
+              {/* City Input */}
               <div className="form-group">
                 <label htmlFor="city">City</label>
                 <input
@@ -328,7 +297,7 @@ const AddRent = () => {
                 )}
               </div>
 
-              {/* Postal Code */}
+              {/* Postal Code Input */}
               <div className="form-group">
                 <label htmlFor="postalCode">Postal Code</label>
                 <input
@@ -346,7 +315,7 @@ const AddRent = () => {
                 )}
               </div>
 
-              {/* Property Details */}
+              {/* Property Details Textarea */}
               <div className="form-group full-width">
                 <label htmlFor="details">Property Details</label>
                 <textarea
@@ -362,7 +331,7 @@ const AddRent = () => {
                 )}
               </div>
 
-              {/* Property Images */}
+              {/* Property Images  */}
               <div className="form-group full-width">
                 <label>Property Images</label>
                 <div className="image-upload-section">
@@ -412,7 +381,7 @@ const AddRent = () => {
                         )}
                       </div>
 
-                      {index >= 3 && (
+                      {index >= 3 && ( 
                         <button
                           type="button"
                           onClick={() => handleRemoveImageField(index)}
@@ -447,11 +416,11 @@ const AddRent = () => {
             {/* Submit Button */}
             <div className="form-actions">
               <button
-                onClick={onSubmit}
-                disabled={isSubmitting}
+                onClick={handleSubmitClick}
+                disabled={loading} 
                 className="submit-btn"
               >
-                {isSubmitting ? "Publishing..." : "Post Ad"}
+                {loading ? "Publishing..." : "Post Ad"}
               </button>
             </div>
           </div>

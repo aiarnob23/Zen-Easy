@@ -13,7 +13,7 @@ export function useRegister() {
   if (!authcontext) {
     throw new Error("Authentication context is not available.");
   }
-  const { EmailPassSignUp , setSelfId } = authcontext;
+  const { EmailPassSignUp } = authcontext;
 
   const register = async (form: TUserRegistration) => {
     setLoading(true);
@@ -83,8 +83,7 @@ export function useRegister() {
         socialMedia: userDataForBackend.socialMedia,
       };
 
-      const res = await serverBaseUrl.post("/user/create-new", userData);
-      setSelfId(res?.data?.data?._id);
+      await serverBaseUrl.post("/user/create-new", userData);
       setSuccess(true);
     } catch (err: any) {
       if (err.response?.data?.message) {

@@ -1,39 +1,137 @@
-import type { TNewService } from "../../utils/types/newServiceType";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler, useFieldArray } from "react-hook-form";
 import "./OfferService.scss";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { getUsersProfessionalInfo } from "../../services/professionalServices"; 
+import { useOfferService } from "../../hooks/useOfferService"; 
+
+// ---------------type -------------
+export type TProfessinalService = {
+  provider: string;
+  category: TServiceCategory;
+  contactNumber: string;
+  addressLine: string;
+  serviceArea: string[];
+  description: string;
+  minimumPrice: number;
+  maximumPrice: number;
+  availableDays: string[];
+  availableTime: "day" | "night" | "always";
+  coverImage?: string; 
+  ratings?: TRating[];
+  status?: 'active' | 'inactive';
+};
+
+export type TServiceCategory = "Maid" | "Tutor" | "Electrician" | "IT Consultant" | "Painter" | "Plumber";
+export type TRating = {
+  client: string;
+  rating: number;
+  feedback: string;
+};
+
+
+type ProfessionalServiceFormData = Omit<TProfessinalService, 'provider' | 'minimumPrice' | 'maximumPrice' | 'availableDays' | 'availableTime' | 'coverImage' | 'ratings' | 'status' | 'serviceArea'> & {
+  serviceAreas: { value: string }[]; 
+  priceRange: {
+    min: number;
+    max: number;
+  };
+  dayOfWeek: string[];
+  availableTimes: "day" | "night" | "always";
+  coverImageFile?: FileList; 
+};
 
 const OfferService = () => {
-  const user = {
-    id: 69,
-    professions: ["x", "y"],
-  };
+  const [professions, setProfessions] = useState<any[]>([]);
+  const [coverImagePreview, setCoverImagePreview] = useState<string | null>(null);
+  const selfId = Cookies.get("zenEasySelfId");
+
+  const { offerService, loading, error, success } = useOfferService(); 
 
   const {
     register,
     handleSubmit,
     watch,
-    setError,
-    formState: { errors, isSubmitting },
-  } = useForm<TNewService>();
+    control,
+    setError, 
+    clearErrors,
+    formState: { errors },
+  } = useForm<ProfessionalServiceFormData>({
+    defaultValues: {
+      serviceAreas: [{ value: "" }], 
+    },
+  });
 
-  const delay = (d: number) => {
-    return new Promise((resolve, _) => {
-      setTimeout(() => {
-        resolve("done");
-      }, d * 1000);
-    });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "serviceAreas",
+    rules: {
+      required: "At least one service area is required.",
+      validate: (value) => {
+        const nonEmptyAreas = value?.filter(area => area.value.trim().length > 0);
+        return (nonEmptyAreas && nonEmptyAreas.length > 0) || "Please add at least one service area.";
+      }
+    }
+  });
+
+  const watchedCoverImageFile = watch("coverImageFile");
+  const firstServiceAreaValue = watch(`serviceAreas.0.value`); 
+
+
+  useEffect(() => {
+    if (watchedCoverImageFile && watchedCoverImageFile.length > 0) {
+      const file = watchedCoverImageFile[0];
+      if (file) {
+        setCoverImagePreview(URL.createObjectURL(file));
+      }
+    } else {
+      setCoverImagePreview(null);
+    }
+    return () => {
+      if (coverImagePreview) {
+        URL.revokeObjectURL(coverImagePreview);
+      }
+    };
+  }, [watchedCoverImageFile]);
+
+  // ---------------Handle form submission----------------
+  const onSubmit: SubmitHandler<ProfessionalServiceFormData> = async (data) => {
+    if (data.priceRange.min >= data.priceRange.max) {
+      setError("priceRange.max", {
+        type: "manual",
+        message: "Maximum price must be greater than minimum price",
+      });
+      return;
+    } else {
+      clearErrors("priceRange.max");
+    }
+
+    await offerService(data);
   };
+// ------------------------
+  useEffect(() => {
+    const getProfessionalInfo = async () => {
+      if (!selfId) {
+        setProfessions([]);
+        return;
+      }
+      try {
+        const result = await getUsersProfessionalInfo(selfId as string);
+        setProfessions(result?.professionalProfiles || []);
+      } catch (error) {
+        console.error("Failed to fetch professional info:", error);
+        setProfessions([]);
+      }
+    };
+    getProfessionalInfo();
+  }, [selfId]); 
 
-  const onSubmit: SubmitHandler<TNewService> = async (data) => {
-    await delay(3);
-    console.log(data);
-  };
-
+// ---------------------- return div --------------------
   return (
     <div className="offer-service-container">
       <div className="header-section">
         <div className="profile-status">
-          {user?.professions?.length == 0 ? (
+          {professions?.length === 0 ? (
             <div className="no-profile">
               <div className="status-icon">👤</div>
               <h3>No Professional Profile</h3>
@@ -42,19 +140,25 @@ const OfferService = () => {
           ) : (
             <div className="has-profile">
               <div className="status-icon">✅</div>
-              <h3>Current Profession</h3>
-              <p>You are currently working as: <span className="profession-name">{user.professions[0]}</span></p>
+              <h3>Current Profession{professions.length > 1 ? "s" : ""}</h3>
+              <p>You are currently working as:{" "}
+                <span className="profession-name">
+                  {professions.map((prof, index) => (
+                    <span key={index}>{prof}{index < professions.length - 1 && ", "}</span>
+                  ))}
+                </span>
+              </p>
             </div>
           )}
         </div>
       </div>
 
       <div className="service-form-section">
-        {user?.professions?.length > 2 ? (
+        {professions?.length >= 2 ? (
           <div className="limit-reached">
             <div className="warning-icon">⚠️</div>
             <h3>Service Limit Reached</h3>
-            <p>You are not allowed to work more than two jobs simultaneously.</p>
+            <p>You are not allowed to offer more than two services simultaneously.</p>
           </div>
         ) : (
           <div className="add-service">
@@ -64,32 +168,34 @@ const OfferService = () => {
 
             <form onSubmit={handleSubmit(onSubmit)} className="service-form">
               <div className="form-grid">
+                {/* Service Category Selection */}
                 <div className="form-group full-width">
-                  <label htmlFor="serviceTitle">Service Type</label>
+                  <label htmlFor="category">Service Type</label>
                   <select
-                    id="serviceTitle"
-                    {...register("serviceTitle", { required: "Please select a service type" })}
-                    className={errors.serviceTitle ? "error" : ""}
+                    id="category"
+                    {...register("category", { required: "Please select a service type" })}
+                    className={errors.category ? "error" : ""}
                   >
                     <option value="">Choose your service</option>
-                    <option value="Maid">🏠 Home Cleaning</option>
+                    <option value="Maid">🏠 Home Maid</option>
                     <option value="Tutor">📚 Private Tutor</option>
                     <option value="Electrician">⚡ Electrician</option>
                     <option value="IT Consultant">💻 IT Consultant</option>
                     <option value="Painter">🎨 Painter</option>
                     <option value="Plumber">🔧 Plumber</option>
                   </select>
-                  {errors.serviceTitle && (
-                    <span className="error-message">{errors.serviceTitle.message}</span>
+                  {errors.category && (
+                    <span className="error-message">{errors.category.message}</span>
                   )}
                 </div>
 
+                {/* Contact Number Input */}
                 <div className="form-group">
                   <label htmlFor="contactNumber">Contact Number</label>
                   <input
                     id="contactNumber"
                     type="tel"
-                    {...register("contactNumber", { 
+                    {...register("contactNumber", {
                       required: "Contact number is required",
                       pattern: {
                         value: /^[0-9+\-\s()]+$/,
@@ -104,43 +210,114 @@ const OfferService = () => {
                   )}
                 </div>
 
+                {/* Address Line Input */}
                 <div className="form-group">
-                  <label htmlFor="city">City</label>
+                  <label htmlFor="addressLine">Full Address Line</label>
                   <input
-                    id="city"
+                    id="addressLine"
                     type="text"
-                    {...register("workArea.city", { required: "City is required" })}
-                    placeholder="Dhaka"
-                    className={errors.workArea?.city ? "error" : ""}
+                    {...register("addressLine", { required: "Address line is required" })}
+                    placeholder="e.g., House 123, Road 4, Gulshan 1, Dhaka 1212"
+                    className={errors.addressLine ? "error" : ""}
                   />
-                  {errors.workArea?.city && (
-                    <span className="error-message">{errors.workArea.city.message}</span>
+                  {errors.addressLine && (
+                    <span className="error-message">{errors.addressLine.message}</span>
                   )}
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="postalCode">Postal Code</label>
-                  <input
-                    id="postalCode"
-                    type="text"
-                    {...register("workArea.postalCode", { required: "Postal code is required" })}
-                    placeholder="1000"
-                    className={errors.workArea?.postalCode ? "error" : ""}
-                  />
-                  {errors.workArea?.postalCode && (
-                    <span className="error-message">{errors.workArea.postalCode.message}</span>
+                {/* Service Area Dynamic Inputs */}
+                <div className="form-group service-areas-group full-width">
+                  <label>Service Areas</label>
+                  {fields.map((field, index) => (
+                    <div key={field.id} className="service-area-item">
+                      <input
+                        type="text"
+                        {...register(`serviceAreas.${index}.value`, {
+                          required: "Service area cannot be empty",
+                          minLength: { value: 3, message: "Service area must be at least 3 characters" }
+                        })}
+                        placeholder={`Service Area ${index + 1}`}
+                        className={errors.serviceAreas?.[index]?.value ? "error" : ""}
+                      />
+                      {fields.length > 1 && (
+                        <button type="button" onClick={() => remove(index)} className="remove-area-btn">
+                          &times;
+                        </button>
+                      )}
+                      {errors.serviceAreas?.[index]?.value && (
+                        <span className="error-message">{errors.serviceAreas[index]?.value?.message}</span>
+                      )}
+                    </div>
+                  ))}
+                  {/*"Add Another Area"  */}
+                  {(firstServiceAreaValue && firstServiceAreaValue.trim().length > 0) || fields.length > 1 ? (
+                    <button
+                      type="button"
+                      onClick={() => append({ value: "" })}
+                      className="add-another-area-btn btn-secondary"
+                    >
+                      Add Another Area
+                    </button>
+                  ) : null}
+
+                  {/*  validation message for serviceAreas array */}
+                  {errors.serviceAreas && typeof errors.serviceAreas.message === 'string' && (
+                    <span className="error-message full-width">{errors.serviceAreas.message}</span>
                   )}
                 </div>
 
+
+                {/* Cover Image Upload Field */}
+                <div className="form-group full-width">
+                  <label htmlFor="coverImage">Cover Image (optional)</label>
+                  <input
+                    id="coverImage"
+                    type="file"
+                    accept="image/*"
+                    {...register("coverImageFile", {
+                      validate: {
+                        fileType: (value) => {
+                          if (value && value.length > 0) {
+                            const file = value[0];
+                            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                            if (!allowedTypes.includes(file.type)) {
+                              return "Only JPEG, PNG, or GIF images are allowed.";
+                            }
+                            const maxSize = 5 * 1024 * 1024; // 5MB
+                            if (file.size > maxSize) {
+                              return "Image size must be less than 5MB.";
+                            }
+                          }
+                          return true;
+                        },
+                      },
+                    })}
+                    className={errors.coverImageFile ? "error" : ""}
+                  />
+                  {errors.coverImageFile && (
+                    <span className="error-message">{errors.coverImageFile.message}</span>
+                  )}
+                  {coverImagePreview && (
+                    <div className="image-preview">
+                      <img src={coverImagePreview} alt="Cover Preview" />
+                    </div>
+                  )}
+                </div>
+
+                {/* Description Textarea */}
                 <div className="form-group full-width">
                   <label htmlFor="description">Service Description</label>
                   <textarea
                     id="description"
-                    {...register("description", { 
+                    {...register("description", {
                       required: "Please describe your service",
                       minLength: {
                         value: 20,
                         message: "Description should be at least 20 characters"
+                      },
+                      maxLength: {
+                        value: 500,
+                        message: "Description cannot exceed 500 characters"
                       }
                     })}
                     placeholder="Describe your service, experience, and what makes you unique..."
@@ -152,14 +329,16 @@ const OfferService = () => {
                   )}
                 </div>
 
+                {/* Minimum Price Input */}
                 <div className="form-group">
                   <label htmlFor="minPrice">Minimum Price (BDT)</label>
                   <input
                     id="minPrice"
                     type="number"
-                    {...register("priceRange.min", { 
+                    {...register("priceRange.min", {
                       required: "Minimum price is required",
-                      min: { value: 1, message: "Price must be greater than 0" }
+                      min: { value: 1, message: "Price must be greater than 0" },
+                      valueAsNumber: true,
                     })}
                     placeholder="500"
                     className={errors.priceRange?.min ? "error" : ""}
@@ -169,14 +348,16 @@ const OfferService = () => {
                   )}
                 </div>
 
+                {/* Maximum Price Input */}
                 <div className="form-group">
                   <label htmlFor="maxPrice">Maximum Price (BDT)</label>
                   <input
                     id="maxPrice"
                     type="number"
-                    {...register("priceRange.max", { 
+                    {...register("priceRange.max", {
                       required: "Maximum price is required",
-                      min: { value: 1, message: "Price must be greater than 0" }
+                      min: { value: 1, message: "Price must be greater than 0" },
+                      valueAsNumber: true,
                     })}
                     placeholder="2000"
                     className={errors.priceRange?.max ? "error" : ""}
@@ -186,6 +367,7 @@ const OfferService = () => {
                   )}
                 </div>
 
+                {/* Available Days Checkboxes */}
                 <div className="form-group full-width">
                   <label>Available Days</label>
                   <div className="checkbox-group">
@@ -206,6 +388,7 @@ const OfferService = () => {
                   )}
                 </div>
 
+                {/* Available Time Radio Buttons */}
                 <div className="form-group full-width">
                   <label>Available Time</label>
                   <div className="radio-group">
@@ -235,12 +418,12 @@ const OfferService = () => {
               </div>
 
               <div className="form-actions">
-                <button 
-                  type="submit" 
-                  disabled={isSubmitting}
+                <button
+                  type="submit"
+                  disabled={loading} 
                   className="submit-btn btn-primary"
                 >
-                  {isSubmitting ? "Publishing..." : "Publish Service"}
+                  {loading ? "Publishing..." : "Publish Service"}
                 </button>
               </div>
             </form>
