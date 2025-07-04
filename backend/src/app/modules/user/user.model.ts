@@ -59,6 +59,11 @@ const RentSchema: Schema = new Schema<TUser>(
     address: {
       type: AddressSchema,
     },
+    phoneNumber:{
+      type:String,
+      required:true,
+      trim:true,
+    },
     email: {
       type: String,
       required: true,
@@ -101,6 +106,12 @@ const RentSchema: Schema = new Schema<TUser>(
         type:Boolean,
         default:false,
         required:false,
+    },
+    status:{
+      type:String,
+      enum:["active" , "inactive"],
+      required:false,
+      default:"active",
     },
   },
   {

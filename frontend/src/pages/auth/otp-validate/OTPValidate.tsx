@@ -162,7 +162,7 @@ const OTPValidate = () => {
                       id="otp"
                       type="text"
                       maxLength={6}
-                      placeholder="six digits OTP"
+                      placeholder="Enter your 6 digits OTP"
                       className={errors.otp ? "error" : ""}
                     />
                   )}

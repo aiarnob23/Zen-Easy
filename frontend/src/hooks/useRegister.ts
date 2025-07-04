@@ -13,7 +13,7 @@ export function useRegister() {
   if (!authcontext) {
     throw new Error("Authentication context is not available.");
   }
-  const { EmailPassSignUp } = authcontext;
+  const { EmailPassSignUp , setSelfId } = authcontext;
 
   const register = async (form: TUserRegistration) => {
     setLoading(true);
@@ -69,7 +69,6 @@ export function useRegister() {
           ? format(userDataForBackend.dateOfBirth, "yyyy-MM-dd")
           : null,
         profileImage: uploadedProfileImageUrl,
-        firebaseUid: authResponse.user.uid,
         address: {
           street: userDataForBackend.address.street,
           city: userDataForBackend.address.city,
@@ -84,8 +83,8 @@ export function useRegister() {
         socialMedia: userDataForBackend.socialMedia,
       };
 
-      await serverBaseUrl.post("/user/create-new", userData);
-
+      const res = await serverBaseUrl.post("/user/create-new", userData);
+      setSelfId(res?.data?.data?._id);
       setSuccess(true);
     } catch (err: any) {
       if (err.response?.data?.message) {

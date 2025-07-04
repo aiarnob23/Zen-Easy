@@ -7,6 +7,7 @@ export type TUser = {
     city: string;
     postalCode: string;
   };
+  phoneNumber:string;
   whatsapp?: string;
   email: string;
   dateOfBirth: Date;
@@ -22,4 +23,5 @@ export type TUser = {
   rentPosts?: string[];
   otp?:string;
   isVerified?:boolean;
+  status?:'active' | 'inactive';
 };

@@ -19,6 +19,12 @@ const getUserDetails = async (_id: string) => {
   return result;
 };
 
+//get user's id 
+const getUserId = async(email:string)=>{
+  const result = await User.find({email:email}, {_id:1});
+  return result;
+}
+
 //update user's OTP
 const updateUsersOTP = async (_id: string, OTP: string) => {
   const result = await User.findByIdAndUpdate(_id, { otp: OTP }, { new: true });
@@ -41,10 +47,18 @@ const validateUsersOTP = async (_id: string, OTP: string) => {
   return result;
 };
 
+//get the user's total professional services
+const getUsersProfessionalServices = async(_id : string) => {
+  const result = await User.findById(_id, {professionalProfiles:1});
+  return result;
+}
+
 export const userServices = {
   createNewUser,
   updateUserDetails,
+  getUserId,
   getUserDetails,
   updateUsersOTP,
   validateUsersOTP,
+  getUsersProfessionalServices,
 };

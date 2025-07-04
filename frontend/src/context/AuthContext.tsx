@@ -1,3 +1,4 @@
+// authcontext.tsx
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -50,20 +51,30 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const unSubscribe = onAuthStateChanged(auth, async(currentUser) => {
       setLoading(false);
       if (currentUser) {
-        setUser(currentUser?.email);
-        console.log(currentUser);
+        setUser(currentUser);
+        console.log("Firebase User:", currentUser);
         const email : string = currentUser?.email || '';
-        // const res = await serverBaseUrl.post("auth/login", { email });
-        // const token = res?.data?.data;
-        // Cookies.set("accessToken", token, { expires: 7 });
-        // Cookies.set("email", email, { expires: 7 });
+        // try {
+        //     const res = await serverBaseUrl.post("auth/login", { email }); // Assuming this endpoint returns _id
+        //     if (res?.data?.data?._id) {
+        //         setSelfId(res.data.data._id);
+        //         Cookies.set("accessToken", res.data.data.token, { expires: 7 }); // Example for token
+        //         Cookies.set("email", email, { expires: 7 });
+        //     }
+        // } catch (error) {
+        //     console.error("Error fetching selfId or token on auth state change:", error);
+        // }
+
       }
       if (!currentUser) {
         setLoading(false);
+        setUser(null); 
       }
     });
     return () => unSubscribe();
-  });
+  }, []); 
+
+
 
   // auth info
   const authInfo: AuthContextType = {

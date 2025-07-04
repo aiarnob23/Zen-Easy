@@ -1,13 +1,20 @@
 import { useForm, type SubmitHandler, Controller } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Register.scss";
 import { Link } from "react-router-dom";
 import { useRegister } from "../../../hooks/useRegister";
 import type { TUserRegistration } from "../../../utils/types/registerUserType";
+import { AuthContext } from "../../../context/AuthContext";
 
 const Register = () => {
+  const authcontext = useContext(AuthContext);
+
+  if (!authcontext) {
+    throw new Error("Authentication context is not available.");
+  }
+  const { selfId } = authcontext;
   const {
     register,
     handleSubmit,
@@ -35,7 +42,7 @@ const Register = () => {
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(
     null
   );
-  const {error, success, register: registerUser } = useRegister();
+  const { error, success, register: registerUser } = useRegister();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const password = watch("password");
@@ -54,11 +61,12 @@ const Register = () => {
 
   useEffect(() => {
     if (success) {
-      alert("Registration complete")
-      window.location.replace('/auth/otp-validate');
+      // alert ("registration complete");
+      console.log("Registration complete");
+      window.location.replace(`/auth/otp-validate/${selfId}`);
     }
     if (error) {
-       alert(error);
+      alert(error);
     }
   }, [success, error]);
 

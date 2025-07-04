@@ -53,6 +53,20 @@ const getUserDetails = catchAsync(async(req,res)=>{
     errorResponse("Failed to fetch user details" , 400);
 })
 
+//get user's id
+const getUserId = catchAsync(async(req, res)=>{
+const email = req?.body?.email;
+    const result = await userServices.getUserId(email as string);
+    if(result){
+        sendResponse(res,{
+            success:true,
+            statusCode:200,
+            message:"User id found",
+            data:result,
+        })
+    }
+})
+
 //update user's OTP
 const updateUsersOTP = catchAsync(async(req,res)=>{
     const _id = req?.params?.id;
@@ -92,10 +106,26 @@ const validateUsersOTP = catchAsync(async(req,res)=>{
     })
 })
 
+//get the user's professional services 
+const getUsersProfessionalServices = catchAsync(async(req,res)=>{
+    const _id = req?.params?.id;
+    const result = await userServices.getUsersProfessionalServices(_id as string);
+    if(result){
+        sendResponse(res,{
+            success:true,
+            statusCode:200,
+            message:"Professional details fetched successfully",
+            data:result,
+        })
+    }
+})
+
 export const userControllers = {
     createNewUser,
     editUserDetails,
     getUserDetails,
+    getUserId,
     updateUsersOTP,
     validateUsersOTP,
+    getUsersProfessionalServices,
 }

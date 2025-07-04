@@ -1,6 +1,8 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { Link } from "react-router-dom";
 import "./Login.scss";
+import { useSignIn } from "../../../hooks/useSIgnIn";
+import { useEffect } from "react";
 
 type TUserLogin = {
   email: string;
@@ -14,9 +16,22 @@ const Login = () => {
     formState: { errors, isSubmitting },
   } = useForm<TUserLogin>();
 
+  const {signIn, loading, error, success} = useSignIn();
+
   const onSubmit: SubmitHandler<TUserLogin> = async (data) => {
-    console.log("Login Data:", data);
+    console.log(data?.email , data?.password);
+    await signIn(data.email as string, data.password as string);
   };
+
+  useEffect(()=>{
+    if(success){
+      console.log("success : ", success);
+       window.location.replace('/');
+    }
+    if(error){
+      console.log(error);
+    }
+  },[success,error])
 
   return (
     <div className="login-container">
