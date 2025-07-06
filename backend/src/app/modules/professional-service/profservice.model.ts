@@ -1,4 +1,4 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model } from "mongoose";
 import { TProfessinalService } from "./profservice.interface";
 
 // TRating Schema
@@ -26,7 +26,9 @@ const ratingSchema = new Schema(
 const professionalServiceSchema = new Schema<TProfessinalService>(
   {
     provider: {
-      type: String,
+      type: Schema.Types.ObjectId as any,
+      ref: 'User',
+      required: true,
       trim: true,
     },
     category: {

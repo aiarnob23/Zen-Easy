@@ -4,7 +4,7 @@ import { uploadPropertyImages } from "../services/imageUploadService";
 
 
 type AddRentFormInput = {
-  email: string; 
+  user: string | undefined; 
   category: string;
   cost: string; 
   rentPaymentFrequency: string;
@@ -43,7 +43,7 @@ export function useAddRent() {
       const finalPropertyData = {
         ...formData,
         cost: parseFloat(formData.cost), 
-        propertyImages: imageUrls, 
+        imageUrls: imageUrls, 
       };
 
       delete (finalPropertyData as any).selectedImages;

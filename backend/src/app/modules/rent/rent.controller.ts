@@ -5,7 +5,7 @@ import { rentServices } from "./rent.service";
 import { Request, Response } from "express";
 
 //fetch all rent posts
-export const fetchAllRentPosts = catchAsync(
+const fetchAllRentPosts = catchAsync(
   async (req: Request, res: Response) => {
     const result = await rentServices.getRentPosts();
     if (result) {
@@ -23,9 +23,9 @@ export const fetchAllRentPosts = catchAsync(
 
 
 //create a rent ad
-export const createNewRentAd = catchAsync(
+const createNewRentAd = catchAsync(
   async (req: Request, res: Response) => {
-    const result = await rentServices.createRentAd(req?.body?.rentData);
+    const result = await rentServices.createRentAd(req?.body);
     if (result) {
       sendResponse(res, {
         success: true,
@@ -39,7 +39,7 @@ export const createNewRentAd = catchAsync(
 );
 
 //update rent post status 
-export const updateRentPostStatus = catchAsync(async(req,res)=>{
+const updateRentPostStatus = catchAsync(async(req,res)=>{
   const result = await rentServices.updateRentAdStatus(req?.params?.id, req?.body?.rentPostStatus);
   if(result){
       sendResponse(res, {
@@ -53,7 +53,7 @@ export const updateRentPostStatus = catchAsync(async(req,res)=>{
 })
 
 //update rent post details 
-export const updateRentPostDetails = catchAsync(async(req,res)=>{
+const updateRentPostDetails = catchAsync(async(req,res)=>{
   const result = await rentServices.updateRentAd(req?.params?.id, req?.body?.rentPostData);
   if(result){
       sendResponse(res, {
@@ -66,10 +66,30 @@ export const updateRentPostDetails = catchAsync(async(req,res)=>{
   errorResponse("Failed to update the rent ad", 400);
 })
 
+//view a rent details
+const getRentDetails = catchAsync(async(req,res)=>{
+  const _id = req?.params?.id;
+  const result = await rentServices.viewRentDeails(_id as string);
+  if(result){
+    sendResponse(res,{
+      success:true,
+      statusCode:200,
+      message:"Rent details fetched successfully",
+      data:result,
+    })
+  }
+  sendResponse(res,{
+    success:false,
+    statusCode:404,
+    message:"Failed to fetch rent post details",
+    data:null,
+  })
+})
 
 export const rentController = {
     fetchAllRentPosts,
     createNewRentAd,
     updateRentPostStatus,
     updateRentPostDetails,
+    getRentDetails,
 }

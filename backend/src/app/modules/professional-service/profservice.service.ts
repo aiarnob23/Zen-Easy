@@ -1,3 +1,4 @@
+import { get } from "http";
 import User from "../user/user.model";
 import { TProfessinalService } from "./profservice.interface";
 import { ProfessionalService } from "./profservice.model";
@@ -16,7 +17,7 @@ const createNewService = async (_id: string, payload: TProfessinalService) => {
 };
 
 //get user's professional profiles details
-const getUserProfessionalProfilesDetails = async (_id: string) => {
+const getUserProfessionalProfiles = async (_id: string) => {
   const result = await ProfessionalService.findById(_id);
   return result;
 };
@@ -30,4 +31,18 @@ const updateProfessionalProfile = async (
     new: true,
   });
   return result;
+};
+
+//find services
+const findServices = async (category: string) => {
+  const result = await ProfessionalService.find({
+    category: category,
+  }).populate("provider");
+  return result;
+};
+export const professionHandlerService = {
+  createNewService,
+  getUserProfessionalProfiles,
+  updateProfessionalProfile,
+  findServices,
 };

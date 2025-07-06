@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import "./GeneralProfile.scss";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getUserProfileDetails } from "../../services/userProfileServices";
 import Cookies from "js-cookie";
 
 const GeneralProfile = () => {
   const [userProfile, setUserProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const {userId} = useParams<{userId:string}>();
   const selfId = Cookies.get("zenEasySelfId");
-  console.log(selfId);
-
+console.log(userId);
   useEffect(() => {
     const getUserProfile = async () => {
       try {
-        const result = await getUserProfileDetails(selfId as string);
+        const result = await getUserProfileDetails(userId as string);
         if (result.success) {
           console.log(result.res);
           setUserProfile(result.res);
@@ -227,10 +227,11 @@ const GeneralProfile = () => {
                   <h3>Professional Profiles</h3>
                   <div className="profiles-grid">
                     {userProfile.professionalProfiles.map(
-                      (profession: string, index: number) => (
-                        <div className="profile-item" key={index}>
-                          <div className="profile-content">
-                            <span className="profile-name">{profession}</span>
+                      (profession: any, index: number) => (
+                        <Link to={`/main/prof-profile/${profession._id}`} className="profile-item" key={index}>
+                          <div className="profile-content relative">
+                            <span className="profile-name">{profession.category}</span>
+                            <span className={`text-[10px] font-semibold absolute -bottom-4 left-[5px] ${profession.status === 'active' ? 'text-green-600' : 'text-red-500'}`}>{profession.status}</span>
                           </div>
                           <button className="view-btn">
                             <svg viewBox="0 0 24 24">
@@ -238,7 +239,7 @@ const GeneralProfile = () => {
                             </svg>
                             View
                           </button>
-                        </div>
+                        </Link>
                       )
                     )}
                   </div>

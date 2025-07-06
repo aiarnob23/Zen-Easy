@@ -3,9 +3,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./AddRent.scss";
 import { useAddRent } from "../../hooks/useAddRent";
+import Cookies from "js-cookie";
 
 const AddRent = () => {
-  const userEmail = "airnob23@gmail.com";
+  const selfId = Cookies.get("zenEasySelfId");
 
   const [imageFields, setImageFields] = useState([1, 2, 3]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
@@ -13,7 +14,7 @@ const AddRent = () => {
 
   // Form data state
   const [formData, setFormData] = useState({
-    email: userEmail,
+    user: selfId,
     category: "",
     cost: "",
     rentPaymentFrequency: "",

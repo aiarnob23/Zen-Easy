@@ -1,0 +1,408 @@
+
+.rent-details-wrapper {
+  background-color: var(--bg-primary); 
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; 
+}
+
+.rent-details-container {
+  max-width: 1000px;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1); 
+  border: 1px solid rgba(0, 0, 0, 0.08); 
+  padding: 40px; 
+
+  .loading-state, .error-state, .no-data-state {
+    text-align: center;
+    padding: 60px;
+    font-size: 1.3em;
+    color: #666;
+    font-weight: 500;
+  }
+  .error-state {
+    color: #d32f2f; 
+    font-weight: 700;
+  }
+
+  .rent-header {
+    text-align: center;
+    margin-bottom: 40px; 
+
+    .rent-status {
+      padding: 8px 20px;
+      border-radius: 25px; 
+      font-weight: 700;
+      font-size: 0.85em;
+      text-transform: uppercase;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+      &.status-active {
+        background-color: #e8f5e9; 
+        color: #28a745; 
+      }
+      &.status-booked {
+        background-color: #ffebee; 
+        color: #dc3545; 
+      }
+    }
+
+    .rent-title {
+      font-size: 3.2em; 
+      color: #1a1a1a;
+      margin-top: 25px; 
+      margin-bottom: 8px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .rent-address-line {
+      font-size: 1.1em;
+      color: #777;
+      margin-bottom: 15px;
+    }
+
+    .rent-cost {
+      font-size: 2.5em; 
+      color: var(--primary);
+      font-weight: 800;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 8px;
+
+      .frequency {
+        font-size: 0.6em; 
+        color: #555;
+        font-weight: 600;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .rent-image-gallery {
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+
+    .main-image-container {
+      position: relative;
+      width: 100%;
+      height: 450px; 
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      background-color: #f0f0f0; 
+
+      .main-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease-in-out; 
+      }
+
+      .nav-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        font-size: 2em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0.8;
+        transition: background-color 0.3s ease, opacity 0.3s ease;
+        z-index: 10;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.7);
+          opacity: 1;
+        }
+
+        &.prev-button {
+          left: 15px;
+        }
+        &.next-button {
+          right: 15px;
+        }
+      }
+    }
+
+    .thumbnail-gallery {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto; 
+      padding-bottom: 5px; 
+      justify-content: center; 
+
+      .thumbnail {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: border-color 0.2s ease, transform 0.2s ease;
+        opacity: 0.7;
+
+        &:hover {
+          border-color: #ccc;
+          transform: scale(1.05);
+          opacity: 1;
+        }
+
+        &.active {
+          border-color: var(--primary);
+          opacity: 1;
+          box-shadow: 0 0 0 3px rgba(228, 237, 100, 0.4);
+        }
+      }
+    }
+
+    .no-images-placeholder {
+      width: 100%;
+      height: 450px;
+      background-color: #f0f0f0;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-style: italic;
+      font-size: 1.1em;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  .rent-info-sections {
+    display: grid;
+    grid-template-columns: 2fr 1fr; 
+    gap: 30px;
+    margin-bottom: 40px;
+
+    .info-card {
+      background-color: #fcfcfc; 
+      padding: 30px; 
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.03);
+
+      h2 {
+        font-size: 2em;
+        color: #1a1a1a;
+        margin-bottom: 18px;
+        font-weight: 700;
+        border-bottom: 2px solid var(--primary);
+        padding-bottom: 10px;
+        display: inline-block; 
+      }
+
+      &.details-description {
+        .description-text {
+          font-size: 1.1em;
+          color: #444;
+          line-height: 1.8;
+          white-space: pre-wrap;
+          text-align: justify; 
+        }
+      }
+
+      .key-info-list {
+        list-style: none;
+        padding: 0;
+
+        li {
+          font-size: 1.05em;
+          color: #555;
+          margin-bottom: 10px;
+          line-height: 1.5;
+
+          strong {
+            color: #333;
+            font-weight: 600;
+          }
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .rent-actions {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+
+    button {
+      padding: 14px 30px; 
+      font-size: 1.1em;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+
+      &.edit-btn {
+        background-color: var(--primary);
+        color: #1a1a1a;
+        border: 2px solid var(--primary);
+        box-shadow: 0 6px 20px rgba(228, 237, 100, 0.4);
+
+        &:hover {
+          background-color: #d4dc4a; 
+          transform: translateY(-3px);
+          box-shadow: 0 8px 25px rgba(228, 237, 100, 0.6);
+        }
+      }
+
+      &.delete-btn {
+        background-color: #e57373;
+        color: white;
+        border: 2px solid #e57373;
+        box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+
+        &:hover {
+          background-color: #ef5350;
+          transform: translateY(-3px);
+          box-shadow: 0 8px 25px rgba(244, 67, 54, 0.6);
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 900px) {
+  .rent-details-container {
+    padding: 30px;
+  }
+  .rent-info-sections {
+    grid-template-columns: 1fr; 
+  }
+}
+
+@media (max-width: 768px) {
+  .rent-details-wrapper {
+    padding: 20px 10px;
+  }
+  .rent-details-container {
+    padding: 25px;
+
+    .rent-header {
+      .rent-title {
+        font-size: 2.5em;
+      }
+      .rent-cost {
+        font-size: 2em;
+      }
+    }
+    
+    .rent-image-gallery {
+      .main-image-container {
+        height: 300px; 
+      }
+      .nav-button {
+        width: 40px;
+        height: 40px;
+        font-size: 1.8em;
+      }
+      .no-images-placeholder {
+        height: 300px;
+      }
+    }
+
+    .rent-info-sections {
+      gap: 20px;
+      .info-card {
+        padding: 20px;
+        h2 {
+          font-size: 1.8em;
+        }
+        .description-text, .key-info-list li {
+          font-size: 0.95em;
+        }
+      }
+    }
+
+    .rent-actions {
+      flex-direction: column;
+      gap: 15px;
+
+      button {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 1em;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .rent-details-container {
+    padding: 15px;
+
+    .rent-header {
+      .rent-status {
+        position: static; 
+        transform: none;
+        margin-bottom: 10px;
+      }
+      .rent-title {
+        font-size: 1.8em;
+      }
+      .rent-address-line {
+        font-size: 0.9em;
+      }
+      .rent-cost {
+        font-size: 1.6em;
+      }
+    }
+
+    .rent-image-gallery {
+      .main-image-container {
+        height: 220px;
+      }
+      .nav-button {
+        width: 35px;
+        height: 35px;
+        font-size: 1.5em;
+      }
+      .no-images-placeholder {
+        height: 220px;
+      }
+      .thumbnail-gallery {
+        flex-wrap: wrap; 
+        justify-content: center;
+        .thumbnail {
+          width: 60px;
+          height: 60px;
+        }
+      }
+    }
+
+    .rent-info-sections {
+      .info-card {
+        padding: 15px;
+        h2 {
+          font-size: 1.5em;
+        }
+        .description-text, .key-info-list li {
+          font-size: 0.9em;
+        }
+      }
+    }
+  }
+}

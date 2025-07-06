@@ -10,5 +10,5 @@ export type TRent = {
     postalCode:number;
     contactInfo:string;
     status?:"Active" | "Booked";
-    email:string;
+    user:string;
 }

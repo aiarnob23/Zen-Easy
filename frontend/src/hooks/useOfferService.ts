@@ -13,7 +13,7 @@ export function useOfferService() {
 
   const selfId = Cookies.get("zenEasySelfId");
 
-  const offerService = async (formData : any) => {
+  const offerService = async (id:string , formData : any) => {
     setLoading(true);
     setError(null);
     setSuccess(false);
@@ -61,9 +61,8 @@ export function useOfferService() {
      //------------------ data post -----------------------
       // Example: await serverBaseUrl.post("/professional-service/create", finalServiceData);
       console.log("Sending final service data to backend:", finalServiceData);
-      await new Promise(resolve => setTimeout(resolve, 1000)); 
+      await serverBaseUrl.post(`/profession/create-profile/${id}` , finalServiceData);
       setSuccess(true);
-      alert("Service published successfully!");
     } catch (err: any) {
       console.error("Error in useOfferService:", err);
       setError(err.message || "An error occurred while publishing the service.");

@@ -58,7 +58,7 @@ const RentSchema: Schema = new Schema<TRent>(
       required: false,
       default: "Active",
     },
-    email:{
+    user:{
       type:String,
       required:true,
     }

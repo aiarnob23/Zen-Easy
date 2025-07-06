@@ -106,7 +106,7 @@ const OfferService = () => {
       clearErrors("priceRange.max");
     }
 
-    await offerService(data);
+    await offerService(selfId as string, data);
   };
 // ------------------------
   useEffect(() => {

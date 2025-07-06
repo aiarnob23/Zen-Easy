@@ -15,3 +15,16 @@ export const getRentPosts = async () => {
     return null;
   }
 };
+
+
+//view rent post's details
+export const getRentDetails = async(id : string)=>{
+  try{
+    const response = await serverBaseUrl.get(`/rent/view-details/${id}`)
+    const result = response?.data;
+    return result;
+  }catch(error){
+    console.error("Failed to fetch the rent details");
+    return null;
+  }
+}

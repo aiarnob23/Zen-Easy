@@ -502,14 +502,14 @@ const RentPage = () => {
                   </div>
                 ) : null
               }
-              scrollThreshold={0.8} // Load more when 80% scrolled
+              scrollThreshold={0.8} //new data ---- 80% scrolled
             >
               <div className="posts-grid">
                 {rentPosts.length > 0 ? (
                   rentPosts.map((post: any) => (
                     <Link
                       key={post?._id}
-                      to={`/rent/${post?._id}`}
+                      to={`/main/view-rent/${post?._id}`}
                       className="post-card"
                     >
                       <div className="post-images">

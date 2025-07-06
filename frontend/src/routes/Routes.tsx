@@ -11,6 +11,9 @@ import AuthLayout from "../layouts/AuthLayout";
 import Register from "../pages/auth/register/Register";
 import Login from "../pages/auth/login/Login";
 import OTPValidate from "../pages/auth/otp-validate/OTPValidate";
+import RentDetailsPage from "../pages/rent-details/RentDetails";
+import FindService from "../pages/find-service/FindService";
+import ProfProfile from "../pages/prof-profile/profProfile";
 
 const router = createBrowserRouter([
   {
@@ -40,12 +43,24 @@ const router = createBrowserRouter([
         element: <RentPage />,
       },
       {
-        path: "/main/profile",
+        path: "/main/profile/:userId",
         element: <GeneralProfile />,
       },
       {
         path: "/main/add-rent",
         element: <AddRent />,
+      },
+      {
+        path: "/main/view-rent/:id",
+        element: <RentDetailsPage />,
+      },
+      {
+        path: "/main/find-service/:category",
+        element: <FindService />,
+      },
+      {
+        path: "/main/prof-profile/:id",
+        element: <ProfProfile />,
       },
     ],
   },

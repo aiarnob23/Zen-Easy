@@ -15,7 +15,7 @@ const updateUserDetails = async (_id: string, payload: TUser) => {
 
 //get user details
 const getUserDetails = async (_id: string) => {
-  const result = User.findById(_id);
+  const result = User.findById(_id).populate("professionalProfiles");
   return result;
 };
 

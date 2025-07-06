@@ -1,18 +1,20 @@
 import { Link } from "react-router-dom";
 import "./header.scss";
 import { FaUser } from 'react-icons/fa';
+import Cookies from "js-cookie";
 
 const Header = ({bg} : {bg:string}) => {
     console.log('header rendered');
+    const selfId = Cookies.get("zenEasySelfId");
 
     const navLinks = [
         { name: "Rent", path: "/main/rent" },
-        { name: "Maid", path: "/main/home-maid" },
-        { name: "Plumber", path: "/main/plumber" },
-        { name: "Tutor", path: "/main/tutor" },
-        { name: "Electrician", path: "/main/electrician" },
-        { name: "IT Consultant", path: "/main/it-consultant" },
-        { name: "Painter", path: "/main/painter" },
+        { name: "Maid", path: "/main/find-service/Maid" },
+        { name: "Plumber", path: "/main/find-service/Plumber" },
+        { name: "Tutor", path: "/main/find-service/Tutor" },
+        { name: "Electrician", path: "/main/find-service/Electrician" },
+        { name: "IT Consultant", path: "/main/find-service/IT Consultant" },
+        { name: "Painter", path: "/main/find-service/Painter" },
     ]
   return (
     <div className={`${bg==="white" ? "bg-white" : "bg-black"} header`}>
@@ -27,7 +29,7 @@ const Header = ({bg} : {bg:string}) => {
                        <Link to={link.path}>{link.name}</Link>
                    </li>
                ))}
-               <Link to='/main/profile' className="user-profile"><FaUser/></Link>
+               <Link to={`/main/profile/${selfId}`} className="user-profile"><FaUser/></Link>
            </ul>
         </nav>
     </div>

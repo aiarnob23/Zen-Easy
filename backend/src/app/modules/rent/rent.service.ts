@@ -12,7 +12,7 @@ const getRentPosts = async () => {
 const createRentAd = async (payload: TRent) => {
   const result = await Rent.create(payload);
   if (result?._id) {
-    const user = await User.findOne({ email: payload.email });
+    const user = await User.findOne({ _id: payload.user });
     if (!user) {
       await Rent.findByIdAndDelete(result._id);
       throw new Error(
@@ -21,7 +21,7 @@ const createRentAd = async (payload: TRent) => {
     }
 
     const updatedUser = await User.findOneAndUpdate(
-      { email: payload.email },
+      { _id: payload.user },
       { $push: { rentPosts: result._id } },
       { new: true, runValidators: true }
     );
@@ -30,22 +30,28 @@ const createRentAd = async (payload: TRent) => {
   return null;
 };
 
-
 //update rent ad status
-const updateRentAdStatus = async(_id:string , status:string)=>{
-    const result = Rent.findByIdAndUpdate(_id , {status:status} , {new:true});
-    return result;
-}
+const updateRentAdStatus = async (_id: string, status: string) => {
+  const result = Rent.findByIdAndUpdate(_id, { status: status }, { new: true });
+  return result;
+};
 
-//update rent ad 
-const updateRentAd = async(_id:string, payload:TRent) => {
-    const result = await Rent.findByIdAndUpdate(_id, payload, {new:true});
-    return result;
-}
+//update rent ad
+const updateRentAd = async (_id: string, payload: TRent) => {
+  const result = await Rent.findByIdAndUpdate(_id, payload, { new: true });
+  return result;
+};
+
+//view a rent details
+const viewRentDeails = async (_id: string) => {
+  const result = await Rent.findById(_id);
+  return result;
+};
 
 export const rentServices = {
   getRentPosts,
   createRentAd,
   updateRentAd,
   updateRentAdStatus,
+  viewRentDeails,
 };

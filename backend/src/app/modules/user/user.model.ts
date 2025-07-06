@@ -90,7 +90,8 @@ const RentSchema: Schema = new Schema<TUser>(
       trim: true,
     },
     professionalProfiles: {
-      type: [String],
+      type: [Schema.Types.ObjectId],
+      ref:'ProfessionalService',
       required: false,
     },
     socialMedia: {

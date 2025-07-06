@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { rentRoutes } from "./app/modules/rent/rent.route";
 import { imageRoutes } from "./app/modules/image/image.route";
 import { userRoutes } from "./app/modules/user/user.route";
+import { profHandleRoutes } from "./app/modules/professional-service/profService.route";
 
 
 
@@ -25,6 +26,7 @@ app.use(
 app.use("/api/v1/rent", rentRoutes);
 app.use("/api/v1/image", imageRoutes);
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/profession", profHandleRoutes);
 app.get("/", (req: Request, res: Response) => {
   res.send("Zen Easy BD server is running...");
 });
