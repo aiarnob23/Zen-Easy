@@ -3,6 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import type { TUserRegistration } from "../utils/types/registerUserType";
 import { serverBaseUrl } from "../utils/baseUrl";
 import { format } from "date-fns";
+import Cookies from "js-cookie";
 
 export function useRegister() {
   const [loading, setLoading] = useState(false);
@@ -83,7 +84,10 @@ export function useRegister() {
         socialMedia: userDataForBackend.socialMedia,
       };
 
-      await serverBaseUrl.post("/user/create-new", userData);
+      const res = await serverBaseUrl.post("/user/create-new", userData);
+      if(res?.data?.success){
+        Cookies.set('zenEasySelfId', res.data.data._id);
+      }
       setSuccess(true);
     } catch (err: any) {
       if (err.response?.data?.message) {

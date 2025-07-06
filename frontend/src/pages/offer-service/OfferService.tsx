@@ -316,8 +316,8 @@ const OfferService = () => {
                         message: "Description should be at least 20 characters"
                       },
                       maxLength: {
-                        value: 500,
-                        message: "Description cannot exceed 500 characters"
+                        value: 1000,
+                        message: "Description cannot exceed 1000 characters"
                       }
                     })}
                     placeholder="Describe your service, experience, and what makes you unique..."

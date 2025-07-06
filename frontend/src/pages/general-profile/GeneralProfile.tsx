@@ -228,7 +228,7 @@ console.log(userId);
                   <div className="profiles-grid">
                     {userProfile.professionalProfiles.map(
                       (profession: any, index: number) => (
-                        <Link to={`/main/prof-profile/${profession._id}`} className="profile-item" key={index}>
+                        <Link to={`/main/prof-profile/${userId}`} className="profile-item" key={index}>
                           <div className="profile-content relative">
                             <span className="profile-name">{profession.category}</span>
                             <span className={`text-[10px] font-semibold absolute -bottom-4 left-[5px] ${profession.status === 'active' ? 'text-green-600' : 'text-red-500'}`}>{profession.status}</span>

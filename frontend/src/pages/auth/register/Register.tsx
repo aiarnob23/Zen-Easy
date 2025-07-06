@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useRegister } from "../../../hooks/useRegister";
 import type { TUserRegistration } from "../../../utils/types/registerUserType";
 import { AuthContext } from "../../../context/AuthContext";
+import Cookies from "js-cookie";
 
 const Register = () => {
   const authcontext = useContext(AuthContext);
@@ -14,7 +15,7 @@ const Register = () => {
   if (!authcontext) {
     throw new Error("Authentication context is not available.");
   }
-  const { selfId } = authcontext;
+
   const {
     register,
     handleSubmit,
@@ -39,6 +40,7 @@ const Register = () => {
     },
   });
 
+  const selfId = Cookies.get("zenEasySelfId");
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(
     null
   );

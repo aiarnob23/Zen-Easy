@@ -178,7 +178,7 @@ const FindService = () => {
   const debouncedSetSearchTerm = useCallback(
     debounce((value: string) => {
       setSearchTerm(value);
-    }, 300), // 300ms debounce delay
+    }, 300),
     []
   );
 
@@ -392,12 +392,7 @@ const FindService = () => {
             </div>
           ) : displayedServices.length === 0 ? (
             <div className="no-services-found service-list-message">
-              <div className="no-services-icon">😔</div>
               <h2>No Matching Services Found</h2>
-              <p>
-                We couldn't find any {capitalizeWords(category || "")} services
-                matching your criteria. Try adjusting your filters.
-              </p>
             </div>
           ) : (
             <div className="service-cards-grid">
