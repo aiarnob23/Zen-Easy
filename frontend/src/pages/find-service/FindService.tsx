@@ -5,11 +5,10 @@ import { findServicesByCategory } from "../../services/professionalServices";
 import debounce from "lodash.debounce";
 import ReviewsModal from "../../components/modals/reviews/ReviewsModal";
 
-
 // type
 export type TProfessinalService = {
   _id: string;
-  provider: { 
+  provider: {
     _id: string;
     name: string;
   };
@@ -35,7 +34,7 @@ export type TServiceCategory =
   | "Painter"
   | "Plumber";
 export type TRating = {
-  client: string; 
+  client: string;
   rating: number;
   feedback: string;
 };
@@ -53,7 +52,7 @@ const serviceIcons: Record<TServiceCategory, string> = {
 const FindService = () => {
   const { category } = useParams<{ category: string }>();
 
-  const [allServices, setAllServices] = useState<TProfessinalService[]>([]); // Stores all fetched services
+  const [allServices, setAllServices] = useState<TProfessinalService[]>([]); 
   const [displayedServices, setDisplayedServices] = useState<
     TProfessinalService[]
   >([]);
@@ -72,9 +71,12 @@ const FindService = () => {
 
   // --- State for Reviews Modal ---
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
-  const [currentServiceRatings, setCurrentServiceRatings] = useState<TRating[]>([]);
-  const [currentServiceCategory, setCurrentServiceCategory] = useState<TServiceCategory | ''>('');
-
+  const [currentServiceRatings, setCurrentServiceRatings] = useState<TRating[]>(
+    []
+  );
+  const [currentServiceCategory, setCurrentServiceCategory] = useState<
+    TServiceCategory | ""
+  >("");
 
   // ---------------- Fetch all services ----------------
   useEffect(() => {
@@ -93,34 +95,7 @@ const FindService = () => {
       try {
         const result = await findServicesByCategory(category as string);
         if (result?.success && Array.isArray(result.data)) {
-          // --- Mock data for demonstration if no real data comes from API ---
-          if (result.data.length === 0) {
-              const mockData: TProfessinalService[] = Array.from({ length: 15 }).map((_, i) => ({
-                  _id: `mock-service-${category}-${i + 1}`,
-                  provider: { _id: `user-id-${i+1}`, name: `Provider Name ${i+1}` }, // Mock provider object
-                  category: category as TServiceCategory,
-                  contactNumber: `+880 123456789${i}`,
-                  addressLine: `House ${10 + i}, Road ${2 + i}, Area ${i % 2 === 0 ? 'A' : 'B'}`,
-                  serviceArea: [`Dhaka-${i % 3 === 0 ? 'Gulshan' : 'Mirpur'}`],
-                  description: `Experienced ${category} offering high-quality services. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
-                  minimumPrice: 500 + i * 100,
-                  maximumPrice: 2000 + i * 200,
-                  availableDays: ["Monday", "Wednesday", "Friday"],
-                  availableTime: i % 2 === 0 ? "day" : "night",
-                  coverImage: `https://via.placeholder.com/400x300/E4ED64/000000?text=${category}+${i + 1}`, // Placeholder image
-                  ratings: i % 3 === 0 ? [] : (i % 3 === 1 ? [ // Mock ratings
-                    { client: `Client A${i}`, rating: 5, feedback: "Superb service, highly recommended!" },
-                    { client: `Client B${i}`, rating: 4, feedback: "Good work, a bit slow on response." }
-                  ] : [
-                    { client: `Client C${i}`, rating: 3, feedback: "It was okay, nothing special." }
-                  ]),
-                  status: i % 4 === 0 ? 'inactive' : 'active',
-              }));
-              setAllServices(mockData);
-              console.log("Using mock data for demonstration.");
-          } else {
-              setAllServices(result.data);
-          }
+          setAllServices(result.data);
         } else {
           setError(
             result?.message ||
@@ -142,7 +117,6 @@ const FindService = () => {
     fetchAllServices();
   }, [category]);
 
-
   // ---------- Apply filters and sorting ----------------
   useEffect(() => {
     let filteredAndSortedServices = [...allServices];
@@ -157,10 +131,9 @@ const FindService = () => {
           service.serviceArea.some((area) =>
             area.toLowerCase().includes(lowerCaseSearchTerm)
           ) ||
-          service.provider.name.toLowerCase().includes(lowerCaseSearchTerm) // Search by provider name
+          service.provider.name.toLowerCase().includes(lowerCaseSearchTerm) 
       );
     }
-
 
     // --- Price Range Filter ---
     const min = parseFloat(minPrice);
@@ -223,7 +196,6 @@ const FindService = () => {
     []
   );
 
-
   useEffect(() => {
     return () => {
       debouncedSetSearchTerm.cancel();
@@ -236,13 +208,15 @@ const FindService = () => {
     return str.replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
-
   const getTotalFilteredCount = useMemo(() => {
     return displayedServices.length;
   }, [displayedServices]);
 
   // --- Reviews Modal Handlers ---
-  const openReviewsModal = (ratings: TRating[], serviceCategory: TServiceCategory) => {
+  const openReviewsModal = (
+    ratings: TRating[],
+    serviceCategory: TServiceCategory
+  ) => {
     setCurrentServiceRatings(ratings);
     setCurrentServiceCategory(serviceCategory);
     setIsReviewsModalOpen(true);
@@ -250,10 +224,9 @@ const FindService = () => {
 
   const closeReviewsModal = () => {
     setIsReviewsModalOpen(false);
-    setCurrentServiceRatings([]); 
-    setCurrentServiceCategory('');
+    setCurrentServiceRatings([]);
+    setCurrentServiceCategory("");
   };
-
 
   console.log(displayedServices);
 
@@ -539,7 +512,9 @@ const FindService = () => {
                     {service.ratings && service.ratings.length > 0 && (
                       <button
                         className="see-reviews-btn"
-                        onClick={() => openReviewsModal(service.ratings!, service.category)}
+                        onClick={() =>
+                          openReviewsModal(service.ratings!, service.category)
+                        }
                       >
                         See Reviews ({service.ratings.length})
                       </button>
