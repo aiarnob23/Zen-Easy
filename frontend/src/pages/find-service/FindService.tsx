@@ -3,11 +3,16 @@ import "./FindSevice.scss";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { findServicesByCategory } from "../../services/professionalServices";
 import debounce from "lodash.debounce";
+import ReviewsModal from "../../components/modals/reviews/ReviewsModal";
+
 
 // type
 export type TProfessinalService = {
   _id: string;
-  provider: any;
+  provider: { 
+    _id: string;
+    name: string;
+  };
   category: TServiceCategory;
   contactNumber: string;
   addressLine: string;
@@ -30,7 +35,7 @@ export type TServiceCategory =
   | "Painter"
   | "Plumber";
 export type TRating = {
-  client: string;
+  client: string; 
   rating: number;
   feedback: string;
 };
@@ -52,8 +57,10 @@ const FindService = () => {
   const [displayedServices, setDisplayedServices] = useState<
     TProfessinalService[]
   >([]);
-  const [loading, setLoading] = useState<boolean>(true); 
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  // --- Filter and Sort states ---
   const [searchTerm, setSearchTerm] = useState("");
   const [minPrice, setMinPrice] = useState<string>("");
   const [maxPrice, setMaxPrice] = useState<string>("");
@@ -63,7 +70,13 @@ const FindService = () => {
   const [sortBy, setSortBy] = useState("minimumPrice");
   const [sortOrder, setSortOrder] = useState("asc");
 
-  // ---------------- Fetch all services  ----------------
+  // --- State for Reviews Modal ---
+  const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
+  const [currentServiceRatings, setCurrentServiceRatings] = useState<TRating[]>([]);
+  const [currentServiceCategory, setCurrentServiceCategory] = useState<TServiceCategory | ''>('');
+
+
+  // ---------------- Fetch all services ----------------
   useEffect(() => {
     const fetchAllServices = async () => {
       setLoading(true);
@@ -80,7 +93,34 @@ const FindService = () => {
       try {
         const result = await findServicesByCategory(category as string);
         if (result?.success && Array.isArray(result.data)) {
-          setAllServices(result.data);
+          // --- Mock data for demonstration if no real data comes from API ---
+          if (result.data.length === 0) {
+              const mockData: TProfessinalService[] = Array.from({ length: 15 }).map((_, i) => ({
+                  _id: `mock-service-${category}-${i + 1}`,
+                  provider: { _id: `user-id-${i+1}`, name: `Provider Name ${i+1}` }, // Mock provider object
+                  category: category as TServiceCategory,
+                  contactNumber: `+880 123456789${i}`,
+                  addressLine: `House ${10 + i}, Road ${2 + i}, Area ${i % 2 === 0 ? 'A' : 'B'}`,
+                  serviceArea: [`Dhaka-${i % 3 === 0 ? 'Gulshan' : 'Mirpur'}`],
+                  description: `Experienced ${category} offering high-quality services. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
+                  minimumPrice: 500 + i * 100,
+                  maximumPrice: 2000 + i * 200,
+                  availableDays: ["Monday", "Wednesday", "Friday"],
+                  availableTime: i % 2 === 0 ? "day" : "night",
+                  coverImage: `https://via.placeholder.com/400x300/E4ED64/000000?text=${category}+${i + 1}`, // Placeholder image
+                  ratings: i % 3 === 0 ? [] : (i % 3 === 1 ? [ // Mock ratings
+                    { client: `Client A${i}`, rating: 5, feedback: "Superb service, highly recommended!" },
+                    { client: `Client B${i}`, rating: 4, feedback: "Good work, a bit slow on response." }
+                  ] : [
+                    { client: `Client C${i}`, rating: 3, feedback: "It was okay, nothing special." }
+                  ]),
+                  status: i % 4 === 0 ? 'inactive' : 'active',
+              }));
+              setAllServices(mockData);
+              console.log("Using mock data for demonstration.");
+          } else {
+              setAllServices(result.data);
+          }
         } else {
           setError(
             result?.message ||
@@ -100,7 +140,7 @@ const FindService = () => {
     };
 
     fetchAllServices();
-  }, [category]); 
+  }, [category]);
 
 
   // ---------- Apply filters and sorting ----------------
@@ -116,7 +156,8 @@ const FindService = () => {
           service.description.toLowerCase().includes(lowerCaseSearchTerm) ||
           service.serviceArea.some((area) =>
             area.toLowerCase().includes(lowerCaseSearchTerm)
-          )
+          ) ||
+          service.provider.name.toLowerCase().includes(lowerCaseSearchTerm) // Search by provider name
       );
     }
 
@@ -165,7 +206,7 @@ const FindService = () => {
 
     setDisplayedServices(filteredAndSortedServices);
   }, [
-    allServices, 
+    allServices,
     searchTerm,
     minPrice,
     maxPrice,
@@ -178,7 +219,7 @@ const FindService = () => {
   const debouncedSetSearchTerm = useCallback(
     debounce((value: string) => {
       setSearchTerm(value);
-    }, 300),
+    }, 100),
     []
   );
 
@@ -199,6 +240,22 @@ const FindService = () => {
   const getTotalFilteredCount = useMemo(() => {
     return displayedServices.length;
   }, [displayedServices]);
+
+  // --- Reviews Modal Handlers ---
+  const openReviewsModal = (ratings: TRating[], serviceCategory: TServiceCategory) => {
+    setCurrentServiceRatings(ratings);
+    setCurrentServiceCategory(serviceCategory);
+    setIsReviewsModalOpen(true);
+  };
+
+  const closeReviewsModal = () => {
+    setIsReviewsModalOpen(false);
+    setCurrentServiceRatings([]); 
+    setCurrentServiceCategory('');
+  };
+
+
+  console.log(displayedServices);
 
   return (
     <div className="find-service-page-wrapper">
@@ -228,7 +285,7 @@ const FindService = () => {
               <input
                 type="text"
                 id="search"
-                placeholder="Search by area, description..."
+                placeholder="Search by area, description, provider..."
                 onChange={(e) => debouncedSetSearchTerm(e.target.value)}
               />
             </div>
@@ -346,7 +403,6 @@ const FindService = () => {
             <button
               className="btn-clear"
               onClick={() => {
-                // Reset all filter states
                 setSearchTerm("");
                 setMinPrice("");
                 setMaxPrice("");
@@ -364,7 +420,7 @@ const FindService = () => {
           </div>
         </div>
 
-        {/* --- ---------Services Display ------------- */}
+        {/* --- Services Display ------------- */}
         <div className="services-display-area">
           <div className="page-main-header">
             <h1 className="page-main-title">
@@ -414,7 +470,7 @@ const FindService = () => {
                       className="card-image"
                       onError={(e) => {
                         e.currentTarget.src = `https://via.placeholder.com/400x300/CCCCCC/888888?text=Image+Error`;
-                      }} 
+                      }}
                     />
                     <span
                       className={`service-status status-${
@@ -437,10 +493,11 @@ const FindService = () => {
                     )}
                   </div>
                   <div className="card-content">
-                     <Link to={`/main/profile/${service.provider._id}`}>
-                     <h3 className="provider-name">
-                       {service?.provider?.name}
-                    </h3></Link>
+                    <Link to={`/main/profile/${service.provider._id}`}>
+                      <h3 className="provider-name">
+                        {service?.provider?.name}
+                      </h3>
+                    </Link>
                     <h3 className="card-category">
                       {serviceIcons[service.category] || "✨"}{" "}
                       {capitalizeWords(service.category)}
@@ -478,6 +535,15 @@ const FindService = () => {
                         </span>
                       </div>
                     </div>
+
+                    {service.ratings && service.ratings.length > 0 && (
+                      <button
+                        className="see-reviews-btn"
+                        onClick={() => openReviewsModal(service.ratings!, service.category)}
+                      >
+                        See Reviews ({service.ratings.length})
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -485,6 +551,16 @@ const FindService = () => {
           )}
         </div>
       </div>
+
+      {/* Reviews Modal */}
+      {isReviewsModalOpen && (
+        <ReviewsModal
+          isOpen={isReviewsModalOpen}
+          onClose={closeReviewsModal}
+          reviews={currentServiceRatings}
+          serviceCategory={currentServiceCategory}
+        />
+      )}
     </div>
   );
 };

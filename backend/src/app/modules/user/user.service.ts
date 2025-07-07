@@ -49,7 +49,7 @@ const validateUsersOTP = async (_id: string, OTP: string) => {
 
 //get the user's total professional services
 const getUsersProfessionalServices = async(_id : string) => {
-  const result = await User.findById(_id, {professionalProfiles:1});
+  const result = await User.findById(_id, {professionalProfiles:1}).populate("professionalProfiles");
   return result;
 }
 

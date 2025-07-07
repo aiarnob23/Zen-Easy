@@ -126,6 +126,7 @@ const OfferService = () => {
     getProfessionalInfo();
   }, [selfId]); 
 
+
 // ---------------------- return div --------------------
   return (
     <div className="offer-service-container">
@@ -144,7 +145,7 @@ const OfferService = () => {
               <p>You are currently working as:{" "}
                 <span className="profession-name">
                   {professions.map((prof, index) => (
-                    <span key={index}>{prof}{index < professions.length - 1 && ", "}</span>
+                    <span key={index}>{prof.category}{index < professions.length - 1 && ", "}</span>
                   ))}
                 </span>
               </p>
@@ -157,7 +158,7 @@ const OfferService = () => {
         {professions?.length >= 2 ? (
           <div className="limit-reached">
             <div className="warning-icon">⚠️</div>
-            <h3>Service Limit Reached</h3>
+            <h3>Professional Profile's Limit Reached</h3>
             <p>You are not allowed to offer more than two services simultaneously.</p>
           </div>
         ) : (

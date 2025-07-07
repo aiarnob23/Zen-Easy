@@ -1,6 +1,6 @@
 import { get } from "http";
 import User from "../user/user.model";
-import { TProfessinalService } from "./profservice.interface";
+import { TProfessinalService, TRating } from "./profservice.interface";
 import { ProfessionalService } from "./profservice.model";
 
 // create a new user service
@@ -33,11 +33,25 @@ const updateProfessionalProfile = async (
   return result;
 };
 
+//add new feedback
+const addNewFeedback = async (_id: string, payload: TRating) => {
+  const result = await ProfessionalService.findByIdAndUpdate(_id, {
+    $push: { ratings: payload },
+  });
+  return result;
+};
+
 //find services
 const findServices = async (category: string) => {
   const result = await ProfessionalService.find({
     category: category,
-  }).populate("provider");
+  }).populate("provider").populate("ratings.client", "name _id");
+  return result;
+};
+
+//find a service
+const findServiceById = async (_id: string) => {
+  const result = ProfessionalService.findById(_id);
   return result;
 };
 export const professionHandlerService = {
@@ -45,4 +59,6 @@ export const professionHandlerService = {
   getUserProfessionalProfiles,
   updateProfessionalProfile,
   findServices,
+  findServiceById,
+  addNewFeedback,
 };

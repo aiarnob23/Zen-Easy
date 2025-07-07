@@ -5,7 +5,8 @@ import { TProfessinalService } from "./profservice.interface";
 const ratingSchema = new Schema(
   {
     client: {
-      type: String,
+      type: Schema.Types.ObjectId as any,
+      ref: "User",
       required: true,
     },
     rating: {
@@ -27,7 +28,7 @@ const professionalServiceSchema = new Schema<TProfessinalService>(
   {
     provider: {
       type: Schema.Types.ObjectId as any,
-      ref: 'User',
+      ref: "User",
       required: true,
       trim: true,
     },
@@ -40,7 +41,7 @@ const professionalServiceSchema = new Schema<TProfessinalService>(
         "IT Consultant",
         "Painter",
         "Plumber",
-      ], 
+      ],
       required: true,
     },
     contactNumber: {
@@ -80,7 +81,7 @@ const professionalServiceSchema = new Schema<TProfessinalService>(
     },
     coverImage: {
       type: String,
-      required:false,
+      required: false,
     },
     ratings: {
       type: [ratingSchema],

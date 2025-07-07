@@ -6,5 +6,7 @@ router.post(`/create-profile/:id`, profHandlerControllers.createNewServiceProfil
 router.get(`/view-profile/:id`, profHandlerControllers.getUsersProfessionalProfiles);
 router.post(`/update-profile/:id`, profHandlerControllers.updateProfessionalProfile);
 router.get(`/find-services/:category` , profHandlerControllers.findServices);
+router.get(`/view-details/:id`, profHandlerControllers.findServiceById);
+router.post(`/add-feedback/:id`, profHandlerControllers.addNewFeedback);
 
 export const profHandleRoutes = router;

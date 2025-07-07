@@ -1,6 +1,6 @@
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
-import { TProfessinalService } from "./profservice.interface";
+import { TProfessinalService, TRating } from "./profservice.interface";
 import { professionHandlerService } from "./profservice.service";
 
 //create new user service profile 
@@ -85,9 +85,52 @@ const findServices = catchAsync(async(req,res)=>{
     })
 })
 
+//find a service 
+const findServiceById = catchAsync(async(req,res)=>{
+    const _id = req?.params?.id;
+    const result = await professionHandlerService.findServiceById(_id as string);
+     if(result){
+        sendResponse(res, {
+            success:true,
+            statusCode:200,
+            message:"Service found",
+            data:result,
+        })
+    }
+    sendResponse(res,{
+        success:false, 
+        statusCode:404,
+        message:"Failed to find service detatils",
+        data:null
+    })
+})
+
+//const add new feedback
+const addNewFeedback = catchAsync(async(req,res)=>{
+    const _id = req?.params?.id;
+    const payload = req?.body;
+    const result = await professionHandlerService.addNewFeedback(_id as string, payload as TRating);
+     if(result){
+        sendResponse(res, {
+            success:true,
+            statusCode:200,
+            message:"Feedback added successfully",
+            data:result,
+        })
+    }
+    sendResponse(res,{
+        success:false, 
+        statusCode:500,
+        message:"Failed to add feedback",
+        data:null
+    })
+})
+
 export const profHandlerControllers = {
     createNewServiceProfile,
     updateProfessionalProfile,
     getUsersProfessionalProfiles,
     findServices,
+    findServiceById,
+    addNewFeedback,
 }

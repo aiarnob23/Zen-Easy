@@ -3,10 +3,12 @@ import "./GeneralProfile.scss";
 import { Link, useParams } from "react-router-dom";
 import { getUserProfileDetails } from "../../services/userProfileServices";
 import Cookies from "js-cookie";
+import FeedbackModal from "../../components/modals/feedback/FeedbackModal";
 
 const GeneralProfile = () => {
   const [userProfile, setUserProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const {userId} = useParams<{userId:string}>();
   const selfId = Cookies.get("zenEasySelfId");
 console.log(userId);
@@ -30,10 +32,14 @@ console.log(userId);
   const handleEditProfile = () => {
     console.log("Edit profile clicked");
   };
-
+//----------handle logout -------------
   const handleLogout = () => {
     console.log("Logout clicked");
   };
+//----------handle modal--------------
+const toggleModal = ()=>{
+  setIsModalOpen(!isModalOpen);
+}
 
   if (loading) {
     return (
@@ -48,6 +54,7 @@ console.log(userId);
 
   console.log(userProfile);
 
+// -----------------------------------------//
   return (
     <div className="profile-container">
       <div className="profile-wrapper">
@@ -95,8 +102,8 @@ console.log(userId);
             </>
           ) : (
             <div>
-              <button className="leave-review-btn">
-                <Link to="/">Leave A Review</Link>
+              <button onClick={toggleModal} className="leave-review-btn">
+                <span>Leave A Review</span>
               </button>
             </div>
           )}
@@ -257,6 +264,7 @@ console.log(userId);
           </div>
         </div>
       </div>
+      <FeedbackModal isOpen={isModalOpen} onClose={toggleModal} clientId={selfId as string} provider={userId as string} services={userProfile?.professionalProfiles} />
     </div>
   );
 };
