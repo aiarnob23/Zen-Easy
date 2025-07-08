@@ -1,11 +1,11 @@
 :root {
-  --primary: #fcd34d; // A yellow color for primary actions/highlights
-  --bg-primary: #fffbeb; // A very light yellow for background gradients
-  --red-error: #f44336; // A standard red for errors
-  --border-light: #e1e5e9; // Light grey for borders
-  --text-dark: #1a1a1a; // Dark text
-  --text-medium: #666; // Medium grey text
-  --text-light: #999; // Light grey text for placeholders/hints
+  --primary: #fcd34d; 
+  --bg-primary: #fffbeb; 
+  --red-error: #f44336; 
+  --border-light: #e1e5e9; 
+  --text-dark: #1a1a1a; 
+  --text-medium: #666; 
+  --text-light: #999; 
   --shadow-light: rgba(0, 0, 0, 0.1);
   --shadow-medium: rgba(0, 0, 0, 0.2);
 }
@@ -15,7 +15,7 @@
   margin: 0 auto 160px;
   padding: 32px;
   min-height: 100vh;
-  box-sizing: border-box; // Ensure padding is included in the element's total width and height
+  box-sizing: border-box;
 
   .header-section {
     margin-bottom: 28px;
@@ -292,7 +292,7 @@
                       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 
                       &:hover {
-                        background: darken(#FF0000, 10%);
+                        background: (#FF0000, 10%);
                         transform: scale(1.1);
                       }
                     }
@@ -380,7 +380,7 @@
   }
 }
 
-// Loading animation for future use
+// animations
 @keyframes spin {
   0% {
     transform: rotate(0deg);

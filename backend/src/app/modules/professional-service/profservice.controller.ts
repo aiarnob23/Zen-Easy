@@ -19,7 +19,7 @@ const createNewServiceProfile = catchAsync(async (req, res) => {
       data: result,
     });
     return;
-  }k
+  }
 
   sendResponse(res, {
     success: false,

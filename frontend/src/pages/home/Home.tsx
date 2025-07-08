@@ -1,3 +1,4 @@
+import About from "../../components/home/about/About";
 import Banner from "../../components/home/banner/Banner";
 import Service from "../../components/home/service/Service";
 
@@ -9,6 +10,9 @@ const Home = () => {
       </div>
       <div>
         <Service/>
+      </div>
+      <div>
+        <About/>
       </div>
     </div>
   );
