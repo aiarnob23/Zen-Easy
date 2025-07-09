@@ -5,6 +5,7 @@ import { getUserProfileDetails } from "../../services/userProfileServices";
 import Cookies from "js-cookie";
 import FeedbackModal from "../../components/modals/feedback/FeedbackModal";
 import { AuthContext } from "../../context/AuthContext";
+import ProfileSkeleton from "../../components/ui/skeletons/general-profile/ProfileSkeleton";
 
 const GeneralProfile = () => {
   const [userProfile, setUserProfile] = useState<any>(null);
@@ -52,17 +53,9 @@ const GeneralProfile = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  if (loading) {
-    return (
-      <div className="profile-container">
-        <div className="loading-skeleton">
-          <div className="skeleton-header"></div>
-          <div className="skeleton-content"></div>
-        </div>
-      </div>
-    );
+if (loading) {
+   return <ProfileSkeleton />;
   }
-
   console.log(userProfile);
 
   // -----------------------------------------//
@@ -77,12 +70,6 @@ const GeneralProfile = () => {
               alt="Profile"
               className="avatar-image"
             />
-            <div className="avatar-overlay">
-              <svg viewBox="0 0 24 24" className="camera-icon">
-                <path d="M12 15.2l3.2-2.4L12 10.4 8.8 12.8 12 15.2zm0-8.4c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4z" />
-                <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9z" />
-              </svg>
-            </div>
           </div>
 
           <div className="profile-intro">

@@ -24,11 +24,11 @@ const PrivateRoute = ({ children }: { children: ReactNode }) => {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
-          fontSize: "24px",
+          fontSize: "30px",
         }}
       >
         <span className="loading loading-bars loading-lg"></span>
-        <p>Authenticating...</p>
+        <p className="primary font-semibold">Authenticating...</p>
       </div>
     );
   }

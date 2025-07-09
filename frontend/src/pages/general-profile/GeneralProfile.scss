@@ -8,31 +8,7 @@
     margin: 0 auto;
   }
 
-  // ----------------Loading skeleton-----------------
-  .loading-skeleton {
-    max-width: 1200px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
-    .skeleton-header,
-    .skeleton-content {
-      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-      background-size: 200px 100%;
-      animation: slideInFromLeft 1.5s infinite;
-    }
-
-    .skeleton-header {
-      height: 200px;
-    }
-
-    .skeleton-content {
-      height: 400px;
-      margin-top: 20px;
-    }
-  }
 
   // ---------------Profile Header----------------
   .profile-header {
@@ -44,7 +20,7 @@
     display: flex;
     align-items: center;
     gap: 30px;
-    animation: SlideInFromLeft 0.9s  ease-out forwards;
+    animation: SlideInFromLeft 0.9s ease-out forwards;
     position: relative;
     overflow: hidden;
 
@@ -112,7 +88,10 @@
 
     .profile-intro {
       flex: 1;
-      animation: SlideInFromLeft 0.9s  ease-out forwards;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInSlideUp 1.5s ease-out forwards;
+      animation-delay: 0.2s;
 
       .profile-name {
         font-size: 40px;
@@ -218,7 +197,7 @@
       overflow: hidden;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
-      animation: slideInFromLeft 1.2s  ease-out forwards;
+      animation: slideInFromLeft 1.2s ease-out forwards;
       .card-header {
         background: linear-gradient(135deg, var(--primary), #f4e55a);
         padding: 24px 32px;
@@ -590,13 +569,13 @@
   }
 
 
-  // Hover effects for better interactivity
+  // Hover effects
   .profile-header:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
   }
 
-  // Focus states for accessibility
+  // Focus states
   .btn-edit:focus,
   .btn-logout:focus,
   .view-btn:focus,
@@ -623,24 +602,24 @@
 }
 
 
-// Animations
-
-@keyframes fadeIn {
-  from {
+@keyframes slideInFromBottom {
+  0% {
     opacity: 0;
+    transform: translateY(60px);
   }
-  to {
+  100% {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@keyframes scaleIn {
+@keyframes fadeInSlideUp {
   from {
     opacity: 0;
-    transform: scale(0.6);
+    transform: translateY(20px); 
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0px); 
   }
 }

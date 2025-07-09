@@ -2,7 +2,8 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import "./Login.scss";
 import { useSignIn } from "../../../hooks/useSIgnIn";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useNotification } from "../../../context/notification/NotificationContext";
 
 type TUserLogin = {
   email: string;
@@ -10,6 +11,7 @@ type TUserLogin = {
 };
 
 const Login = () => {
+  const { showSuccess, showError } = useNotification();
   const {
     register,
     handleSubmit,
@@ -17,19 +19,22 @@ const Login = () => {
   } = useForm<TUserLogin>();
  const navigate = useNavigate();
   const {signIn, loading, error, success} = useSignIn();
+  const [loginError, setLoginError] = useState<string|"">("");
 
   const onSubmit: SubmitHandler<TUserLogin> = async (data) => {
-    console.log(data?.email , data?.password);
+    setLoginError("");
     await signIn(data.email as string, data.password as string);
   };
 
   useEffect(()=>{
     if(success){
-      console.log("success : ", success);
-      navigate('/');
+       showSuccess("Login successful!" , 1000);
+      setTimeout(() => {
+         navigate('/');
+      }, 1000);
     }
     if(error){
-      console.log(error);
+      setLoginError(error);
     }
   },[success,error])
 
@@ -88,6 +93,7 @@ const Login = () => {
               )}
             </div>
           </div>
+          <div className="text-red-500 my-2">{loginError && <span className="error-message">{loginError}</span>}</div>
 
           {/* (Login Button */}
           <div className="form-actions animated-item">
