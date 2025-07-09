@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 import { TRent } from "./rent.interface";
 
 const RentSchema: Schema = new Schema<TRent>(
@@ -59,7 +59,9 @@ const RentSchema: Schema = new Schema<TRent>(
       default: "Active",
     },
     user:{
-      type:String,
+      type:Schema.Types.ObjectId,
+      ref:"User",
+      trim:true,
       required:true,
     }
   },

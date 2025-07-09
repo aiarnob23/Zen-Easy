@@ -1,7 +1,8 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./RentDetails.scss";
 import { getRentDetails } from "../../services/rentServices";
+import Cookies from "js-cookie";
 
 const RentDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -9,6 +10,7 @@ const RentDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const selfId = Cookies.get("zenEasySelfId") || "";
 
   useEffect(() => {
     const fetchRentDetails = async () => {
@@ -140,16 +142,20 @@ const RentDetailsPage = () => {
               <li><strong>Available From:</strong> {new Date(rentProperty.rentStartDate).toLocaleDateString('en-GB', {year: 'numeric', month: 'long', day: 'numeric'})}</li>
               <li><strong>Posted On:</strong> {new Date(rentProperty.createdAt).toLocaleDateString('en-GB', {year: 'numeric', month: 'long', day: 'numeric'})}</li>
               <li><strong>Contact:</strong> {rentProperty.contactInfo}</li>
-              <li><strong>Posted by:</strong> {rentProperty.user}</li>
+              <li><strong>Posted by:</strong><Link className="primary font-semibold cursor-pointer" to={`/main/profile/${rentProperty.user._id}`}> {rentProperty.user.name}</Link></li>
             </ul>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="rent-actions">
-          <button onClick={handleEdit} className="edit-btn">Edit Listing</button>
-          <button onClick={handleDelete} className="delete-btn">Delete Listing</button>
-        </div>
+        {
+          selfId === rentProperty.user._id && (
+            <div className="rent-actions">
+              <button onClick={handleEdit} className="edit-btn">Edit Listing</button>
+              <button onClick={handleDelete} className="delete-btn">Delete Listing</button>
+            </div>
+          )
+        }
       </div>
     </div>
   );

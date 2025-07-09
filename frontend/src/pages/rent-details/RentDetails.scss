@@ -1,3 +1,23 @@
+.rent-details-container {
+  animation: fadeIn 1s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.rent-header {
+  animation: fadeUp 2s 0.1s both;
+}
+
+.rent-image-gallery .main-image-container {
+  animation: fadeIn 1.2s 0.2s both;
+}
+
+.rent-info-sections .info-card {
+  animation: slideIn 3s 0.3s both;
+}
+
+.rent-actions {
+  animation: fadeUp 3s 0.4s both;
+}
+
 
 .rent-details-wrapper {
   background-color: var(--bg-primary); 
@@ -404,5 +424,41 @@
         }
       }
     }
+  }
+}
+
+
+// animations----------
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

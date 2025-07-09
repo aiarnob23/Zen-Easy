@@ -44,7 +44,7 @@ const updateRentAd = async (_id: string, payload: TRent) => {
 
 //view a rent details
 const viewRentDeails = async (_id: string) => {
-  const result = await Rent.findById(_id);
+  const result = await Rent.findById(_id).populate("user", "name email contactNumber");
   return result;
 };
 

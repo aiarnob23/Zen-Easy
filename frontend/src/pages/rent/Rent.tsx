@@ -6,6 +6,7 @@ import OrbitalSpinner from "../../components/ui/LoadingSpinner";
 import debounce from "lodash.debounce";
 import { rentCategories } from "../../utils/constants";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Cookies from "js-cookie";
 
 const RentPage = () => {
   const [rentPosts, setRentPosts] = useState<any>([]);
@@ -18,10 +19,12 @@ const RentPage = () => {
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("desc");
   const [hasMore, setHasMore] = useState(true);
-  // states infinite scroll
+  const selfId = Cookies.get("zenEasySelfId") || "";
+
   const [currentPage, setCurrentPage] = useState(1);
   const [allRentPosts, setAllRentPosts] = useState<any>([]);
   const POSTS_PER_PAGE = 12;
+  const [postedBYFilter, setPostedBYFilter] = useState<"all" | "you" | "others">("all");
 
   // ----rent posts----
   useEffect(() => {
@@ -94,6 +97,15 @@ const RentPage = () => {
       );
     }
 
+    //posted by filter
+    if(postedBYFilter === "you" && selfId){
+      filteredAllPosts = filteredAllPosts.filter((post:any)=>post.user === selfId);
+    }
+    else if(postedBYFilter === "others" && selfId){
+      filteredAllPosts = filteredAllPosts.filter((post:any)=>post.user !== selfId);
+    }
+    
+
     //sorting
     filteredAllPosts.sort((a: any, b: any) => {
       let comparison = 0;
@@ -131,6 +143,8 @@ const RentPage = () => {
     sortOrder,
     hasMore,
     loading,
+    postedBYFilter,
+    selfId,
   ]);
 
   // Reset pagination when filters change
@@ -167,6 +181,17 @@ const RentPage = () => {
       filtered = filtered.filter((post: any) => post.cost <= max);
     }
 
+     // Posted by filter
+    if (postedBYFilter === "you" && selfId) {
+      filtered = filtered.filter(
+        (post: any) => post.user === selfId
+      );
+    } else if (postedBYFilter === "others" && selfId) {
+      filtered = filtered.filter(
+        (post: any) => post.user !== selfId
+      );
+    }
+
     //sorting
     filtered.sort((a: any, b: any) => {
       let comparison = 0;
@@ -184,7 +209,7 @@ const RentPage = () => {
       return sortOrder === "asc" ? comparison : -comparison;
     });
 
-    // -----load first page with filtered results
+    // -----load first page------------
     const firstPagePosts = filtered.slice(0, POSTS_PER_PAGE);
     setRentPosts(firstPagePosts);
     setHasMore(filtered.length > POSTS_PER_PAGE);
@@ -196,6 +221,8 @@ const RentPage = () => {
     maxPrice,
     sortBy,
     sortOrder,
+    postedBYFilter,
+    selfId,
   ]);
 
   // debounce search
@@ -407,6 +434,46 @@ const RentPage = () => {
                       onChange={(e) => setMaxPrice(e.target.value)}
                     />
                   </div>
+                </div>
+              </div>
+
+               {/* posted by filter */}
+              <div className="filter-group">
+                <label htmlFor="postedBy">Posted By</label>
+                <div className="radio-group">
+                  <label className="radio-option">
+                    <input
+                      type="radio"
+                      name="postedBy"
+                      value="all"
+                      checked={postedBYFilter === "all"}
+                      onChange={(e) => setPostedBYFilter(e.target.value as "all" | "you" | "others")}
+                    />
+                    <span className="radio-custom"></span>
+                    <span className="radio-label">All</span>
+                  </label>
+                  <label className="radio-option">
+                    <input
+                      type="radio"
+                      name="postedBy"
+                      value="you"
+                      checked={postedBYFilter === "you"}
+                      onChange={(e) => setPostedBYFilter(e.target.value as "all" | "you" | "others")}
+                    />
+                    <span className="radio-custom"></span>
+                    <span className="radio-label">You</span>
+                  </label>
+                  <label className="radio-option">
+                    <input
+                      type="radio"
+                      name="postedBy"
+                      value="others"
+                      checked={postedBYFilter === "others"}
+                      onChange={(e) => setPostedBYFilter(e.target.value as "all" | "you" | "others")}
+                    />
+                    <span className="radio-custom"></span>
+                    <span className="radio-label">Others</span>
+                  </label>
                 </div>
               </div>
 
