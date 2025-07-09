@@ -9,6 +9,7 @@
   background-size: cover;
   background-position: center;
   backdrop-filter: 100px;
+  margin-bottom: 80px;
 
   .about-container {
     height: 700px;
@@ -23,6 +24,8 @@
     .about-contents {
       height: 100%;
       .single-about-content {
+        backdrop-filter: blur(7px);
+        background-color: rgba(0, 0, 0, 0.2);
         height: 100%;
         max-width: 1280px;
         margin: auto;
@@ -34,19 +37,26 @@
         gap: 20px;
         opacity: 0;
         transform: translateY(50px);
-
+        border-radius: 24px;
+        margin-top: 80px;
+        padding-left: 20px;
+        padding-right: 20px;
         h3 {
-          font-size: 80px;
+          font-size: 60px;
           font-weight: 500;
           opacity: 0;
+          color: var(--primary);
+          font-weight: 600;
           transform: translateY(30px);
           transition: opacity 0.6s ease-out, transform 0.6s ease-out;
           transition-delay: 0.1s;
         }
         p {
-          font-size: 40px;
+          font-size: 30px;
           font-weight: 300;
+          color: rgb(255, 255, 255);
           opacity: 0;
+          font-weight: 400;
           transform: translateY(30px);
           transition: opacity 0.6s ease-out, transform 0.6s ease-out;
           transition-delay: 0.2s;
