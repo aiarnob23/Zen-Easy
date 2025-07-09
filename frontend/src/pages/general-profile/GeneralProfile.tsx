@@ -1,17 +1,27 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./GeneralProfile.scss";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { getUserProfileDetails } from "../../services/userProfileServices";
 import Cookies from "js-cookie";
 import FeedbackModal from "../../components/modals/feedback/FeedbackModal";
+import { AuthContext } from "../../context/AuthContext";
 
 const GeneralProfile = () => {
   const [userProfile, setUserProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const {userId} = useParams<{userId:string}>();
+  const { userId } = useParams<{ userId: string }>();
   const selfId = Cookies.get("zenEasySelfId");
-console.log(userId);
+  const authContext = useContext(AuthContext);
+
+  if (!authContext) {
+    console.error(
+      "PrivateRoute: AuthContext is not available. Ensure AuthProvider wraps your application."
+    );
+    return <Navigate to={"/auth/login"} />;
+  }
+
+  const {logOut} = authContext
   useEffect(() => {
     const getUserProfile = async () => {
       try {
@@ -32,14 +42,15 @@ console.log(userId);
   const handleEditProfile = () => {
     console.log("Edit profile clicked");
   };
-//----------handle logout -------------
-  const handleLogout = () => {
-    console.log("Logout clicked");
+  //----------handle logout -------------
+  const handleLogout = async() => {
+    await logOut();
+    window.location.href = "/";
   };
-//----------handle modal--------------
-const toggleModal = ()=>{
-  setIsModalOpen(!isModalOpen);
-}
+  //----------handle modal--------------
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
 
   if (loading) {
     return (
@@ -54,7 +65,7 @@ const toggleModal = ()=>{
 
   console.log(userProfile);
 
-// -----------------------------------------//
+  // -----------------------------------------//
   return (
     <div className="profile-container">
       <div className="profile-wrapper">
@@ -163,13 +174,16 @@ const toggleModal = ()=>{
                 <div className="info-item address-item">
                   <span className="info-label">Address</span>
                   <span className="info-value mb-[20px]">
-                    <span>Address Line : </span>{userProfile?.address?.street || "Not provided"}
+                    <span>Address Line : </span>
+                    {userProfile?.address?.street || "Not provided"}
                   </span>
                   <span className="info-value mb-[20px]">
-                    <span>City : </span>{userProfile?.address?.city || "Not provided"}
+                    <span>City : </span>
+                    {userProfile?.address?.city || "Not provided"}
                   </span>
                   <span className="info-value">
-                    <span>Postal code : </span>{userProfile?.address?.postalCode || "Not provided"}
+                    <span>Postal code : </span>
+                    {userProfile?.address?.postalCode || "Not provided"}
                   </span>
                 </div>
               </div>
@@ -235,10 +249,24 @@ const toggleModal = ()=>{
                   <div className="profiles-grid">
                     {userProfile.professionalProfiles.map(
                       (profession: any, index: number) => (
-                        <Link to={`/main/prof-profile/${userId}`} className="profile-item" key={index}>
+                        <Link
+                          to={`/main/prof-profile/${userId}`}
+                          className="profile-item"
+                          key={index}
+                        >
                           <div className="profile-content relative">
-                            <span className="profile-name">{profession.category}</span>
-                            <span className={`text-[10px] font-semibold absolute -bottom-4 left-[5px] ${profession.status === 'active' ? 'text-green-600' : 'text-red-500'}`}>{profession.status}</span>
+                            <span className="profile-name">
+                              {profession.category}
+                            </span>
+                            <span
+                              className={`text-[10px] font-semibold absolute -bottom-4 left-[5px] ${
+                                profession.status === "active"
+                                  ? "text-green-600"
+                                  : "text-red-500"
+                              }`}
+                            >
+                              {profession.status}
+                            </span>
                           </div>
                           <button className="view-btn">
                             <svg viewBox="0 0 24 24">
@@ -264,7 +292,13 @@ const toggleModal = ()=>{
           </div>
         </div>
       </div>
-      <FeedbackModal isOpen={isModalOpen} onClose={toggleModal} clientId={selfId as string} provider={userId as string} services={userProfile?.professionalProfiles} />
+      <FeedbackModal
+        isOpen={isModalOpen}
+        onClose={toggleModal}
+        clientId={selfId as string}
+        provider={userId as string}
+        services={userProfile?.professionalProfiles}
+      />
     </div>
   );
 };

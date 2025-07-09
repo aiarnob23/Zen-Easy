@@ -1,5 +1,5 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Login.scss";
 import { useSignIn } from "../../../hooks/useSIgnIn";
 import { useEffect } from "react";
@@ -15,7 +15,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<TUserLogin>();
-
+ const navigate = useNavigate();
   const {signIn, loading, error, success} = useSignIn();
 
   const onSubmit: SubmitHandler<TUserLogin> = async (data) => {
@@ -26,7 +26,7 @@ const Login = () => {
   useEffect(()=>{
     if(success){
       console.log("success : ", success);
-       window.location.replace('/');
+      navigate('/');
     }
     if(error){
       console.log(error);

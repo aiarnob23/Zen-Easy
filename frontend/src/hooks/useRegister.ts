@@ -4,6 +4,7 @@ import type { TUserRegistration } from "../utils/types/registerUserType";
 import { serverBaseUrl } from "../utils/baseUrl";
 import { format } from "date-fns";
 import Cookies from "js-cookie";
+import { generateSignInToken } from "../services/authServices";
 
 export function useRegister() {
   const [loading, setLoading] = useState(false);
@@ -86,6 +87,8 @@ export function useRegister() {
 
       const res = await serverBaseUrl.post("/user/create-new", userData);
       if(res?.data?.success){
+        const token = await generateSignInToken(res.data.data._id);
+        Cookies.set('zenEasySelfToken', token.data, { expires: 14 });
         Cookies.set('zenEasySelfId', res.data.data._id);
       }
       setSuccess(true);

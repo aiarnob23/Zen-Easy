@@ -14,6 +14,7 @@ import OTPValidate from "../pages/auth/otp-validate/OTPValidate";
 import RentDetailsPage from "../pages/rent-details/RentDetails";
 import FindService from "../pages/find-service/FindService";
 import ProfProfile from "../pages/prof-profile/profProfile";
+import PrivateRoute from "./PrivateRoutes";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/main",
-    element: <RootLayout />,
+    element: <PrivateRoute><RootLayout /></PrivateRoute>,
     children: [
       {
         path: "/main/offer-service",

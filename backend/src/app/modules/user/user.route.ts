@@ -13,5 +13,6 @@ router.get(
   `/professional-details/:id`,
   userControllers.getUsersProfessionalServices
 );
+router.post(`/sign-in-token/:id`, userControllers.userSignInToken);
 
 export const userRoutes = router;
