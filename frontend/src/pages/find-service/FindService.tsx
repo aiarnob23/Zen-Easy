@@ -96,6 +96,7 @@ const FindService = () => {
         const result = await findServicesByCategory(category as string);
         if (result?.success && Array.isArray(result.data)) {
           setAllServices(result.data);
+          setDisplayedServices(result.data);
         } else {
           setError(
             result?.message ||
