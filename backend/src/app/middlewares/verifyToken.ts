@@ -3,7 +3,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 
 
 interface CustomRequest extends Request {
-  user?: string | JwtPayload;
+  realUser?: string | JwtPayload;
 }
 
 export const verifyToken = (
@@ -32,7 +32,7 @@ export const verifyToken = (
     console.log("Decoded token:", decoded);
 
  
-    req.user = decoded;
+    req.realUser = decoded;
 
     next(); 
   } catch (error) {

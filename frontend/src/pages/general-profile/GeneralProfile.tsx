@@ -41,7 +41,7 @@ const GeneralProfile = () => {
   }, []);
 
   const handleEditProfile = () => {
-    console.log("Edit profile clicked");
+    window.location.href = `/main/edit-profile`;
   };
   //----------handle logout -------------
   const handleLogout = async() => {

@@ -9,6 +9,7 @@ import { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import auth from "../config/firebase.config";
 
+
 //Type for the context
 interface AuthContextType {
   EmailPassSignUp: (email: string, password: string) => Promise<UserCredential>;
@@ -20,7 +21,6 @@ interface AuthContextType {
 
 //Context
 export const AuthContext = createContext<AuthContextType | null>(null);
-
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any>(null);
@@ -41,10 +41,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     return await signOut(auth);
   };
 
-
   //onAuth state change handler
   useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, async(currentUser) => {
+    const unSubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setLoading(false);
       if (currentUser) {
         setUser(currentUser);
@@ -52,13 +51,11 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
       if (!currentUser) {
         setLoading(false);
-        setUser(null); 
+        setUser(null);
       }
     });
     return () => unSubscribe();
-  }, []); 
-
-
+  }, []);
 
   // auth info
   const authInfo: AuthContextType = {

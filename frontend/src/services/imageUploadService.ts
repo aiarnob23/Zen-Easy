@@ -60,3 +60,33 @@ export const uploadPropertyImages = async (files: File[]): Promise<string[] | un
         return undefined;
     }
 };
+
+
+
+// -----------------user profile image upload-------------------------------
+export const uploadProfileImage = async (file: File): Promise<string | undefined> => {
+    const formData = new FormData();
+    formData.append("profileImage", file); 
+
+    try {
+        const response = await serverBaseUrl.post(
+            "/image/upload-profile", 
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                withCredentials: true,
+            }
+        );
+
+        if (response.data?.success && response.data?.data?.url) {
+            return response.data.data.url; 
+            console.error("Profile image upload failed or no URL returned:", response.data?.message || "Unknown error");
+            return undefined;
+        }
+    } catch (error: any) {
+        console.error("Error uploading profile image:", error.response?.data?.message || error.message);
+        return undefined;
+    }
+};

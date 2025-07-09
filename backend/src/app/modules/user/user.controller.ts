@@ -6,6 +6,12 @@ import { sendOtpToUserEmail } from "../../utils/sendEmailNotification";
 import sendResponse from "../../utils/sendResponse";
 import { userServices } from "./user.service";
 
+declare module "express-serve-static-core" {
+  interface Request {
+    realUser?: any;
+  }
+}
+
 //create new user
 const createNewUser = catchAsync(async (req, res) => {
   const payload = req?.body;
@@ -26,6 +32,16 @@ const createNewUser = catchAsync(async (req, res) => {
 const editUserDetails = catchAsync(async (req, res) => {
   const _id = req?.params?.id;
   const payload = req?.body;
+  const realUser = req.realUser;
+  if (realUser?.userId !== _id) {
+    sendResponse(res, {
+      success: false,
+      statusCode: 403,
+      message: "You are not authorized to update this user",
+      data: null,
+    });
+    return;
+  }
   const result = await userServices.updateUserDetails(_id, payload);
   if (result) {
     sendResponse(res, {

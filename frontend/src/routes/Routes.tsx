@@ -15,6 +15,7 @@ import RentDetailsPage from "../pages/rent-details/RentDetails";
 import FindService from "../pages/find-service/FindService";
 import ProfProfile from "../pages/prof-profile/profProfile";
 import PrivateRoute from "./PrivateRoutes";
+import EditProfile from "../pages/edit-profile/EditProfile";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "/main/profile/:userId",
         element: <GeneralProfile />,
+      },
+      {
+        path: "/main/edit-profile",
+        element: <EditProfile />,
       },
       {
         path: "/main/add-rent",
