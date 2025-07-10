@@ -4,6 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./AddRent.scss";
 import { useAddRent } from "../../hooks/useAddRent";
 import Cookies from "js-cookie";
+import { useNotification } from "../../context/notification/NotificationContext";
 
 const AddRent = () => {
   const selfId = Cookies.get("zenEasySelfId");
@@ -118,20 +119,20 @@ const AddRent = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
+  const {showError } = useNotification();
   // ------------------Handle form submission------------------
   const handleSubmitClick = async () => {
-    if (!validateForm()) return; 
+    if (!validateForm()) return;
 
     const filteredImages = selectedImages.filter(Boolean);
     if (filteredImages.length === 0) {
-      alert("Please add at least one image!");
+      showError("Please add at least one image!", 1000);
       return;
     }
     await addRentProperty({ ...formData, selectedImages: filteredImages });
   };
 
-// ---------------------------------------
+  // ---------------------------------------
 
   const isAddMoreImagesDisabled =
     selectedImages.filter(Boolean).length < 3 && imageFields.length === 3;
@@ -239,7 +240,7 @@ const AddRent = () => {
                     errors.rentStartDate ? "error" : ""
                   }`}
                   placeholderText="Select a date"
-                  minDate={new Date()} 
+                  minDate={new Date()}
                 />
                 {errors.rentStartDate && (
                   <span className="error-message">{errors.rentStartDate}</span>
@@ -382,7 +383,7 @@ const AddRent = () => {
                         )}
                       </div>
 
-                      {index >= 3 && ( 
+                      {index >= 3 && (
                         <button
                           type="button"
                           onClick={() => handleRemoveImageField(index)}
@@ -418,7 +419,7 @@ const AddRent = () => {
             <div className="form-actions">
               <button
                 onClick={handleSubmitClick}
-                disabled={loading} 
+                disabled={loading}
                 className="submit-btn"
               >
                 {loading ? "Publishing..." : "Post Ad"}

@@ -16,6 +16,8 @@ import FindService from "../pages/find-service/FindService";
 import ProfProfile from "../pages/prof-profile/profProfile";
 import PrivateRoute from "./PrivateRoutes";
 import EditProfile from "../pages/edit-profile/EditProfile";
+import ResetPassword from "../pages/auth/reset-password/ResetPassword";
+import EditService from "../pages/edit-profession/EditProfProfile";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +70,10 @@ const router = createBrowserRouter([
         path: "/main/prof-profile/:id",
         element: <ProfProfile />,
       },
+      {
+        path: "/main/edit-profession/:serviceId",
+        element: <EditService />,
+      },
     ],
   },
   {
@@ -85,6 +91,10 @@ const router = createBrowserRouter([
       {
         path: "/auth/otp-validate/:id",
         element: <OTPValidate />,
+      },
+      {
+        path: "/auth/reset-password",
+        element: <ResetPassword />,
       },
     ],
   },

@@ -66,7 +66,6 @@ export function useOfferService() {
     } catch (err: any) {
       console.error("Error in useOfferService:", err);
       setError(err.message || "An error occurred while publishing the service.");
-      alert(err.message || "Failed to publish service. Please try again.");
     } finally {
       setLoading(false);
     }

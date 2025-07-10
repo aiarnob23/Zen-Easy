@@ -8,6 +8,7 @@ import { useRegister } from "../../../hooks/useRegister";
 import type { TUserRegistration } from "../../../utils/types/registerUserType";
 import { AuthContext } from "../../../context/AuthContext";
 import Cookies from "js-cookie";
+import { useNotification } from "../../../context/notification/NotificationContext";
 
 const Register = () => {
   const authcontext = useContext(AuthContext);
@@ -15,7 +16,7 @@ const Register = () => {
   if (!authcontext) {
     throw new Error("Authentication context is not available.");
   }
-
+const { showSuccess, showError } = useNotification();
   const {
     register,
     handleSubmit,
@@ -63,12 +64,11 @@ const Register = () => {
 
   useEffect(() => {
     if (success) {
-      // alert ("registration complete");
-      console.log("Registration complete");
-      window.location.replace(`/auth/otp-validate/${selfId}`);
+      showSuccess("registration complete" , 1000);
+      window.location.href = `/auth/otp-validate/${selfId}`;
     }
     if (error) {
-      alert(error);
+      showError(error, 1000);
     }
   }, [success, error]);
 

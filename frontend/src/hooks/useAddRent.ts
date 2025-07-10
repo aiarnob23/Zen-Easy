@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { serverBaseUrl } from "../utils/baseUrl"; 
 import { uploadPropertyImages } from "../services/imageUploadService";
+import { useNotification } from "../context/notification/NotificationContext";
 
 
 type AddRentFormInput = {
@@ -21,6 +22,7 @@ export function useAddRent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const { showSuccess, showError } = useNotification();
 
   const addRentProperty = async (formData: AddRentFormInput) => {
     setLoading(true);
@@ -52,11 +54,11 @@ export function useAddRent() {
       console.log("Sending final property data to backend:", finalPropertyData);
       await serverBaseUrl.post('/rent/create' , finalPropertyData);
       setSuccess(true);
-      alert("Property ad posted successfully!"); 
+      showSuccess("Property ad posted successfully!" , 1000); 
     } catch (err: any) {
       console.error("Error in useAddRent:", err);
       setError(err.message || "An error occurred while posting the ad.");
-      alert(err.message || "Failed to post property ad. Please try again."); 
+      showError(err.message || "Failed to post property ad. Please try again." , 1000); 
     } finally {
       setLoading(false);
     }

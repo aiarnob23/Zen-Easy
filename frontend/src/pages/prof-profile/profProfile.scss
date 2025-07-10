@@ -369,6 +369,21 @@
               font-size: 16px; 
           }
         }
+        .edit-profession{
+          padding: 10px 15px;
+          background-color: var(--primary);
+          color: rgb(12, 12, 78);
+          font-weight: 600;
+          border-radius: 8px;
+          text-align: center;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+
+          &:hover {
+             scale: 1.04;
+             transition: all 0.5s ease;
+          }
+        }
       }
     } 
   } 

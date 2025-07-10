@@ -5,6 +5,7 @@ import { useSignIn } from "../../../hooks/useSIgnIn";
 import { useEffect, useState } from "react";
 import { useNotification } from "../../../context/notification/NotificationContext";
 
+
 type TUserLogin = {
   email: string;
   password: string;
@@ -17,26 +18,30 @@ const Login = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<TUserLogin>();
- const navigate = useNavigate();
-  const {signIn, loading, error, success} = useSignIn();
-  const [loginError, setLoginError] = useState<string|"">("");
+  const navigate = useNavigate();
+  const { signIn, loading, error, success } = useSignIn();
+  const [loginError, setLoginError] = useState<string | "">("");
 
   const onSubmit: SubmitHandler<TUserLogin> = async (data) => {
     setLoginError("");
     await signIn(data.email as string, data.password as string);
   };
 
-  useEffect(()=>{
-    if(success){
-       showSuccess("Login successful!" , 1000);
+  useEffect(() => {
+    if (success) {
+      showSuccess("Login successful!", 1000);
       setTimeout(() => {
-         navigate('/');
+        navigate("/");
       }, 1000);
     }
-    if(error){
+    if (error) {
       setLoginError(error);
     }
-  },[success,error])
+  }, [success, error]);
+
+  const handlePasswordReset = async () => {
+    window.location.href = "/auth/reset-password";
+  }
 
   return (
     <div className="login-container">
@@ -93,7 +98,9 @@ const Login = () => {
               )}
             </div>
           </div>
-          <div className="text-red-500 my-2">{loginError && <span className="error-message">{loginError}</span>}</div>
+          <div className="text-red-500 my-2">
+            {loginError && <span className="error-message">{loginError}</span>}
+          </div>
 
           {/* (Login Button */}
           <div className="form-actions animated-item">
@@ -106,9 +113,14 @@ const Login = () => {
             </button>
           </div>
 
-          {/* Registration Link */}
-          <div className="register-link animated-item">
-            New here? <Link to="/auth/register">Please Register</Link>
+          {/* Registration Link & pass reset */}
+          <div className="flex justify-between items-center mt-4">
+            <div onClick={handlePasswordReset} className=" animated-item">
+              <button className="text-gray-600 cursor-pointer">Forgot password?</button>
+            </div>
+            <div className="register-link animated-item">
+              New here? <Link to="/auth/register">Please Register</Link>
+            </div>
           </div>
         </form>
       </div>

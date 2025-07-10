@@ -38,7 +38,7 @@ const GeneralProfile = () => {
       }
     };
     getUserProfile();
-  }, []);
+  }, [userId, selfId]);
 
   const handleEditProfile = () => {
     window.location.href = `/main/edit-profile`;
@@ -66,7 +66,7 @@ if (loading) {
         <div className="profile-header">
           <div className="profile-avatar">
             <img
-              src={userProfile?.profileImage || "/api/placeholder/120/120"}
+              src={userProfile?.profileImage || "/images/profile/user.png"}
               alt="Profile"
               className="avatar-image"
             />

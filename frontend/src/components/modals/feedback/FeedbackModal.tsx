@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import "./FeedbackModal.scss";
 import { addNewFeedback } from "../../../services/professionalServices";
+import { useNotification } from "../../../context/notification/NotificationContext";
 
 // form strctr------------
 type FeedbackFormData = {
@@ -41,23 +42,24 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
       reset();
     }
   }, [isOpen, reset]);
+  const { showSuccess, showError } = useNotification();
 
   // -------- Handle form submission --------------
   const onSubmit: SubmitHandler<FeedbackFormData> = async (data) => {
     if (!data.serviceId) {
-      alert("Please select a service category.");
+      showError("Please select a service category.");
       return;
     }
     if (data.rating < 1 || data.rating > 5) {
-      alert("Rating must be between 1 and 5.");
+      showError("Rating must be between 1 and 5.");
       return;
     }
     if (!data.feedback || data.feedback.trim().length < 10) {
-      alert("Feedback must be at least 10 characters long.");
+      showError("Feedback must be at least 10 characters long.");
       return;
     }
 
-    alert("Submitting feedback...");
+    showSuccess("Submitting feedback...");
 
     try {
       const finalFeedbackDataForBackend: any = {

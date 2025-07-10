@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
@@ -14,6 +15,7 @@ import auth from "../config/firebase.config";
 interface AuthContextType {
   EmailPassSignUp: (email: string, password: string) => Promise<UserCredential>;
   EmailPassLogIn: (email: string, password: string) => Promise<UserCredential>;
+  resetPassword: (email: string) => Promise<void>;
   logOut: () => Promise<void>;
   user: any;
   loading: boolean;
@@ -26,8 +28,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  // const provider = new GoogleAuthProvider();
-
   //Email-Password SignUp
   const EmailPassSignUp = async (email: string, password: string) => {
     return await createUserWithEmailAndPassword(auth, email, password);
@@ -36,6 +36,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const EmailPassLogIn = async (email: string, password: string) => {
     return await signInWithEmailAndPassword(auth, email, password);
   };
+  //password reset
+  const resetPassword = async(email:string)=>{
+    return await sendPasswordResetEmail(auth, email);
+  }
   //Sign-Out
   const logOut = async () => {
     return await signOut(auth);
@@ -62,6 +66,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     EmailPassSignUp,
     EmailPassLogIn,
     logOut,
+    resetPassword,
     user,
     loading,
   };
