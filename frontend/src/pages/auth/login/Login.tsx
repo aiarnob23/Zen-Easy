@@ -47,7 +47,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="heading animated-heading">
-        <h1 className="animated-item">Welcome Back to Zen Easy BD</h1>
+        <h1 className="animated-item">Welcome Back to <Link className="brand-name" to='/'>Zen Easy BD</Link></h1>
         <h2 className="animated-item">Login to Your Account</h2>
         <p className="animated-item">
           Access your services and connect with ease.

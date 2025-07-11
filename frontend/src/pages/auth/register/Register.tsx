@@ -86,7 +86,7 @@ const { showSuccess, showError } = useNotification();
   return (
     <div className="register-container">
       <div className="heading animated-heading">
-        <h1 className="animated-item">Welcome to Zen Easy BD</h1>
+        <h1 className="animated-item">Welcome to <Link to='/' className="brand-name">Zen Easy BD</Link></h1>
         <h2 className="animated-item">Register Your Account</h2>
         <p className="animated-item">
           Join us to experience seamless services.

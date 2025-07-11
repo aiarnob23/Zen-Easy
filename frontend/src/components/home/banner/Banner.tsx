@@ -6,7 +6,7 @@ const Banner = () => {
   return (
     <div className="banner">
       <div className="">
-        <Header bg="white" />
+        <Header bg="white"/>
       </div>
       <div className="banner-content-wrapper">
         <div className="banner-content">

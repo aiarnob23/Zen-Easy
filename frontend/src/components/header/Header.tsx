@@ -1,11 +1,17 @@
 import { Link } from "react-router-dom";
 import "./header.scss";
-import { FaUser } from 'react-icons/fa';
+import { FaUser, FaBars, FaTimes } from 'react-icons/fa';
 import Cookies from "js-cookie";
+import { useState } from "react";
 
 const Header = ({bg} : {bg:string}) => {
     console.log('header rendered');
     const selfId = Cookies.get("zenEasySelfId");
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const toggleMobileMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen);
+    };
 
     const navLinks = [
         { name: "Rent", path: "/main/rent" },
@@ -19,7 +25,7 @@ const Header = ({bg} : {bg:string}) => {
     ]
   return (
     <div className={`${bg==="white" ? "bg-white" : "bg-black"} header`}>
-        {/* desktop */}
+        {/* ------------desktop -------------*/}
         <nav className="navs">
            {/* logo */}
            <Link to="/" id="logo">ZenEasy</Link>
@@ -33,6 +39,26 @@ const Header = ({bg} : {bg:string}) => {
                <Link to={`/main/profile/${selfId}`} className="user-profile"><FaUser/></Link>
            </ul>
         </nav>
+
+        {/* ------------moobile -------------*/}
+        <nav className="mobile-navs">
+             {/* logo */}
+           <Link to="/" id="logo">ZenEasy</Link>
+           {/* Hamburger icon */}
+           <div className="hamburger-icon" onClick={toggleMobileMenu}>
+               {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+           </div>
+           {/* menu */}
+           <ul className={`mobile-menu ${isMobileMenuOpen ? "mobile-menu--open" : ""}`}>
+               {navLinks.map(link => (
+                   <li key={link.name}>
+                       <Link to={link.path} onClick={toggleMobileMenu}>{link.name}</Link>
+                   </li>
+               ))}
+               <Link to={`/main/profile/${selfId}`} className="user-profile" onClick={toggleMobileMenu}><FaUser/></Link>
+           </ul>
+        </nav>
+
     </div>
   );
 };
