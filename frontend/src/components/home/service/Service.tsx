@@ -13,8 +13,10 @@ import "./Service.scss";
 import { useNavigate } from "react-router-dom";
 
 const Service = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false); 
+  const [isHeadingVisible, setIsHeadingVisible] = useState(false); 
   const containerRef = useRef(null);
+  const headingRef = useRef(null); 
   const navigate = useNavigate();
 
   const handleServiceClick = (link: string) => {
@@ -31,7 +33,7 @@ const Service = () => {
     { id: 7, link:'find-service/Painter', name: "Painting", icon: <FaPaintBrush /> },
   ];
 
-  // trigger use
+  // trigger use (for service cards)
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -54,12 +56,41 @@ const Service = () => {
       if (containerRef.current) {
         observer.unobserve(containerRef.current);
       }
+      observer.disconnect(); 
     };
   }, []);
 
+  // ------- heading animation
+  useEffect(() => {
+    const headingObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsHeadingVisible(true);
+          headingObserver.unobserve(entry.target);
+        }
+      },
+      {
+        threshold: 0.5, 
+        rootMargin: "0px",
+      }
+    );
+
+    if (headingRef.current) {
+      headingObserver.observe(headingRef.current);
+    }
+
+    return () => {
+      if (headingRef.current) {
+        headingObserver.unobserve(headingRef.current);
+      }
+      headingObserver.disconnect(); 
+    };
+  }, []);
+
+
   return (
     <div className="service-container" ref={containerRef}>
-      <div className="service-header">
+      <div className={`service-header ${isHeadingVisible ? 'animate-heading' : ''}`} ref={headingRef}>
         <h3>Find what you need in person.</h3>
       </div>
       <div className="service-list">

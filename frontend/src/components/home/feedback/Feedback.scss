@@ -22,24 +22,34 @@
   background-color: #ffffff;
   padding: 40px;
   border-radius: 18px;
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  box-shadow: 0px 1px 1px var(--primary);
+  border: 1px solid var(--primary);
   width: 100%;
   max-width: 600px;
   text-align: center;
+
+  opacity: 0;
+  transform: translateY(50px); 
+  transition: opacity 2s ease-out, transform 2s ease-out; 
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0px);
+  }
 }
 
-.card-title {
+#card-title{
+  color: var(--primary);
   font-size: 32px;
-  font-weight: 800;
-  color: #1a1a1a;
-  margin-bottom: 10px;
+  font-weight: 600;
+  margin: 24px 0px;
+  border-bottom: 1px solid var(--primary);
 }
-
 .card-subtitle {
   font-size: 16px;
   color: #666666;
   margin-bottom: 30px;
+  border-bottom: 1px solid var(--primary);
 }
 
 .feedback-form {

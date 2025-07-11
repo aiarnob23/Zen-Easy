@@ -8,9 +8,19 @@
 }
 
 .service-header {
-  font-size: 40px;
+  font-size: 56px;
   font-weight: 600;
-  color: #000000;
+  margin:50px 0px;
+  color:black;
+
+  opacity: 0; 
+  transform: translateY(100px);
+  transition: opacity 0.8s ease-out, transform 1.8s ease-out; 
+
+  &.animate-heading {
+    opacity: 1;
+    transform: translateY(0px);
+  }
 }
 
 .service-list {
@@ -153,7 +163,4 @@
   font-weight: 400;
   font-size: 14px;
 }
-
-
-
 }

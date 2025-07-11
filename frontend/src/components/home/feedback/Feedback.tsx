@@ -1,4 +1,4 @@
-
+import { useEffect, useRef } from 'react'; 
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
 import './Feedback.scss';
@@ -14,19 +14,49 @@ type FeedbackFormData = {
 
 const Feedback = () => {
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FeedbackFormData>();
+  const cardRef = useRef<HTMLDivElement>(null); 
 
   const onSubmit: SubmitHandler<FeedbackFormData> = async () => {
     await new Promise(resolve => setTimeout(resolve, 1000));
     reset(); 
   };
 
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible"); 
+            observer.unobserve(entry.target); 
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.2, 
+      }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => {
+      if (cardRef.current) {
+        observer.unobserve(cardRef.current);
+      }
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <div className="feedback-container-wrapper">
       <div className="feedback-container">
         <div className="feedback-div">
-          <div className="feedback-form-card">
-            <h3 className="card-title">Your opinion is important to us</h3>
-            <p className="card-subtitle">We value your feedback and suggestions. Please share your thoughts with us.</p>
+          <div ref={cardRef} className="feedback-form-card"> 
+            <h3 id="card-title">Your opinion is important to us</h3>
             <form onSubmit={handleSubmit(onSubmit)} className="feedback-form">
               <div className="form-group">
                 <label htmlFor="name">Name</label>

@@ -28,8 +28,9 @@ const AddRent = () => {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  const { addRentProperty, loading, error, success } = useAddRent();
+ 
+  const { addRentProperty, loading, success } = useAddRent();
+  const {showError , showSuccess } = useNotification();
 
   const handleAddMoreImages = () => {
     if (imageFields.length < 5) {
@@ -119,7 +120,7 @@ const AddRent = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  const {showError } = useNotification();
+
   // ------------------Handle form submission------------------
   const handleSubmitClick = async () => {
     if (!validateForm()) return;
@@ -131,7 +132,12 @@ const AddRent = () => {
     }
     await addRentProperty({ ...formData, selectedImages: filteredImages });
   };
-
+  useEffect(() => {
+    if (success) {
+     showSuccess("Rental property added successfully!", 1000);
+     window.location.href = "/main/rent";
+    }
+  }, [success, selfId]);
   // ---------------------------------------
 
   const isAddMoreImagesDisabled =

@@ -15,9 +15,17 @@ const fetchAllRentPosts = catchAsync(
         message: "Rent posts fetched successfully",
         data: result,
       });
+      return;
     }
-
-    errorResponse("Data not found!",404);
+    else{
+      sendResponse(res,{
+        success:false,
+        statusCode:404,
+        message:"Data not found",
+        data:null,
+      })
+      return;
+    }
   }
 );
 
@@ -33,8 +41,17 @@ const createNewRentAd = catchAsync(
         message: "Rent post created successfully",
         data: result,
       });
+      return;
     }
-    errorResponse("Post creation failed", 400)
+    else {
+      sendResponse(res,{
+        success:false,
+        statusCode:400,
+        message:"Post creation failed",
+        data:null,
+      })
+      return;
+    }
   }
 );
 
@@ -48,8 +65,17 @@ const updateRentPostStatus = catchAsync(async(req,res)=>{
         message: "Rent post's status has changed",
         data: result,
       });
+      return;
   }
-  errorResponse("Failed to update the status of rent ad", 400);
+  else {
+    sendResponse(res,{
+      success:false,
+      statusCode:400,
+      message:"Failed to update the status of rent ad",
+      data:null,
+    })
+    return;
+  }
 })
 
 //update rent post details 
@@ -62,8 +88,17 @@ const updateRentPostDetails = catchAsync(async(req,res)=>{
         message: "Rent post updated successfully",
         data: result,
       });
+      return;
   }
-  errorResponse("Failed to update the rent ad", 400);
+  else {
+    sendResponse(res,{
+      success:false,
+      statusCode:400,
+      message:"Failed to update the rent ad",
+      data:null,
+    })
+    return;
+  }
 })
 
 //view a rent details
@@ -77,13 +112,17 @@ const getRentDetails = catchAsync(async(req,res)=>{
       message:"Rent details fetched successfully",
       data:result,
     })
+    return;
   }
-  sendResponse(res,{
-    success:false,
-    statusCode:404,
-    message:"Failed to fetch rent post details",
-    data:null,
-  })
+  else{
+    sendResponse(res,{
+      success:false,
+      statusCode:404,
+      message:"Failed to fetch rent post details",
+      data:null,
+    })
+    return;
+  }
 })
 
 export const rentController = {

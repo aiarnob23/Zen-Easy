@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { getUsersProfessionalInfo } from "../../services/professionalServices"; 
 import { useOfferService } from "../../hooks/useOfferService"; 
+import { useNotification } from "../../context/notification/NotificationContext";
 
 // ---------------type -------------
 export type TProfessinalService = {
@@ -42,11 +43,12 @@ type ProfessionalServiceFormData = Omit<TProfessinalService, 'provider' | 'minim
 };
 
 const OfferService = () => {
+  const {showSuccess} = useNotification();
   const [professions, setProfessions] = useState<any[]>([]);
   const [coverImagePreview, setCoverImagePreview] = useState<string | null>(null);
   const selfId = Cookies.get("zenEasySelfId");
 
-  const { offerService, loading, error, success } = useOfferService(); 
+  const { offerService, loading, success } = useOfferService(); 
 
   const {
     register,
@@ -108,6 +110,12 @@ const OfferService = () => {
 
     await offerService(selfId as string, data);
   };
+
+  useEffect(()=>{
+    if(success){
+      showSuccess("Professional Profile created" , 1000)
+    }
+  },[success])
 // ------------------------
   useEffect(() => {
     const getProfessionalInfo = async () => {
