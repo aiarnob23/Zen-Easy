@@ -3,7 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import { getUserProfileDetails } from "../../services/userProfileServices";
 import OrbitalSpinner from "../../components/ui/LoadingSpinner";
 import "./ProfProfile.scss";
-import Cookies from "js-cookie" ;
+import Cookies from "js-cookie";
+import type { TServiceCategory } from "../../utils/types/serviceTitleType";
 
 // --- Types
 export type TProfessinalService = {
@@ -24,14 +25,6 @@ export type TProfessinalService = {
   status: "active" | "inactive";
   updatedAt: string;
 };
-
-export type TServiceCategory =
-  | "Maid"
-  | "Tutor"
-  | "Electrician"
-  | "IT Consultant"
-  | "Painter"
-  | "Plumber";
 
 export type TRating = {
   client: string;
@@ -74,9 +67,10 @@ export type TUserProfile = {
 
 const serviceIcons: Record<TServiceCategory, string> = {
   Maid: "🏠",
+  "Home Shifter": "🚚",
   Tutor: "📖",
   Electrician: "⚡",
-  "IT Consultant": "💻",
+  "IT Provider": "💻",
   Painter: "🎨",
   Plumber: "🔧",
 };
@@ -86,7 +80,7 @@ const ProfProfile = () => {
   const [userProfile, setUserProfile] = useState<TUserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const selfId = Cookies.get("zenEasySelfId") || "" ;
+  const selfId = Cookies.get("zenEasySelfId") || "";
 
   // --- Fetch user profile and professional details ---
   useEffect(() => {
@@ -389,18 +383,15 @@ const ProfProfile = () => {
                         </span>
                       </div>
                     )}
-                      {
-                      selfId === userProfile._id && (                        <Link
-                          to={`/main/edit-profession/${service._id}`}
-                          className="edit-profession"
-                        >
-                        ✏️  Edit Profession 
-                        </Link>
-                      )
-                   }
- 
+                    {selfId === userProfile._id && (
+                      <Link
+                        to={`/main/edit-profession/${service._id}`}
+                        className="edit-profession"
+                      >
+                        ✏️ Edit Profession
+                      </Link>
+                    )}
                   </div>
-
                 </div>
               )
             )

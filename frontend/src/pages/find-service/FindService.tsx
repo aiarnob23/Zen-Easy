@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { findServicesByCategory } from "../../services/professionalServices";
 import debounce from "lodash.debounce";
 import ReviewsModal from "../../components/modals/reviews/ReviewsModal";
+import OrbitalSpinner from "../../components/ui/LoadingSpinner";
+import type { TServiceCategory } from "../../utils/types/serviceTitleType";
 
 // type
 export type TProfessinalService = {
@@ -26,13 +28,7 @@ export type TProfessinalService = {
   status?: "active" | "inactive";
 };
 
-export type TServiceCategory =
-  | "Maid"
-  | "Tutor"
-  | "Electrician"
-  | "IT Consultant"
-  | "Painter"
-  | "Plumber";
+
 export type TRating = {
   client: string;
   rating: number;
@@ -42,9 +38,10 @@ export type TRating = {
 // Icons
 const serviceIcons: Record<TServiceCategory, string> = {
   Maid: "🏠",
+  "Home Shifter": "🚚",
   Tutor: "👨‍🏫",
   Electrician: "⚡",
-  "IT Consultant": "💻",
+  "IT Provider": "💻",
   Painter: "🎨",
   Plumber: "🔧",
 };
@@ -229,7 +226,6 @@ const FindService = () => {
     setCurrentServiceCategory("");
   };
 
-  console.log(displayedServices);
 
   return (
     <div className="find-service-page-wrapper">
@@ -407,11 +403,8 @@ const FindService = () => {
           </div>
 
           {loading ? (
-            <div className="loading-state service-list-message">
-              <div className="loading-spinner"></div>
-              <p>
-                Fetching top {capitalizeWords(category || "")} professionals...
-              </p>
+            <div className="">
+             <OrbitalSpinner/>
             </div>
           ) : error ? (
             <div className="error-state service-list-message">

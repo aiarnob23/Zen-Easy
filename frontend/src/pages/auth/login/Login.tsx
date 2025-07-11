@@ -4,7 +4,7 @@ import "./Login.scss";
 import { useSignIn } from "../../../hooks/useSIgnIn";
 import { useEffect, useState } from "react";
 import { useNotification } from "../../../context/notification/NotificationContext";
-
+import { Eye, EyeOff } from 'lucide-react'; 
 
 type TUserLogin = {
   email: string;
@@ -19,8 +19,9 @@ const Login = () => {
     formState: { errors, isSubmitting },
   } = useForm<TUserLogin>();
   const navigate = useNavigate();
-  const { signIn, loading, error, success } = useSignIn();
+  const { signIn, error, success } = useSignIn();
   const [loginError, setLoginError] = useState<string | "">("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit: SubmitHandler<TUserLogin> = async (data) => {
     setLoginError("");
@@ -37,10 +38,10 @@ const Login = () => {
     if (error) {
       setLoginError(error);
     }
-  }, [success, error]);
+  }, [success, error, navigate, showSuccess, showError]);
 
-  const handlePasswordReset = async () => {
-    window.location.href = "/auth/reset-password";
+  const handlePasswordReset = () => {
+    navigate("/auth/reset-password");
   }
 
   return (
@@ -56,7 +57,6 @@ const Login = () => {
       <div className="login-form-section animated-form-section">
         <form onSubmit={handleSubmit(onSubmit)} className="login-form">
           <div className="form-grid">
-            {/* Email Input */}
             <div className="form-group animated-item">
               <label htmlFor="loginEmail">Email</label>
               <input
@@ -77,12 +77,11 @@ const Login = () => {
               )}
             </div>
 
-            {/* Password Input */}
-            <div className="form-group animated-item">
+            <div className="form-group animated-item password-group">
               <label htmlFor="loginPassword">Password</label>
               <input
                 id="loginPassword"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 {...register("password", {
                   required: "Password is required",
                   minLength: {
@@ -93,6 +92,14 @@ const Login = () => {
                 placeholder="********"
                 className={errors.password ? "error" : ""}
               />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />} {/* Lucide icons */}
+              </button>
               {errors.password && (
                 <span className="error-message">{errors.password.message}</span>
               )}
@@ -102,7 +109,6 @@ const Login = () => {
             {loginError && <span className="error-message">{loginError}</span>}
           </div>
 
-          {/* (Login Button */}
           <div className="form-actions animated-item">
             <button
               type="submit"
@@ -113,10 +119,9 @@ const Login = () => {
             </button>
           </div>
 
-          {/* Registration Link & pass reset */}
           <div className="flex justify-between items-center mt-4">
-            <div onClick={handlePasswordReset} className=" animated-item">
-              <button className="text-gray-600 cursor-pointer">Forgot password?</button>
+            <div onClick={handlePasswordReset} className="animated-item">
+              <button type="button" className="text-gray-600 cursor-pointer">Forgot password?</button>
             </div>
             <div className="register-link animated-item">
               New here? <Link to="/auth/register">Please Register</Link>

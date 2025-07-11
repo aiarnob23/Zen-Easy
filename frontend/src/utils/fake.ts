@@ -12,7 +12,7 @@ const User = {
     nationality: "Bangladesh",
     occupation: "Software Engineer",
     professionalProfiles : [
-        "IT Consultant" , "Electrician"
+        "IT Provider" , "Electrician"
     ],
     socialMedia: {
         facebook: "https://facebook.com/johndoe",

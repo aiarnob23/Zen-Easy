@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { uploadServiceImage } from "../services/imageUploadService"; 
+import { serverBaseUrl } from "../utils/baseUrl";
+import Cookies from "js-cookie";
+const token = Cookies.get("zenEasySelfToken");
+
 
 type EditServiceFormData = Omit<any, '_id' | 'provider' | 'minimumPrice' | 'maximumPrice' | 'availableDays' | 'availableTime' | 'coverImage' | 'ratings' | 'status' | 'createdAt' | 'updatedAt'> & {
     serviceAreas: { value: string }[]; 
@@ -24,6 +28,10 @@ export function useEditService() {
         setLoading(true);
         setError(null);
         setSuccess(false);
+        if(!token){
+            window.location.href = "/auth/login";
+            return;
+        }
 
         try {
             let coverImageUrl: string | undefined = formData.existingCoverImage; // Start with existing image
@@ -62,9 +70,20 @@ export function useEditService() {
             //------------------- update request to backend--------------
             
             console.log("Updating service ID:", serviceId, "with data:", payload);
-            await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
+            const response = await serverBaseUrl.patch(`/profession/update-profile/${serviceId}` 
+                ,payload
+                ,{
+                    headers:{
+                        Authorization:`${token}`
+                    }
+                }
+            );
+            console.log(response);
+            if(response?.data?.success){
+                setSuccess(true);
+                console.log('success : true');
+            }
 
-            setSuccess(true);
         } catch (err: any) {
             console.error("Error updating service:", err);
             setError(err.message || "An error occurred while updating the service.");

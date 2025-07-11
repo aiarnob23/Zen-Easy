@@ -22,7 +22,7 @@ export type TProfessinalService = {
   status?: 'active' | 'inactive';
 };
 
-export type TServiceCategory = "Maid" | "Tutor" | "Electrician" | "IT Consultant" | "Painter" | "Plumber";
+export type TServiceCategory = "Maid" | "Tutor" | "Electrician" | "IT Provider" | "Painter" | "Plumber";
 export type TRating = {
   client: string;
   rating: number;
@@ -179,9 +179,10 @@ const OfferService = () => {
                   >
                     <option value="">Choose your service</option>
                     <option value="Maid">🏠 Home Maid</option>
+                    <option value="Home Shifter">🚚 Home Shifter</option>
                     <option value="Tutor">📚 Private Tutor</option>
                     <option value="Electrician">⚡ Electrician</option>
-                    <option value="IT Consultant">💻 IT Consultant</option>
+                    <option value="IT Provider">💻 IT Provider</option>
                     <option value="Painter">🎨 Painter</option>
                     <option value="Plumber">🔧 Plumber</option>
                   </select>

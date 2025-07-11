@@ -69,10 +69,48 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+// --------------responsive design--------------
+@media screen and (max-width: 480px) {
   .banner {
-    background-image: url("/images/home/banner.png");
-    padding: 10px;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)),
+    url("/images/home/banner.png");
+  background-repeat: no-repeat;
+  height: 400px;
+  background-size: cover;
+  background-position: center;
+
+
+  .banner-content-wrapper {
+    width: 400px;
+    margin-top: 30px;
+   
+    .banner-content {
+      h2 {
+        width: 100%;
+        font-size: 20px;
+        font-weight: 500;
+        color: #ffffff;
+      }
+      p {
+        width: 90%;
+        text-align: left;
+        font-size: 10px;
+        font-weight: 500;
+      }
+    }
   }
+  .banner-action-wrapper {
+    margin: 10px 0px 60px;
+    display: flex;
+    gap: 40px;
+
+    .button {
+      font-size: 12px;
+      font-weight: 400;
+      padding: 5px 10px;
+      border-radius: 12px;
+    }
+  }
+}
 }
 

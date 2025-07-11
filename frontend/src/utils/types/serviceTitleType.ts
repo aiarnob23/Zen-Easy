@@ -1,1 +1,8 @@
-export type TSserviceTitle = "Maid" | "Tutor" | "Electrician" | "IT Consultant" | "Painter" | "Plumber";
+export type TServiceCategory =
+  | "Maid"
+  | "Home Shifter"
+  | "Tutor"
+  | "Electrician"
+  | "IT Provider"
+  | "Painter"
+  | "Plumber";

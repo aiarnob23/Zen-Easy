@@ -1,6 +1,7 @@
 import React from "react";
 import "./ReviewsModal.scss";
 import { Link } from "react-router-dom";
+import type { TServiceCategory } from "../../../utils/types/serviceTitleType";
 
 // --- Type
 export type TRating = {
@@ -9,13 +10,6 @@ export type TRating = {
   feedback: string;
 };
 
-export type TServiceCategory =
-  | "Maid"
-  | "Tutor"
-  | "Electrician"
-  | "IT Consultant"
-  | "Painter"
-  | "Plumber";
 
 // --- Props  ---
 interface ReviewsModalProps {

@@ -7,21 +7,28 @@ import {
   FaBolt,
   FaLaptop,
   FaPaintBrush,
+  FaTruck,
 } from "react-icons/fa";
 import "./Service.scss";
+import { useNavigate } from "react-router-dom";
 
 const Service = () => {
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef(null);
+  const navigate = useNavigate();
 
+  const handleServiceClick = (link: string) => {
+    navigate(`/main/${link}`);
+  };
   const serviceList = [
-    { id: 1, name: "Home / Room Rent", icon: <FaHome /> },
-    { id: 2, name: "Home Maid", icon: <FaRestroom /> },
-    { id: 3, name: "Plumber", icon: <FaTools /> },
-    { id: 4, name: "Home Tutor", icon: <FaChalkboardTeacher /> },
-    { id: 5, name: "Electrician", icon: <FaBolt /> },
-    { id: 6, name: "IT Consultant", icon: <FaLaptop /> },
-    { id: 7, name: "Painting", icon: <FaPaintBrush /> },
+    { id: 1, link:'rent', name: "Home / Room Rent", icon: <FaHome /> },
+    { id: 2, link:'find-service/Maid', name: "Home Maid", icon: <FaRestroom /> },
+     { id: 2, link:'find-service/Home Shifter', name: "Home Shifter", icon: <FaTruck /> }, 
+    { id: 3, link:'find-service/Plumber', name: "Plumber", icon: <FaTools /> },
+    { id: 4, link:'find-service/Tutor', name: "Home Tutor", icon: <FaChalkboardTeacher /> },
+    { id: 5, link:'find-service/Electrician', name: "Electrician", icon: <FaBolt /> },
+    { id: 6, link:'find-service/IT Provider', name: "IT Provider", icon: <FaLaptop /> },
+    { id: 7, link:'find-service/Painter', name: "Painting", icon: <FaPaintBrush /> },
   ];
 
   // trigger use
@@ -59,6 +66,7 @@ const Service = () => {
         <ul>
           {serviceList.map((service, index) => (
             <li
+              onClick={() => handleServiceClick(service.link)}
               className={`flex flex-col-reverse service-card ${
                 isVisible ? "animate" : ""
               }`}

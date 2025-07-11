@@ -15,7 +15,7 @@ const Banner = () => {
               All of our service
               providers are highly vetted and certified to ensure that you
               receive top-quality work every time. From plumbers to IT
-              consultants, each professional is selected based on their
+              provider's, each professional is selected based on their
               expertise and experience. 24/7 no matter the time, find your needed
               service provider with ease.
             </p>

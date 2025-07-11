@@ -10,6 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import './EditProfProfile.scss';
 import { useEditService } from '../../hooks/useEditProfProfile';
 import { findServiceDetailsById } from '../../services/professionalServices';
+import type { TServiceCategory } from '../../utils/types/serviceTitleType';
 
 // types 
 export type TProfessinalService = {
@@ -32,7 +33,6 @@ export type TProfessinalService = {
 };
 
 type TServiceStatus = 'active' | 'inactive'; 
-export type TServiceCategory = "Maid" | "Tutor" | "Electrician" | "IT Consultant" | "Painter" | "Plumber";
 
 // Form data type for React Hook Form
 type EditServiceFormData = Omit<TProfessinalService, '_id' | 'provider' | 'minimumPrice' | 'maximumPrice' | 'availableDays' | 'availableTime' | 'coverImage' | 'ratings' | 'status' | 'createdAt' | 'updatedAt'> & {
@@ -52,6 +52,7 @@ type EditServiceFormData = Omit<TProfessinalService, '_id' | 'provider' | 'minim
 const EditService = () => {
     const { serviceId } = useParams<{ serviceId: string }>();
     const navigate = useNavigate();
+    const [serviceDataloading, setServiceDataLoading] = useState(true);
     const selfId = Cookies.get("zenEasySelfId"); 
     const authContext = useContext(AuthContext);
     const { showSuccess, showError } = useNotification();
@@ -90,6 +91,7 @@ const EditService = () => {
 
     // -------------- service data and pre-populate form fields --------------
     useEffect(() => {
+        setServiceDataLoading(true);
         const loadService = async () => {
             if (!serviceId) {
                 showError("Service ID is missing from URL.");
@@ -97,7 +99,8 @@ const EditService = () => {
                 return;
             }
 
-            const result = await findServiceDetailsById(serviceId);
+            try{
+                const result = await findServiceDetailsById(serviceId);
             const data = result?.data;
             setServiceData(data);
             if (data) {
@@ -110,7 +113,6 @@ const EditService = () => {
                     priceRange: { min: data.minimumPrice, max: data.maximumPrice },
                     dayOfWeek: data.availableDays,
                     availableTimes: data.availableTime,
-                    coverImage: data.coverImage,
                     status: data.status,
                     existingCoverImage: data.coverImage, 
                 });
@@ -118,6 +120,9 @@ const EditService = () => {
                 if (data.coverImage) {
                     setCoverImagePreview(data.coverImage);
                 }
+            }
+            }finally{
+                setServiceDataLoading(false);
             }
         };
         loadService();
@@ -142,7 +147,8 @@ const EditService = () => {
 
     useEffect(() => {
         if (success) {
-            showSuccess("Service updated successfully!");
+            console.log('success : true');
+            showSuccess("Service updated successfully!" , 1000);
             navigate(`/main/prof-profile/${selfId}`); 
         }
         if (error) {
@@ -172,9 +178,9 @@ const EditService = () => {
         return <Navigate to={"/auth/login"} />;
     }
     // Loading state 
-    if (loading) {
+    if (serviceDataloading) {
         return (
-            <div className="edit-service-container loading-state">
+            <div className="edit-service-container min-h-screen loading-state">
                 <div className="loading-spinner"></div>
                 <p>Loading service details for editing...</p>
             </div>

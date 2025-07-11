@@ -36,9 +36,10 @@ const professionalServiceSchema = new Schema<TProfessinalService>(
       type: String,
       enum: [
         "Maid",
+        "Home Shifter",
         "Tutor",
         "Electrician",
-        "IT Consultant",
+        "IT Provider",
         "Painter",
         "Plumber",
       ],

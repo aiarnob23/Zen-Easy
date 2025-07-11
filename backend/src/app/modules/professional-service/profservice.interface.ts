@@ -1,6 +1,6 @@
 export type TProfessinalService = {
     provider:string;
-    category : TServiceCategory;
+    category : "Maid" | "Home Shifter" | "Tutor" | "Electrician" | "IT Provider" | "Painter" | "Plumber";
     contactNumber:string;
     addressLine:string;
     serviceArea:string[];
@@ -15,7 +15,7 @@ export type TProfessinalService = {
 }
 
 
-export type TServiceCategory = "Maid" | "Tutor" | "Electrician" | "IT Consultant" | "Painter" | "Plumber" ;
+
 export type TRating = {
     client:string;
     rating:number;
