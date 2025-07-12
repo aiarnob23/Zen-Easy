@@ -6,8 +6,6 @@ import { imageRoutes } from "./app/modules/image/image.route";
 import { userRoutes } from "./app/modules/user/user.route";
 import { profHandleRoutes } from "./app/modules/professional-service/profService.route";
 
-
-
 const app: Application = express();
 
 //cors and middlewares
@@ -15,12 +13,11 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["https://zen-easy.vercel.app", "http://localhost:5173"],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
   })
 );
-
 
 //routes
 app.use("/api/v1/rent", rentRoutes);
@@ -30,7 +27,5 @@ app.use("/api/v1/profession", profHandleRoutes);
 app.get("/", (req: Request, res: Response) => {
   res.send("Zen Easy BD server is running...");
 });
-
-
 
 export default app;
