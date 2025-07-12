@@ -118,3 +118,11 @@ html {
     border: 1px solid var(--bg-primary);
   }
 }
+
+
+@media (max-width: 480px){
+  *{
+    max-width: 425px;
+    overflow-x: hidden !important;
+  }
+}
