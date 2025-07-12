@@ -68,7 +68,7 @@ const OurProperty: React.FC = () => {
 
     return (
         <div className="property-collection">
-            <div className="header" ref={headingRef}> 
+            <div className="our-property-header" ref={headingRef}> 
                 <h1 className={isHeadingVisible ? 'animate-heading' : ""}>Explore Our Property Collection</h1> {/* Apply class to h1 */}
             </div>
             
