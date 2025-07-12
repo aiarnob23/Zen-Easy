@@ -72,6 +72,7 @@
 
   .mobile-navs {
     position: relative;
+   
 
     .mobile-header-top {
       width: 400px;
@@ -98,10 +99,11 @@
       background: #000;
       border-radius: 12px;
       flex-direction: column;
-      justify-content: center;
+      justify-content: start;
       align-items: center;
       gap: 20px;
       padding: 40px;
+      min-height: 100vh;
       font-size: 20px;
       font-weight: 400;
       transform: translateX(100%);

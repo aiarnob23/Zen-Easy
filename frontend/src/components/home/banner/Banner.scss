@@ -69,48 +69,43 @@
   }
 }
 
-// --------------responsive design--------------
+// ------------responsive design--------------
 @media screen and (max-width: 480px) {
   .banner {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)),
-    url("/images/home/banner.png");
-  background-repeat: no-repeat;
-  height: 600px;
-  background-size: cover;
-  background-position: center;
+    height: 600px;
+    overflow-x:hidden;
 
+    .banner-content-wrapper {
+      max-width: 480px;
+      margin-top: 40px;
+      padding: 0 10px;
 
-  .banner-content-wrapper {
-    width: 400px;
-    margin-top: 30px;
-   
-    .banner-content {
-      h2 {
-        width: 100%;
-        font-size: 20px;
-        font-weight: 500;
-        color: #ffffff;
+      .banner-content {
+        h2 {
+          margin-bottom:px;
+          width: 90%;
+          text-align: left;
+          font-size: 30px;
+          font-weight: 400;
+        }
+        p {
+          font-size: 12px;
+          font-weight: 400;
+          color: #d8d8d8;
+        }
       }
-      p {
-        width: 90%;
-        text-align: left;
-        font-size: 10px;
-        font-weight: 500;
+    }
+    .banner-action-wrapper {
+      margin: 60px 0px 30px;
+      display: flex;
+      gap: 20px;
+
+      .button {
+        font-size: 12px;
+        font-weight: 400;
+        padding: 5px 10px;
+        border-radius: 12px;
       }
     }
   }
-  .banner-action-wrapper {
-    margin: 10px 0px 60px;
-    display: flex;
-    gap: 40px;
-
-    .button {
-      font-size: 12px;
-      font-weight: 400;
-      padding: 5px 10px;
-      border-radius: 12px;
-    }
-  }
 }
-}
-

@@ -5,7 +5,7 @@ import "./Banner.scss";
 const Banner = () => {
   return (
     <div className="banner">
-      <div className="">
+      <div className="banner-top-heade">
         <Header bg="white"/>
       </div>
       <div className="banner-content-wrapper">
