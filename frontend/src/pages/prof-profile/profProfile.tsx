@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getUserProfileDetails } from "../../services/userProfileServices";
 import OrbitalSpinner from "../../components/ui/LoadingSpinner";
-import "./ProfProfile.scss";
 import Cookies from "js-cookie";
 import type { TServiceCategory } from "../../utils/types/serviceTitleType";
+import './profProfile.scss';
 
 // --- Types
 export type TProfessinalService = {
