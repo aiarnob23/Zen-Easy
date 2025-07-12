@@ -30,7 +30,7 @@ const Service = () => {
     { id: 4, link:'find-service/Tutor', name: "Home Tutor", icon: <FaChalkboardTeacher /> },
     { id: 5, link:'find-service/Electrician', name: "Electrician", icon: <FaBolt /> },
     { id: 6, link:'find-service/IT Provider', name: "IT Provider", icon: <FaLaptop /> },
-    { id: 7, link:'find-service/Painter', name: "Painting", icon: <FaPaintBrush /> },
+    { id: 7, link:'find-service/Painter', name: "Painter", icon: <FaPaintBrush /> },
   ];
 
   // trigger use (for service cards)
