@@ -39,7 +39,7 @@ export function useUpdateProfile() {
                 const file = formData.profileImageFile[0];
                 uploadedProfileImageUrl = await uploadProfileImage(file);
                 if (!uploadedProfileImageUrl) {
-                    throw new Error("Failed to upload new profile image.");
+                    throw new Error(".");
                 }
             }
 
