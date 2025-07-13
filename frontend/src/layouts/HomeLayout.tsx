@@ -4,7 +4,7 @@ import Footer from "../components/footer/Footer";
 
 const HomeLayout = () => {
   return (
-    <div>
+    <div className="mt-[70px]">
         <Outlet/>
         <Footer/>
     </div>

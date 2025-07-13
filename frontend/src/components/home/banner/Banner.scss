@@ -70,13 +70,18 @@
 }
 
 // ------------responsive design--------------
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 576px) {
   .banner {
-    height: 600px;
-    overflow-x:hidden;
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)),
+    url("/images/home/banner2.png");
+    overflow:hidden;
+    background-repeat: no-repeat;
+    height: 500px;
 
     .banner-content-wrapper {
       max-width: 480px;
+      max-height: 500px !important;
+      overflow: hidden;
       margin-top: 40px;
       padding: 0 10px;
 

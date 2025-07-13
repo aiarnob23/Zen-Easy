@@ -1,11 +1,11 @@
 :root {
-  --primary: #fcd34d; 
-  --bg-primary: #fffbeb; 
-  --red-error: #f44336; 
-  --border-light: #e1e5e9; 
-  --text-dark: #1a1a1a; 
-  --text-medium: #666; 
-  --text-light: #999; 
+  --primary: #fcd34d;
+  --bg-primary: #fffbeb;
+  --red-error: #f44336;
+  --border-light: #e1e5e9;
+  --text-dark: #1a1a1a;
+  --text-medium: #666;
+  --text-light: #999;
   --shadow-light: rgba(0, 0, 0, 0.1);
   --shadow-medium: rgba(0, 0, 0, 0.2);
 }
@@ -151,7 +151,7 @@
               }
 
               &.error {
-                border-color: #FF0000;
+                border-color: #ff0000;
                 box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
               }
 
@@ -195,7 +195,7 @@
             }
 
             .error-message {
-              color: #FF0000;
+              color: #ff0000;
               font-size: 14px;
               margin-top: 8px;
               font-weight: 500;
@@ -267,14 +267,14 @@
                     .image-name {
                       color: var(--text-dark);
                       font-weight: 500;
-                      max-width: calc(100% - 100px); /* Adjust based on button width */
+                      max-width: calc(100% - 100px);
                       overflow: hidden;
                       text-overflow: ellipsis;
                       white-space: nowrap;
                     }
 
                     .remove-image-btn {
-                      background: #FF0000;
+                      background: #ff0000;
                       border: none;
                       color: white;
                       font-size: 16px;
@@ -292,7 +292,7 @@
                       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 
                       &:hover {
-                        background: (#FF0000, 10%);
+                        background: (#ff0000, 10%);
                         transform: scale(1.1);
                       }
                     }
@@ -390,6 +390,51 @@
   }
 }
 
+// ------------- mobile styles-------------
+@media (max-width: 576px) {
+  .add-rent-container {
+    max-width: 576px;
+    overflow: hidden;
+    .rent-form-section {
+      overflow: hidden;
+      .add-rental {
+        .form-header {
+          h2 {
+            font-size: 24px;
+          }
+        }
+        .rent-form {
+          .form-grid {
+            .form-group {
+              label {
+                font-size: 16px;
+              }
+              select {
+                font-size: 14px;
+              }
+              input[type="text"],
+              input[type="email"],
+              input[type="tel"],
+              input[type="number"],
+              textarea {
+                font-size: 12px;
+              }
+            }
+          }
+
+          .form-actions {
+            .submit-btn {
+              font-size: 18px;
+              padding: 8px;
+              
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 // Tablet styles
 @media (max-width: 1024px) {
   .add-rent-container {
@@ -407,165 +452,6 @@
     .header-section .rent-status .no-rent,
     .header-section .rent-status .has-rent {
       padding: 28px;
-    }
-  }
-}
-
-// Mobile styles
-@media (max-width: 768px) {
-  .add-rent-container {
-    padding: 16px;
-    margin-bottom: 120px;
-
-    .rent-form-section .add-rental {
-      .form-header {
-        margin-bottom: 32px;
-
-        h2 {
-          font-size: 32px;
-        }
-      }
-
-      .rent-form {
-        padding: 32px;
-        border-radius: 20px;
-
-        .form-grid {
-          grid-template-columns: 1fr;
-          gap: 24px;
-          margin-bottom: 32px;
-
-          .form-group {
-            input,
-            select,
-            textarea {
-              padding: 14px 20px;
-              font-size: 15px;
-            }
-
-            label {
-              font-size: 15px;
-            }
-
-            .image-upload-section {
-              .image-upload-field {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 8px;
-
-                .image-upload-wrapper {
-                  .image-upload-label {
-                    padding: 14px 20px;
-
-                    span {
-                      font-size: 14px;
-                    }
-                  }
-
-                  .image-preview {
-                    position: relative;
-                    top: auto;
-                    right: auto;
-                    margin-top: 8px;
-
-                    .image-name {
-                      max-width: 200px;
-                    }
-                  }
-                }
-
-                .remove-field-btn {
-                  align-self: center;
-                }
-              }
-
-              .add-more-images-btn {
-                align-self: stretch;
-                padding: 14px 20px;
-              }
-            }
-          }
-        }
-
-        .form-actions {
-          .submit-btn {
-            padding: 16px 40px;
-            font-size: 16px;
-            min-width: 180px;
-          }
-        }
-      }
-    }
-
-    .header-section .rent-status .no-rent,
-    .header-section .rent-status .has-rent {
-      padding: 24px;
-      border-radius: 16px;
-
-      .status-icon {
-        font-size: 40px;
-      }
-
-      h3 {
-        font-size: 20px;
-      }
-
-      p {
-        font-size: 16px;
-      }
-    }
-
-    .rent-form-section .limit-reached {
-      padding: 32px;
-      border-radius: 16px;
-
-      .warning-icon {
-        font-size: 40px;
-      }
-
-      h3 {
-        font-size: 20px;
-      }
-
-      p {
-        font-size: 16px;
-      }
-    }
-  }
-}
-
-// Small mobile styles
-@media (max-width: 480px) {
-  .add-rent-container {
-    padding: 12px;
-
-    .rent-form-section .add-rental .rent-form {
-      padding: 24px;
-
-      .form-grid {
-        gap: 20px;
-
-        .form-group {
-          input,
-          select,
-          textarea {
-            padding: 12px 16px;
-            border-radius: 12px;
-          }
-        }
-      }
-
-      .form-actions {
-        .submit-btn {
-          width: 100%;
-          padding: 14px 32px;
-        }
-      }
-    }
-
-    .header-section .rent-status .no-rent,
-    .header-section .rent-status .has-rent {
-      padding: 20px;
     }
   }
 }
