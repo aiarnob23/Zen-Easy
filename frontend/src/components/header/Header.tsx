@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { User, Menu, X, Home, Wrench, Users, Zap, Code, Palette, Car } from 'lucide-react';
 
 const Header = ({ bg = "white" }) => {
@@ -13,22 +13,25 @@ const Header = ({ bg = "white" }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-    // Prevent body scroll when menu is open
-    if (!isMobileMenuOpen) {
+  // Fix: Ensure body scroll is always properly managed
+  useEffect(() => {
+    if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
-  };
+  }, [isMobileMenuOpen]);
 
-  // Cleanup on unmount
+  // Cleanup on unmount - ensure body scroll is restored
   useEffect(() => {
     return () => {
       document.body.style.overflow = 'unset';
     };
   }, []);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   const navLinks = [
     { name: "Rent", path: "/main/rent", icon: Home },
@@ -45,7 +48,6 @@ const Header = ({ bg = "white" }) => {
     ? `backdrop-blur-xl bg-[#b1a99e] text-black  border-white/20 shadow-lg ${isScrolled ? 'bg-white/20' : ''}` 
     : `backdrop-blur-xl bg-black/90 text-white border-white/10 shadow-2xl ${isScrolled ? 'bg-black/95' : ''}`;
 
-
   const mobileMenuClasses = bg === "white"
     ? "backdrop-blur-xl bg-white/95 border-white/20 shadow-xl"
     : "backdrop-blur-xl text-white bg-black/95 border-white/10 shadow-2xl";
@@ -53,7 +55,7 @@ const Header = ({ bg = "white" }) => {
   return (
     <>
       {/* Header */}
-      <header className={`fixed top-0  right-0 left-0 z-50 lg:px-[60px] py-[10px] transition-all duration-300 ${headerClasses} border-b`}>
+      <header className={`fixed top-0 z-50 right-0 left-0 lg:px-[60px] py-[10px] transition-all duration-300 ${headerClasses} border-b`}>
         <div className=" mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-[50px]">
             {/* Logo */}
@@ -121,10 +123,7 @@ const Header = ({ bg = "white" }) => {
                     key={link.name}
                     href={link.path}
                     className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 `}
-                    onClick={() => {
-                      toggleMobileMenu();
-                      document.body.style.overflow = 'unset';
-                    }}
+                    onClick={toggleMobileMenu}
                   >
                     <IconComponent size={20} />
                     <span className="text-base font-medium">{link.name}</span>
@@ -136,10 +135,7 @@ const Header = ({ bg = "white" }) => {
               <a
                 href="/main/profile/123"
                 className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300`}
-                onClick={() => {
-                  toggleMobileMenu();
-                  document.body.style.overflow = 'unset';
-                }}
+                onClick={toggleMobileMenu}
               >
                 <User size={20} />
                 <span className="text-base font-medium">Profile</span>
