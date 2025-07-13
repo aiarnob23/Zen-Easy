@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import FeedbackModal from "../../components/modals/feedback/FeedbackModal";
 import { AuthContext } from "../../context/AuthContext";
 import ProfileSkeleton from "../../components/ui/skeletons/general-profile/ProfileSkeleton";
+import OrbitalSpinner from "../../components/ui/LoadingSpinner";
 
 const GeneralProfile = () => {
   const [userProfile, setUserProfile] = useState<any>(null);
@@ -54,7 +55,16 @@ const GeneralProfile = () => {
   };
 
 if (loading) {
-   return <ProfileSkeleton />;
+   return (<div>
+   <div  className="hidden lg:flex">
+     <ProfileSkeleton />
+   </div>
+    <div className="flex min-h-screen justify-center items-center lg:hidden">
+      <OrbitalSpinner/>
+    </div>
+   </div>
+
+   )
   }
   console.log(userProfile);
 

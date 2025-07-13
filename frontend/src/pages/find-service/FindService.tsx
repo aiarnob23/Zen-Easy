@@ -28,7 +28,6 @@ export type TProfessinalService = {
   status?: "active" | "inactive";
 };
 
-
 export type TRating = {
   client: string;
   rating: number;
@@ -49,7 +48,7 @@ const serviceIcons: Record<TServiceCategory, string> = {
 const FindService = () => {
   const { category } = useParams<{ category: string }>();
 
-  const [allServices, setAllServices] = useState<TProfessinalService[]>([]); 
+  const [allServices, setAllServices] = useState<TProfessinalService[]>([]);
   const [displayedServices, setDisplayedServices] = useState<
     TProfessinalService[]
   >([]);
@@ -76,6 +75,10 @@ const FindService = () => {
   >("");
 
   // ---------------- Fetch all services ----------------
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [category]);
+  
   useEffect(() => {
     const fetchAllServices = async () => {
       setLoading(true);
@@ -129,7 +132,7 @@ const FindService = () => {
           service.serviceArea.some((area) =>
             area.toLowerCase().includes(lowerCaseSearchTerm)
           ) ||
-          service.provider.name.toLowerCase().includes(lowerCaseSearchTerm) 
+          service.provider.name.toLowerCase().includes(lowerCaseSearchTerm)
       );
     }
 
@@ -225,7 +228,6 @@ const FindService = () => {
     setCurrentServiceRatings([]);
     setCurrentServiceCategory("");
   };
-
 
   return (
     <div className="find-service-page-wrapper">
@@ -404,7 +406,7 @@ const FindService = () => {
 
           {loading ? (
             <div className="">
-             <OrbitalSpinner/>
+              <OrbitalSpinner />
             </div>
           ) : error ? (
             <div className="error-state service-list-message">

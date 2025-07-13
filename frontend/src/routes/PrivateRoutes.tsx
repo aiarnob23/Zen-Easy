@@ -1,6 +1,7 @@
 import { useContext, type ReactNode } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Navigate, useLocation } from "react-router-dom";
+import OrbitalSpinner from "../components/ui/LoadingSpinner";
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
   const authContext = useContext(AuthContext);
@@ -27,8 +28,7 @@ const PrivateRoute = ({ children }: { children: ReactNode }) => {
           fontSize: "30px",
         }}
       >
-        <span className="loading loading-bars loading-lg"></span>
-        <p className="primary font-semibold">Authenticating...</p>
+       <div><OrbitalSpinner/></div>
       </div>
     );
   }
