@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { User, Menu, X, Home, Wrench, Users, Zap, Code, Palette, Car } from 'lucide-react';
+import Cookies from 'js-cookie';
 
 const Header = ({ bg = "white" }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const selfId = Cookies.get("zenEasySelfId");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,7 +15,7 @@ const Header = ({ bg = "white" }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Fix: Ensure body scroll is always properly managed
+
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -22,7 +24,7 @@ const Header = ({ bg = "white" }) => {
     }
   }, [isMobileMenuOpen]);
 
-  // Cleanup on unmount - ensure body scroll is restored
+
   useEffect(() => {
     return () => {
       document.body.style.overflow = 'unset';
@@ -86,7 +88,7 @@ const Header = ({ bg = "white" }) => {
             <div className="flex items-center space-x-4">
               {/* Profile Button (Desktop) */}
               <a
-                href="/main/profile/123"
+                href={`/main/profile/${selfId}`}
                    className={`px-3 py-2  hidden lg:flex rounded-lg text-[18px] font-semibold transition-all duration-300  items-center space-x-2 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#e4ed64] after:transition-all after:duration-300 hover:after:w-full`}
               >
                 <User size={18} />
@@ -133,7 +135,7 @@ const Header = ({ bg = "white" }) => {
               
               {/* Mobile Profile Link */}
               <a
-                href="/main/profile/123"
+                href={`/main/profile/${selfId}`}
                 className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300`}
                 onClick={toggleMobileMenu}
               >
