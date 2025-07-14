@@ -9,6 +9,7 @@ import type { UserCredential } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import auth from "../config/firebase.config";
+import Cookies from "js-cookie";
 
 
 //Type for the context
@@ -56,6 +57,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (!currentUser) {
         setLoading(false);
         setUser(null);
+        Cookies.remove("zenEasySelfId");
+        Cookies.remove("zenEasySelfToken");
       }
     });
     return () => unSubscribe();
