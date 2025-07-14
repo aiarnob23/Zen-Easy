@@ -120,9 +120,3 @@ html {
 }
 
 
-@media (max-width:576px) {
-  body{
-    /* max-width: 0px; */
-    overflow: hidden;
-  }
-}
