@@ -22,7 +22,7 @@ export function useAddRent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const { showSuccess, showError } = useNotification();
+  const {showError } = useNotification();
 
   const addRentProperty = async (formData: AddRentFormInput) => {
     setLoading(true);
@@ -54,7 +54,6 @@ export function useAddRent() {
       console.log("Sending final property data to backend:", finalPropertyData);
       await serverBaseUrl.post('/rent/create' , finalPropertyData);
       setSuccess(true);
-      showSuccess("Property ad posted successfully!" , 1000); 
     } catch (err: any) {
       console.error("Error in useAddRent:", err);
       setError(err.message || "An error occurred while posting the ad.");

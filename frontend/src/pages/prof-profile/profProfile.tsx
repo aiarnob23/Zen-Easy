@@ -127,9 +127,8 @@ const ProfProfile = () => {
 
   if (loading) {
     return (
-      <div className="prof-profile-wrapper loading-state">
+      <div className="prof-profile-wrapper flex justify-center items-center loading-state">
         <OrbitalSpinner />
-        <p>Loading user profile...</p>
       </div>
     );
   }

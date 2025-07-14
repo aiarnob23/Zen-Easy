@@ -56,7 +56,7 @@ const GeneralProfile = () => {
 
 if (loading) {
    return (<div>
-   <div  className="hidden lg:flex">
+   <div  className="hidden bg-primary min-h-screen min-w-full justify-center items-center lg:flex">
      <ProfileSkeleton />
    </div>
     <div className="flex min-h-screen justify-center items-center lg:hidden">

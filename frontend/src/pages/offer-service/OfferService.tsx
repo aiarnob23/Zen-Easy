@@ -114,6 +114,7 @@ const OfferService = () => {
   useEffect(()=>{
     if(success){
       showSuccess("Professional Profile created" , 1000)
+      window.location.href=`/main/prof-profile/${selfId}`;
     }
   },[success])
 // ------------------------

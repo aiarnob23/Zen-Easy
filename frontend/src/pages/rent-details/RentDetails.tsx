@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import "./RentDetails.scss";
 import { getRentDetails } from "../../services/rentServices";
 import Cookies from "js-cookie";
+import OrbitalSpinner from "../../components/ui/LoadingSpinner";
 
 const RentDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,6 +12,17 @@ const RentDetailsPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const selfId = Cookies.get("zenEasySelfId") || "";
+
+  // ------scroll to top----------
+   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'auto' 
+    });
+  }, [id])
+
+  // -----------fetch rent details ------------
 
   useEffect(() => {
     const fetchRentDetails = async () => {
@@ -53,7 +65,7 @@ const RentDetailsPage = () => {
   };
 
   if (loading) {
-    return <div className="rent-details-container min-h-screen loading-state">Loading rental details...</div>;
+    return <div className="rent-details-container min-w-full min-h-screen flex justify-center items-center loading-state"><OrbitalSpinner/></div>;
   }
 
   if (error) {
