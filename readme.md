@@ -73,6 +73,37 @@ The project aims to streamline the process of accessing everyday services and fi
 * **`jsonwebtoken`:** For JWT token generation (if implemented for session management).
 
 
+##Screenshots
+<img width="1914" height="875" alt="Image" src="https://github.com/user-attachments/assets/7594256a-8c6e-4634-aaed-2e12d4228f7d" />
+
+<img width="1912" height="914" alt="Image" src="https://github.com/user-attachments/assets/7e4d4ac9-b0c0-406c-b64e-0ecf01597891" />
+
+<img width="951" height="836" alt="Image" src="https://github.com/user-attachments/assets/77a75f07-976a-4ac2-9f91-0a65c2d83c37" />
+
+<img width="882" height="863" alt="Image" src="https://github.com/user-attachments/assets/78a47baa-b7d0-44c8-9646-c89eceeb0868" />
+
+<img width="1854" height="999" alt="Image" src="https://github.com/user-attachments/assets/bd8df5c4-3e09-48f3-b489-882a3a82cb7b" />
+
+<img width="722" height="805" alt="Image" src="https://github.com/user-attachments/assets/36da0621-c339-4e73-b203-c0f89932a20e" />
+
+<img width="1846" height="918" alt="Image" src="https://github.com/user-attachments/assets/f1a6ba0a-c7ad-4eb3-afe6-d10b07934cc9" />
+
+<img width="730" height="862" alt="Image" src="https://github.com/user-attachments/assets/f39a318e-b4ed-494a-bd13-678cbbe751b4" />
+
+![Image](https://github.com/user-attachments/assets/5d995d28-ac67-4b29-802b-ebab40c70054)
+
+![Image](https://github.com/user-attachments/assets/af55fea2-b4a6-4940-85ce-782bef79ada4)
+
+![Image](https://github.com/user-attachments/assets/2f0fb639-72a9-4431-9312-27b686a454cc)
+
+![Image](https://github.com/user-attachments/assets/2b89c1d9-cd7b-4e18-ad68-7830ca9cf023)
+
+![Image](https://github.com/user-attachments/assets/9b25c0da-17d2-4a25-b501-029fb6bd8761)
+
+![Image](https://github.com/user-attachments/assets/04c57818-6ec3-4c24-b3a2-755eb34349d6)
+
+![Image](https://github.com/user-attachments/assets/3a546c6b-5312-4f44-88df-0c43aaaa70fe)
+
 ## Getting Started
 
 Follow these steps to set up the project locally.
@@ -231,6 +262,6 @@ Contributions are welcome! If you have suggestions or find issues, please open a
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License.
 
 ---
