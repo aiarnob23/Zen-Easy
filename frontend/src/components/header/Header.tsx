@@ -47,7 +47,7 @@ const Header = ({ bg = "white" }) => {
   ];
 
   const headerClasses = bg === "white" 
-    ? `backdrop-blur-xl bg-[#b1a99e] text-black  border-white/20 shadow-lg ${isScrolled ? 'bg-white/20' : ''}` 
+    ? `backdrop-blur-xl bg-[#b1a99e]   border-white/20 shadow-lg ${isScrolled ? 'bg-white/20' : ''}` 
     : `backdrop-blur-xl bg-black/90 text-white border-white/10 shadow-2xl ${isScrolled ? 'bg-black/95' : ''}`;
 
   const mobileMenuClasses = bg === "white"
@@ -57,7 +57,7 @@ const Header = ({ bg = "white" }) => {
   return (
     <>
       {/* Header */}
-      <header className={`fixed top-0 z-50 right-0 left-0 lg:px-[60px] py-[10px] transition-all duration-300 ${headerClasses} border-b`}>
+      <header className={`fixed text-slate-700 top-0 z-50 right-0 left-0 lg:px-[60px] py-[10px] transition-all duration-300 ${headerClasses} border-b`}>
         <div className=" mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-[50px]">
             {/* Logo */}
