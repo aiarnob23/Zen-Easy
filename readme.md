@@ -5,15 +5,16 @@
 1.  [About Zen Easy BD](#about-zen-easy-bd)
 2.  [Features](#features)
 3.  [Technologies Used](#technologies-used)
-4.  [Project Structure](#project-structure)
-5.  [Getting Started](#getting-started)
+4.  [Screenshots](#Screenshots)
+5.  [Project Structure](#project-structure)
+6.  [Getting Started](#getting-started)
     * [Prerequisites](#prerequisites)
     * [Backend Setup](#backend-setup)
     * [Frontend Setup](#frontend-setup)
-6.  [Deployment](#deployment)
-7.  [Contributing](#contributing)
-8.  [Contact](#contact)
-9.  [License](#license)
+7.  [Deployment](#deployment)
+8.  [Contributing](#contributing)
+9.  [Contact](#contact)
+10.  [License](#license)
 
 ## About Zen Easy BD
 
@@ -73,7 +74,7 @@ The project aims to streamline the process of accessing everyday services and fi
 * **`jsonwebtoken`:** For JWT token generation (if implemented for session management).
 
 
-##Screenshots
+## Screenshots
 <img width="1914" height="875" alt="Image" src="https://github.com/user-attachments/assets/7594256a-8c6e-4634-aaed-2e12d4228f7d" />
 
 <img width="1912" height="914" alt="Image" src="https://github.com/user-attachments/assets/7e4d4ac9-b0c0-406c-b64e-0ecf01597891" />
