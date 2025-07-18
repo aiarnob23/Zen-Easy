@@ -13,15 +13,9 @@
     font-weight: 600;
     color: black;
     letter-spacing: 1px;
-    opacity: 0;
-    transform: translateY(100px);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
   }
 
-  h1.animate-heading {
-    opacity: 1;
-    transform: translateY(0px);
-  }
+
 }
 
 .property-section {

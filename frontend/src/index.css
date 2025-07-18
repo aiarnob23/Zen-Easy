@@ -55,7 +55,6 @@
 
 /* Custom Scrollbar Styles */
 
-/* Webkit browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
@@ -88,13 +87,12 @@
   background: var(--bg-primary);
 }
 
-/* Firefox */
 html {
   scrollbar-width: thin;
   scrollbar-color: var(--primary) var(--bg-primary);
 }
 
-/* Enhanced scrollbar for better UX */
+
 ::-webkit-scrollbar-thumb {
   box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
 }
@@ -108,7 +106,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Optional: Hide scrollbar on mobile while keeping functionality */
+
 @media (max-width: 768px) {
   ::-webkit-scrollbar {
     width: 6px;
