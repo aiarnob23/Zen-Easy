@@ -51,7 +51,7 @@ const Banner = () => {
   return (
     <div className="banner" ref={bannerRef}>
       <div className="banner-top-heade">
-        <Header bg="white" />
+        <Header bg="black" />
       </div>
       <div className="banner-content-wrapper">
         <div className="banner-content">
