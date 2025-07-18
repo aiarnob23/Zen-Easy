@@ -26,21 +26,29 @@ const Service = () => {
   //---------------device check-----------
   useEffect(() => {
     const checkMobile = () => {
-      const mobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const mobile =
+        window.innerWidth <= 768 ||
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
       setIsMobile(mobile);
     };
-    
+
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // -------gsap animation------------
   const servicesAnimation = contextSafe(function () {
-    gsap.set(headingRef.current, { x: -400 });
+    gsap.set(headingRef.current, {
+      x: -500,
+      opacity: 0,
+      scale: 0.6,
+    });
     gsap.set(".service-card", {
-      x: -100,
+      x: -500,
       y: -50,
       opacity: 0,
       scale: 0.4,
@@ -48,10 +56,10 @@ const Service = () => {
     });
 
     let tl;
-// ---------for mobile----------
+    // ---------for mobile----------
     if (isMobile) {
       tl = gsap.timeline();
-      
+
       tl.to(headingRef.current, {
         x: 0,
         duration: 1.5,
@@ -69,7 +77,7 @@ const Service = () => {
         },
         "-=1"
       );
-      
+
       setIsVisible(true);
     } else {
       //---------desktop--------
@@ -81,11 +89,13 @@ const Service = () => {
           toggleActions: "play none none reverse",
           onEnter: () => setIsVisible(true),
           onLeave: () => setIsVisible(false),
-        }
+        },
       });
 
       tl.to(headingRef.current, {
         x: 0,
+        opacity: 1,
+        scale: 1,
         duration: 2,
       }).to(
         ".service-card",
@@ -103,15 +113,15 @@ const Service = () => {
       );
     }
 
-    return tl; 
+    return tl;
   });
 
   useEffect(() => {
     servicesAnimation();
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  }, [isMobile]); 
+  }, [isMobile]);
 
   // -------------------------//
 

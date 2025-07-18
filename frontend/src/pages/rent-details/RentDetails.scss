@@ -11,13 +11,12 @@
 }
 
 .rent-info-sections .info-card {
-  animation: slideIn 3s 0.3s both;
+  animation: slideIn 2s 0.3s both;
 }
 
 .rent-actions {
   animation: fadeUp 3s 0.4s both;
 }
-
 
 .rent-details-wrapper {
   background-color: var(--bg-primary); 
@@ -31,9 +30,11 @@
 .rent-details-container {
   max-width: 1000px;
   width: 100%;
-  background-color: #fff;
   border-radius: 15px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1); 
+  box-shadow:
+  0 4px 6px rgba(0, 0, 0, 0.1),       
+  0 10px 10px rgba(0, 0, 0, 0.08),    
+  0 20px 10px rgba(0, 0, 0, 0.06);   
   border: 1px solid rgba(0, 0, 0, 0.08); 
   padding: 40px; 
 
@@ -53,50 +54,33 @@
     text-align: center;
     margin-bottom: 40px; 
 
-    .rent-status {
-      padding: 8px 20px;
-      border-radius: 25px; 
-      font-weight: 700;
-      font-size: 0.85em;
-      text-transform: uppercase;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-
-      &.status-active {
-        background-color: #e8f5e9; 
-        color: #28a745; 
-      }
-      &.status-booked {
-        background-color: #ffebee; 
-        color: #dc3545; 
-      }
-    }
-
     .rent-title {
-      font-size: 3.2em; 
+      font-size: 36px; 
       color: #1a1a1a;
-      margin-top: 25px; 
+      margin-top: 25px;
       margin-bottom: 8px;
-      font-weight: 800;
+      font-weight: 700;
       line-height: 1.2;
+      margin-bottom: 8px;
     }
 
     .rent-address-line {
-      font-size: 1.1em;
+      font-size: 18px;
       color: #777;
       margin-bottom: 15px;
     }
 
     .rent-cost {
-      font-size: 2.5em; 
+      font-size: 20px; 
       color: var(--primary);
-      font-weight: 800;
+      font-weight: 700;
       display: flex;
       align-items: baseline;
       justify-content: center;
       gap: 8px;
 
       .frequency {
-        font-size: 0.6em; 
+        font-size: 15px; 
         color: #555;
         font-weight: 600;
         opacity: 0.8;
@@ -213,10 +197,9 @@
     margin-bottom: 40px;
 
     .info-card {
-      background-color: #fcfcfc; 
       padding: 30px; 
       border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 30px 40px rgba(0, 0, 0, 0.05);
       border: 1px solid rgba(0, 0, 0, 0.03);
 
       h2 {

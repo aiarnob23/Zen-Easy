@@ -1,13 +1,45 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './OurProperty.scss';
 import { Link } from 'react-router-dom';
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 const OurProperty: React.FC = () => {
     const section2Ref = useRef<HTMLDivElement>(null);
     const section3Ref = useRef<HTMLDivElement>(null);
     const section4Ref = useRef<HTMLDivElement>(null);
     const headingRef = useRef<HTMLDivElement>(null); 
-    const [isHeadingVisible, setIsHeadingVisible] = useState(false);
+
+    // GSAP Animation for header
+    useGSAP(() => {
+        if (headingRef.current) {
+            // Set initial state
+            gsap.set(headingRef.current.querySelector('h1'), {
+                x:-500,
+                opacity: 0,
+                scale: 0.6
+            });
+
+            // Create animation that triggers when header comes into view
+            gsap.to(headingRef.current.querySelector('h1'), {
+                x: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 2,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: headingRef.current,
+                    start: "top 80%",
+                    end: "bottom 20%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        }
+    }, []);
 
     // -------------handle scroll---------------------
     useEffect(() => {
@@ -38,38 +70,12 @@ const OurProperty: React.FC = () => {
         };
     }, []);
 
-    //-----------heading trigger--------
-    useEffect(() => {
-        const headingObserver = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsHeadingVisible(true);
-                    headingObserver.unobserve(entry.target);
-                }
-            },
-            {
-                threshold: 0.5,
-                rootMargin: "0px",
-            }
-        );
-
-        if (headingRef.current) {
-            headingObserver.observe(headingRef.current);
-        }
-
-        return () => {
-            if (headingRef.current) {
-                headingObserver.unobserve(headingRef.current);
-            }
-            headingObserver.disconnect();
-        };
-    }, []);
 
 
     return (
         <div className="property-collection">
             <div className="our-property-header" ref={headingRef}> 
-                <h1 className={isHeadingVisible ? 'animate-heading' : ""}>Explore Our Property Collection</h1> {/* Apply class to h1 */}
+                <h1 className='animate-heading'>Explore Our Property Collection</h1> 
             </div>
             
             {/* Section 2 */}

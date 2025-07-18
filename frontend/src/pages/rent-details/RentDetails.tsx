@@ -72,7 +72,6 @@ const RentDetailsPage = () => {
     return (
       <div className="rent-details-container error-state">
         <p>Error: {error}</p>
-        {/* Add a retry button */}
         <button onClick={() => window.location.reload()} className="retry-btn">
           Retry
         </button>
@@ -97,7 +96,6 @@ const RentDetailsPage = () => {
       <div className="rent-details-container">
         {/* Header Section */}
         <div className="rent-header">
-          <span className={`rent-status status-${rentProperty.status?.toLowerCase()}`}>{rentProperty.status}</span>
           <h1 className="rent-title">{rentProperty.category.replace(/\b\w/g, (char: string) => char.toUpperCase())} for Rent</h1>
           <p className="rent-address-line">{rentProperty.addressLine}, {rentProperty.city}, {rentProperty.postalCode}</p>
           <p className="rent-cost">BDT {rentProperty.cost} <span className="frequency">/ {rentProperty.rentPaymentFrequency}</span></p>

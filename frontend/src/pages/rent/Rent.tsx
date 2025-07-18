@@ -569,7 +569,7 @@ const RentPage = () => {
                   </div>
                 ) : null
               }
-              scrollThreshold={0.8} //new data ---- 80% scrolled
+              scrollThreshold={0.8} 
             >
               <div className="posts-grid">
                 {rentPosts.length > 0 ? (
