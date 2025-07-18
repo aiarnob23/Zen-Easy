@@ -9,9 +9,7 @@ const Gallery = () => {
     
     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     
-    document.querySelectorAll(".photo-box").forEach((card, index) => {
-      console.log(`Setting up ScrollTrigger for card ${index}:`, card);
-      
+    document.querySelectorAll(".photo-box").forEach((card, _) => {   
       gsap.to(card, {
         scale: 0.5,
         opacity: 0,

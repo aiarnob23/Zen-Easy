@@ -31,9 +31,8 @@ const Banner = () => {
     gsap.fromTo(
       bannerHeadingRef.current,
       { y: 600, opacity: 0 },
-      { y: 0, opacity: 1.8, duration: 2 }
+      { y: 0, opacity: 1, duration: 2 }
     );
-
     gsap.fromTo(
       bannerContentRef.current,
       { y: 600, opacity: 0 },

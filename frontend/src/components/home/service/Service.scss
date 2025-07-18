@@ -12,15 +12,6 @@
   font-weight: 600;
   margin:50px 0px;
   color:black;
-
-  opacity: 0; 
-  transform: translateY(100px);
-  transition: opacity 0.8s ease-out, transform 1.8s ease-out; 
-
-  &.animate-heading {
-    opacity: 1;
-    transform: translateY(0px);
-  }
 }
 
 .service-list {
@@ -65,16 +56,6 @@
   font-weight: 600;
   color: #000000;
   font-size: 20px;
-}
-
-.service-list ul li.service-card {
-  opacity: 0;
-  transform: translateX(-100px);
-  transition: none;
-}
-
-.service-list ul li.service-card.animate {
-  animation: slideInFromLeft 0.8s ease-out forwards;
 }
 
 .service-list ul li::after {
