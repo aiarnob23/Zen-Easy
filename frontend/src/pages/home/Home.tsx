@@ -1,6 +1,6 @@
-import About from "../../components/home/about/About";
 import Banner from "../../components/home/banner/Banner";
 import Feedback from "../../components/home/feedback/Feedback";
+import Gallery from "../../components/home/gallery/Gallery";
 import OurProperty from "../../components/home/our-property/OurProperty";
 import Service from "../../components/home/service/Service";
 
@@ -14,10 +14,10 @@ const Home = () => {
         <Service/>
       </div>
       <div>
-        <OurProperty/>
+        <Gallery/>
       </div>
       <div>
-        <About/>
+        <OurProperty/>
       </div>
       <div>
         <Feedback/>
