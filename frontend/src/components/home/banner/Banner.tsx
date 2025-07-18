@@ -37,12 +37,12 @@ const Banner = () => {
     gsap.fromTo(
       bannerContentRef.current,
       { y: 600, opacity: 0 },
-      { y: 0, opacity: 1, duration:2 }
+      { y: 0, opacity: 1, duration:2 , delay:0.25 }
     );
     gsap.fromTo(
       bannerCtaRef.current,
       { scale: 0, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 1, delay: 1 }
+      { scale: 1, opacity: 1, duration: 1, delay: 1.25 }
     );
     
   });
