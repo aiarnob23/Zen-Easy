@@ -16,7 +16,8 @@ const Register = () => {
   if (!authcontext) {
     throw new Error("Authentication context is not available.");
   }
-const { showSuccess, showError } = useNotification();
+
+  const { showSuccess, showError } = useNotification();
   const {
     register,
     handleSubmit,
@@ -42,15 +43,13 @@ const { showSuccess, showError } = useNotification();
   });
 
   const selfId = Cookies.get("zenEasySelfId");
-  const [profileImagePreview, setProfileImagePreview] = useState<string | null>(
-    null
-  );
-  const { error, success, register: registerUser } = useRegister();
+  const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
+  const { error, success, register: registerUser, progress } = useRegister();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const password = watch("password");
 
-  //------------------------ handle onsubmit--------------------------
+  // Handle form submission
   const onSubmit: SubmitHandler<TUserRegistration> = async (data) => {
     if (data.password !== data.confirmPassword) {
       setError("confirmPassword", {
@@ -59,34 +58,67 @@ const { showSuccess, showError } = useNotification();
       });
       return;
     }
-    await registerUser(data);
+
+    registerUser(data);
   };
 
   useEffect(() => {
     if (success) {
-      showSuccess("registration complete" , 1000);
-      window.location.href = `/auth/otp-validate/${selfId}`;
+      showSuccess("Registration completed successfully!", 2000);
+      setTimeout(() => {
+        window.location.href = `/auth/otp-validate/${selfId}`;
+      }, 1000);
     }
     if (error) {
-      showError(error, 1000);
+      showError(error, 3000);
     }
-  }, [success, error]);
+  }, [success, error, selfId, showSuccess, showError]);
 
-  // ----------handle profile image change-----------
+  // Handle profile image change 
   const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      
+      //  file size 
+      if (file.size > 5 * 1024 * 1024) {
+        showError("Image size should be less than 5MB", 3000);
+        e.target.value = '';
+        return;
+      }
+      
+      //  file type
+      if (!file.type.startsWith('image/')) {
+        showError("Please select a valid image file", 3000);
+        e.target.value = '';
+        return;
+      }
+      
       setProfileImagePreview(URL.createObjectURL(file));
     } else {
       setProfileImagePreview(null);
     }
   };
 
-  // ---------------------------------return body ----------------------------------
+  // Progress indicator 
+  const ProgressIndicator = () => {
+    if (!progress) return null;
+    
+    return (
+      <div className="progress-indicator">
+        <div className="progress-bar">
+          <div className="progress-fill" style={{ width: '60%' }}></div>
+        </div>
+        <p className="progress-text">{progress}</p>
+      </div>
+    );
+  };
+
   return (
     <div className="register-container">
       <div className="heading animated-heading">
-        <h1 className="animated-item">Welcome to <Link to='/' className="brand-name">Zen Easy BD</Link></h1>
+        <h1 className="animated-item">
+          Welcome to <Link to='/' className="brand-name">Zen Easy BD</Link>
+        </h1>
         <h2 className="animated-item">Register Your Account</h2>
         <p className="animated-item">
           Join us to experience seamless services.
@@ -105,23 +137,26 @@ const { showSuccess, showError } = useNotification();
                 {...register("name", { required: "Full name is required" })}
                 placeholder="Enter Full Name"
                 className={errors.name ? "error" : ""}
+                disabled={isSubmitting}
               />
               {errors.name && (
                 <span className="error-message">{errors.name.message}</span>
               )}
             </div>
 
-            {/* Profile Image*/}
+            {/* Profile Image */}
             <div className="form-group full-width profile-image-upload animated-item">
-              <label htmlFor="profileImage">Profile Image</label>
+              <label htmlFor="profileImage">Profile Image (Optional)</label>
               <input
                 id="profileImage"
                 type="file"
-                accept="image/*"
+                accept="image/jpeg,image/png,image/webp"
                 {...register("profileImage")}
                 onChange={handleProfileImageChange}
                 className={errors.profileImage ? "error" : ""}
+                disabled={isSubmitting}
               />
+              <small className="form-hint">Maximum file size: 5MB. Supported formats: JPG, PNG, WEBP</small>
               {profileImagePreview && (
                 <div className="profile-image-preview">
                   <img src={profileImagePreview} alt="Profile Preview" />
@@ -149,11 +184,13 @@ const { showSuccess, showError } = useNotification();
                 })}
                 placeholder="e.g. zen.easy.info@example.com"
                 className={errors.email ? "error" : ""}
+                disabled={isSubmitting}
               />
               {errors.email && (
                 <span className="error-message">{errors.email.message}</span>
               )}
             </div>
+
             <div className="hidden lg:block">
               <br />
             </div>
@@ -173,11 +210,13 @@ const { showSuccess, showError } = useNotification();
                 })}
                 placeholder="********"
                 className={errors.password ? "error" : ""}
+                disabled={isSubmitting}
               />
               <button
                 type="button"
                 className="password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
+                disabled={isSubmitting}
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
@@ -199,11 +238,13 @@ const { showSuccess, showError } = useNotification();
                 })}
                 placeholder="********"
                 className={errors.confirmPassword ? "error" : ""}
+                disabled={isSubmitting}
               />
               <button
                 type="button"
                 className="password-toggle"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                disabled={isSubmitting}
               >
                 {showConfirmPassword ? "Hide" : "Show"}
               </button>
@@ -229,6 +270,7 @@ const { showSuccess, showError } = useNotification();
                 })}
                 placeholder="+880 1XXXXXXXXX"
                 className={errors.phoneNumber ? "error" : ""}
+                disabled={isSubmitting}
               />
               {errors.phoneNumber && (
                 <span className="error-message">
@@ -246,13 +288,14 @@ const { showSuccess, showError } = useNotification();
                 {...register("nid")}
                 placeholder="XXXXXXXXXXXXX"
                 className={errors.nid ? "error" : ""}
+                disabled={isSubmitting}
               />
               {errors.nid && (
                 <span className="error-message">{errors.nid.message}</span>
               )}
             </div>
 
-            {/* Address - Street */}
+            {/* Address Fields - Street */}
             <div className="form-group animated-item">
               <label htmlFor="street">Street Address</label>
               <input
@@ -263,6 +306,7 @@ const { showSuccess, showError } = useNotification();
                 })}
                 placeholder="123 Main St"
                 className={errors.address?.street ? "error" : ""}
+                disabled={isSubmitting}
               />
               {errors.address?.street && (
                 <span className="error-message">
@@ -271,7 +315,7 @@ const { showSuccess, showError } = useNotification();
               )}
             </div>
 
-            {/* Address - City */}
+            {/* City */}
             <div className="form-group animated-item">
               <label htmlFor="city">City</label>
               <input
@@ -280,6 +324,7 @@ const { showSuccess, showError } = useNotification();
                 {...register("address.city", { required: "City is required" })}
                 placeholder="Dhaka"
                 className={errors.address?.city ? "error" : ""}
+                disabled={isSubmitting}
               />
               {errors.address?.city && (
                 <span className="error-message">
@@ -288,7 +333,7 @@ const { showSuccess, showError } = useNotification();
               )}
             </div>
 
-            {/* Address - Postal Code */}
+            {/* Postal Code */}
             <div className="form-group animated-item">
               <label htmlFor="postalCode">Postal Code</label>
               <input
@@ -299,6 +344,7 @@ const { showSuccess, showError } = useNotification();
                 })}
                 placeholder="1000"
                 className={errors.address?.postalCode ? "error" : ""}
+                disabled={isSubmitting}
               />
               {errors.address?.postalCode && (
                 <span className="error-message">
@@ -329,6 +375,7 @@ const { showSuccess, showError } = useNotification();
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"
+                    disabled={isSubmitting}
                   />
                 )}
               />
@@ -346,6 +393,7 @@ const { showSuccess, showError } = useNotification();
                 id="gender"
                 {...register("gender", { required: "Gender is required" })}
                 className={errors.gender ? "error" : ""}
+                disabled={isSubmitting}
               >
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
@@ -367,6 +415,7 @@ const { showSuccess, showError } = useNotification();
                 })}
                 placeholder="Bangladeshi"
                 className={errors.nationality ? "error" : ""}
+                disabled={isSubmitting}
               />
               {errors.nationality && (
                 <span className="error-message">
@@ -386,6 +435,7 @@ const { showSuccess, showError } = useNotification();
                 })}
                 placeholder="e.g., Engineer, Electrician, Maid, Student...."
                 className={errors.occupation ? "error" : ""}
+                disabled={isSubmitting}
               />
               {errors.occupation && (
                 <span className="error-message">
@@ -401,19 +451,25 @@ const { showSuccess, showError } = useNotification();
                 type="text"
                 {...register("socialMedia.facebook")}
                 placeholder="Facebook Profile URL"
+                disabled={isSubmitting}
               />
               <input
                 type="text"
                 {...register("socialMedia.instagram")}
                 placeholder="Instagram Profile URL"
+                disabled={isSubmitting}
               />
               <input
                 type="text"
                 {...register("socialMedia.linkedin")}
                 placeholder="LinkedIn Profile URL"
+                disabled={isSubmitting}
               />
             </div>
           </div>
+
+          {/* Progress Indicator */}
+          <ProgressIndicator />
 
           <div className="form-actions animated-item">
             <button
@@ -423,7 +479,13 @@ const { showSuccess, showError } = useNotification();
             >
               {isSubmitting ? "Registering..." : "Register"}
             </button>
+            {isSubmitting && (
+              <p className="registration-note">
+                Please don't close this page. Registration is in progress...
+              </p>
+            )}
           </div>
+          
           <div className="register-link animated-item">
             Already Registered? <Link to="/auth/login">Sign In</Link>
           </div>
