@@ -423,7 +423,7 @@ const FindService = () => {
             <div className="service-cards-grid">
               {displayedServices.map((service, index) => (
                 <div
-                  key={service._id}
+                  key={service?._id}
                   className="service-card"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
@@ -462,7 +462,7 @@ const FindService = () => {
                     )}
                   </div>
                   <div className="card-content">
-                    <Link to={`/main/profile/${service.provider._id}`}>
+                    <Link to={`/main/profile/${service?.provider?._id}`}>
                       <h3 className="provider-name">
                         {service?.provider?.name}
                       </h3>
