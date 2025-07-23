@@ -127,7 +127,6 @@ const getRentDetails = catchAsync(async(req,res)=>{
 
 //delete a rent post
 const deleteRentPost = catchAsync(async(req,res)=>{
-  console.log('req accepted....');
   const id = req?.params?.id;
   if(id){
     const result = await rentServices.deleteRent(id as string);
