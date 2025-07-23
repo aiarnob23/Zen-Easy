@@ -18,6 +18,7 @@ import PrivateRoute from "./PrivateRoutes";
 import EditProfile from "../pages/edit-profile/EditProfile";
 import ResetPassword from "../pages/auth/reset-password/ResetPassword";
 import EditService from "../pages/edit-profession/EditProfProfile";
+import NotFoundPage from "../pages/not-found/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -97,6 +98,10 @@ const router = createBrowserRouter([
         element: <ResetPassword />,
       },
     ],
+  },
+  {
+    path:"*",
+    element:<NotFoundPage/>,
   },
 ]);
 

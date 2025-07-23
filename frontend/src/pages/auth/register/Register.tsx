@@ -1,7 +1,5 @@
-import { useForm, type SubmitHandler, Controller } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { useContext, useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import "./Register.scss";
 import { Link } from "react-router-dom";
 import { useRegister } from "../../../hooks/useRegister";
@@ -9,6 +7,12 @@ import type { TUserRegistration } from "../../../utils/types/registerUserType";
 import { AuthContext } from "../../../context/AuthContext";
 import Cookies from "js-cookie";
 import { useNotification } from "../../../context/notification/NotificationContext";
+
+type TUserRegistrationWithDOB = TUserRegistration & {
+  dobDay: string;
+  dobMonth: string;
+  dobYear: string;
+};
 
 const Register = () => {
   const authcontext = useContext(AuthContext);
@@ -23,9 +27,9 @@ const Register = () => {
     handleSubmit,
     watch,
     setError,
-    control,
+    setValue,
     formState: { errors, isSubmitting },
-  } = useForm<TUserRegistration>({
+  } = useForm<TUserRegistrationWithDOB>({
     defaultValues: {
       gender: "",
       address: {
@@ -38,7 +42,10 @@ const Register = () => {
         instagram: "",
         linkedin: "",
       },
-      dateOfBirth: null,
+      dateOfBirth: undefined,
+      dobDay: "",
+      dobMonth: "",
+      dobYear: "",
     },
   });
 
@@ -49,8 +56,48 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const password = watch("password");
 
+  const dobDay = watch("dobDay");
+  const dobMonth = watch("dobMonth");
+  const dobYear = watch("dobYear");
+
+  // Months
+  const months = [
+    { value: "01", label: "January" },
+    { value: "02", label: "February" },
+    { value: "03", label: "March" },
+    { value: "04", label: "April" },
+    { value: "05", label: "May" },
+    { value: "06", label: "June" },
+    { value: "07", label: "July" },
+    { value: "08", label: "August" },
+    { value: "09", label: "September" },
+    { value: "10", label: "October" },
+    { value: "11", label: "November" },
+    { value: "12", label: "December" },
+  ];
+
+  // Combine DOB 
+  useEffect(() => {
+    if (dobDay && dobMonth && dobYear) {
+      const day = parseInt(dobDay);
+      const month = parseInt(dobMonth) - 1; 
+      const year = parseInt(dobYear);
+      
+      // Validate date
+      if (day >= 1 && day <= 31 && year >= 1900 && year <= new Date().getFullYear()) {
+        const combinedDate = new Date(year, month, day);
+        
+        if (combinedDate.getDate() === day && 
+            combinedDate.getMonth() === month && 
+            combinedDate.getFullYear() === year) {
+          setValue("dateOfBirth", combinedDate);
+        }
+      }
+    }
+  }, [dobDay, dobMonth, dobYear, setValue]);
+
   // Handle form submission
-  const onSubmit: SubmitHandler<TUserRegistration> = async (data) => {
+  const onSubmit: SubmitHandler<TUserRegistrationWithDOB> = async (data) => {
     if (data.password !== data.confirmPassword) {
       setError("confirmPassword", {
         type: "manual",
@@ -59,7 +106,17 @@ const Register = () => {
       return;
     }
 
-    registerUser(data);
+    // Validate DOB fields
+    if (!data.dobDay || !data.dobMonth || !data.dobYear) {
+      setError("dobDay", {
+        type: "manual",
+        message: "Date of birth is required",
+      });
+      return;
+    }
+
+    const { dobDay, dobMonth, dobYear, ...submitData } = data;
+    registerUser(submitData as TUserRegistration);
   };
 
   useEffect(() => {
@@ -353,37 +410,79 @@ const Register = () => {
               )}
             </div>
 
-            {/* Date of Birth */}
-            <div className="form-group animated-item">
-              <label htmlFor="dateOfBirth">Date of Birth</label>
-              <Controller
-                control={control}
-                name="dateOfBirth"
-                rules={{ required: "Date of Birth is required" }}
-                render={({ field }) => (
-                  <DatePicker
-                    id="dateOfBirth"
-                    placeholderText="Select your Date of Birth"
-                    maxDate={new Date()}
-                    onChange={(date) => field.onChange(date)}
-                    selected={field.value}
-                    dateFormat="dd/MM/yyyy"
-                    className={`date-picker-input ${
-                      errors.dateOfBirth ? "error" : ""
-                    }`}
-                    peekNextMonth
-                    showMonthDropdown
-                    showYearDropdown
-                    dropdownMode="select"
+            {/* Date of Birth  */}
+            <div className="form-group full-width dob-group animated-item">
+              <label>Date of Birth</label>
+              <div className="dob-fields">
+                <div className="dob-field">
+                  <input
+                    type="text"
+                    placeholder="DD"
+                    {...register("dobDay", {
+                      required: "Day is required",
+                      pattern: {
+                        value: /^(0?[1-9]|[12][0-9]|3[01])$/,
+                        message: "Enter valid day (1-31)"
+                      }
+                    })}
+                    className={errors.dobDay ? "error" : ""}
                     disabled={isSubmitting}
+                    maxLength={2}
                   />
-                )}
-              />
-              {errors.dateOfBirth && (
-                <span className="error-message">
-                  {errors.dateOfBirth.message}
-                </span>
-              )}
+                  {errors.dobDay && (
+                    <span className="error-message">{errors.dobDay.message}</span>
+                  )}
+                </div>
+                
+                <div className="dob-field">
+                  <select
+                    {...register("dobMonth", { required: "Month is required" })}
+                    className={errors.dobMonth ? "error" : ""}
+                    disabled={isSubmitting}
+                  >
+                    <option value="">Select Month</option>
+                    {months.map((month) => (
+                      <option key={month.value} value={month.value}>
+                        {month.label}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.dobMonth && (
+                    <span className="error-message">{errors.dobMonth.message}</span>
+                  )}
+                </div>
+                
+                <div className="dob-field">
+                  <input
+                    type="text"
+                    placeholder="YYYY"
+                    {...register("dobYear", {
+                      required: "Year is required",
+                      pattern: {
+                        value: /^(19|20)\d{2}$/,
+                        message: "Enter valid year (1900-2099)"
+                      },
+                      validate: (value) => {
+                        const year = parseInt(value);
+                        const currentYear = new Date().getFullYear();
+                        if (year > currentYear) {
+                          return "Year cannot be in the future";
+                        }
+                        if (year < 1900) {
+                          return "Year must be 1900 or later";
+                        }
+                        return true;
+                      }
+                    })}
+                    className={errors.dobYear ? "error" : ""}
+                    disabled={isSubmitting}
+                    maxLength={4}
+                  />
+                  {errors.dobYear && (
+                    <span className="error-message">{errors.dobYear.message}</span>
+                  )}
+                </div>
+              </div>
             </div>
 
             {/* Gender */}

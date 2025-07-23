@@ -4,7 +4,8 @@ import { getUserProfileDetails } from "../../services/userProfileServices";
 import OrbitalSpinner from "../../components/ui/LoadingSpinner";
 import Cookies from "js-cookie";
 import type { TServiceCategory } from "../../utils/types/serviceTitleType";
-import './profProfile.scss';
+import "./profProfile.scss";
+import ReviewsModal from "../../components/modals/reviews/ReviewsModal";
 
 // --- Types
 export type TProfessinalService = {
@@ -81,6 +82,28 @@ const ProfProfile = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const selfId = Cookies.get("zenEasySelfId") || "";
+  const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
+  const [currentServiceRatings, setCurrentServiceRatings] = useState<TRating[]>(
+    []
+  );
+  const [currentServiceCategory, setCurrentServiceCategory] = useState<
+    TServiceCategory | ""
+  >("");
+    // --- Reviews Modal Handlers ---
+    const openReviewsModal = (
+      ratings: TRating[],
+      serviceCategory: TServiceCategory
+    ) => {
+      setCurrentServiceRatings(ratings);
+      setCurrentServiceCategory(serviceCategory);
+      setIsReviewsModalOpen(true);
+    };
+  
+    const closeReviewsModal = () => {
+      setIsReviewsModalOpen(false);
+      setCurrentServiceRatings([]);
+      setCurrentServiceCategory("");
+    };
 
   // --- Fetch user profile and professional details ---
   useEffect(() => {
@@ -371,14 +394,24 @@ const ProfProfile = () => {
                       <div className="detail-row full-row rating-row">
                         <span className="detail-label">Rating:</span>
                         <span className="detail-value">
-                          ⭐{" "}
-                          {(
-                            service.ratings.reduce(
-                              (sum, r) => sum + r.rating,
-                              0
-                            ) / service.ratings.length
-                          ).toFixed(1)}
-                          /5 ({service.ratings.length} reviews)
+                          <button
+                            onClick={() =>
+                              openReviewsModal(
+                                service.ratings!,
+                                service.category
+                              )
+                            }
+                            className="cursor-pointer"
+                          >
+                            ⭐{" "}
+                            {(
+                              service.ratings.reduce(
+                                (sum, r) => sum + r.rating,
+                                0
+                              ) / service.ratings.length
+                            ).toFixed(1)}
+                            /5 ({service.ratings.length} reviews)
+                          </button>
                         </span>
                       </div>
                     )}
@@ -397,6 +430,15 @@ const ProfProfile = () => {
           )}
         </div>
       </div>
+      {/* Reviews Modal */}
+      {isReviewsModalOpen && (
+        <ReviewsModal
+          isOpen={isReviewsModalOpen}
+          onClose={closeReviewsModal}
+          reviews={currentServiceRatings}
+          serviceCategory={currentServiceCategory}
+        />
+      )}
     </div>
   );
 };

@@ -12,7 +12,7 @@
   .heading {
     text-align: center;
     margin-bottom: 40px;
-    .brand-name{
+    .brand-name {
       cursor: pointer;
       font-weight: 600;
     }
@@ -77,20 +77,20 @@
             animation: slideFromBottom 0.6s ease-out forwards;
           }
 
-          // animation delays 
-          &:nth-child(1) { animation-delay: 1.0s; } 
-          &:nth-child(2) { animation-delay: 1.1s; } 
-          &:nth-child(3) { animation-delay: 1.2s; } 
-          &:nth-child(4) { animation-delay: 1.3s; } 
+          // Staggered animation delays
+          &:nth-child(1) { animation-delay: 1s; }
+          &:nth-child(2) { animation-delay: 1.1s; }
+          &:nth-child(3) { animation-delay: 1.2s; }
+          &:nth-child(4) { animation-delay: 1.3s; }
           &:nth-child(5) { animation-delay: 1.4s; }
           &:nth-child(6) { animation-delay: 1.5s; }
-          &:nth-child(7) { animation-delay: 1.6s; } 
-          &:nth-child(8) { animation-delay: 1.7s; } 
-          &:nth-child(9) { animation-delay: 1.8s; } 
-          &:nth-child(10) { animation-delay: 1.9s; } 
-          &:nth-child(11) { animation-delay: 2.0s; } 
-          &:nth-child(12) { animation-delay: 2.1s; } 
-          &:nth-child(13) { animation-delay: 2.2s; } 
+          &:nth-child(7) { animation-delay: 1.6s; }
+          &:nth-child(8) { animation-delay: 1.7s; }
+          &:nth-child(9) { animation-delay: 1.8s; }
+          &:nth-child(10) { animation-delay: 1.9s; }
+          &:nth-child(11) { animation-delay: 2s; }
+          &:nth-child(12) { animation-delay: 2.1s; }
+          &:nth-child(13) { animation-delay: 2.2s; }
           &:nth-child(14) { animation-delay: 2.3s; }
           &:nth-child(15) { animation-delay: 2.4s; }
 
@@ -139,13 +139,14 @@
           .error-message {
             color: #ff4d4f;
             font-size: 0.85em;
-            position: absolute; 
-            bottom: -20px;     
-            left: 0;            
-            width: 100%;      
-            margin-top: 0;     
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            width: 100%;
+            margin-top: 0;
           }
 
+          // Profile Image Upload Styles
           &.profile-image-upload {
             input[type="file"] {
               padding: 10px 0;
@@ -175,6 +176,7 @@
             }
           }
 
+          // Social Media Group Styles
           &.social-media-group {
             display: flex;
             flex-direction: column;
@@ -184,7 +186,7 @@
             }
           }
 
-          /* Password toggle styles */
+          // Password Group Styles
           &.password-group {
             input {
               padding-right: 60px;
@@ -206,94 +208,73 @@
             }
           }
 
+          // Date of Birth Group Styles
+          &.dob-group {
+            .dob-fields {
+              display: flex;
+              gap: 12px;
+              align-items: flex-start;
 
-          .react-datepicker-wrapper {
-            width: 100%;
-          }
+              .dob-field {
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                flex: 1;
 
-          .date-picker-input {
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1em;
-            outline: none;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            width: 100%;
-            cursor: pointer;
+                input, select {
+                  width: 100%;
+                  padding: 12px 15px;
+                  border: 1px solid #ddd;
+                  border-radius: 8px;
+                  font-size: 1em;
+                  outline: none;
+                  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 
-            &:focus {
-              border-color: var(--primary);
-              box-shadow: 0 0 0 3px rgba(228, 237, 100, 0.3);
+                  &:focus {
+                    border-color: var(--primary);
+                    box-shadow: 0 0 0 3px rgba(228, 237, 100, 0.3);
+                  }
+
+                  &.error {
+                    border-color: #ff4d4f;
+                  }
+                }
+
+                select {
+                  appearance: none;
+                  background-image: url('data:image/svg+xml;utf8,<svg fill="#555" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+                  background-repeat: no-repeat;
+                  background-position: right 12px center;
+                  background-size: 20px;
+                  cursor: pointer;
+                }
+
+                // Day
+                &:first-child {
+                  flex: 0 0 120px;
+                }
+
+                // Month
+                &:nth-child(2) {
+                  flex: 0 0 120px;
+                }
+
+                // Year 
+                &:last-child {
+                  flex: 0 0 120px;
+                }
+
+                .error-message {
+                  color: #ff4d4f;
+                  font-size: 0.75em;
+                  position: absolute;
+                  bottom: -18px;
+                  left: 0;
+                  width: 100%;
+                  white-space: nowrap;
+                }
+              }
             }
-
-            &.error {
-              border-color: #ff4d4f;
-            }
-          }
-
-          .react-datepicker {
-            font-family: "Geist", sans-serif;
-            border: 1px solid #ddd;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-          }
-
-          .react-datepicker__header {
-            background-color: var(--primary);
-            border-bottom: none;
-            padding-top: 10px;
-            padding-bottom: 10px;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-          }
-
-          .react-datepicker__current-month,
-          .react-datepicker__day-name {
-            color: #000;
-            font-weight: 600;
-          }
-
-          .react-datepicker__navigation--previous,
-          .react-datepicker__navigation--next {
-            top: 15px;
-          }
-          .react-datepicker__navigation-icon::before {
-            border-color: #000;
-          }
-
-          .react-datepicker__day {
-            width: 2.2rem;
-            line-height: 2.2rem;
-            margin: 0.166rem;
-            border-radius: 4px;
-
-            &:hover {
-              background-color: rgba(228, 237, 100, 0.5);
-            }
-          }
-
-          .react-datepicker__day--selected,
-          .react-datepicker__day--keyboard-selected {
-            background-color: var(--primary);
-            color: #000;
-            font-weight: 700;
-            border-radius: 4px;
-          }
-          .react-datepicker__day--selected:hover,
-          .react-datepicker__day--keyboard-selected:hover {
-             background-color: (var(--primary), 10%);
-             color: #000;
-          }
-
-          .react-datepicker__month-select,
-          .react-datepicker__year-select {
-            padding: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            margin: 0 5px;
-            font-size: 0.9em;
-            cursor: pointer;
           }
         }
       }
@@ -317,7 +298,8 @@
           border-radius: 8px;
           text-transform: uppercase;
           letter-spacing: 0.5px;
-          transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+          transition: background-color 0.2s ease, transform 0.2s ease,
+            box-shadow 0.2s ease;
           box-shadow: 0 4px 15px rgba(228, 237, 100, 0.4);
 
           &:hover {
@@ -358,126 +340,264 @@
       }
     }
   }
-.progress-indicator {
-  margin: 20px 0;
-  
-  .progress-bar {
-    width: 100%;
-    height: 6px;
-    background-color: #f0f0f0;
-    border-radius: 3px;
-    overflow: hidden;
-    
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #4CAF50, #45a049);
-      transition: width 0.3s ease;
+
+  // Progress Indicator Styles
+  .progress-indicator {
+    margin: 20px 0;
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background-color: #f0f0f0;
+      border-radius: 3px;
+      overflow: hidden;
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #4caf50, #45a049);
+        transition: width 0.3s ease;
+      }
+    }
+
+    .progress-text {
+      text-align: center;
+      margin-top: 8px;
+      font-size: 14px;
+      color: #666;
     }
   }
-  
-  .progress-text {
+
+  .form-hint {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+  }
+
+  .registration-note {
     text-align: center;
-    margin-top: 8px;
+    margin-top: 10px;
     font-size: 14px;
     color: #666;
   }
 }
-
-.form-hint {
-  display: block;
-  font-size: 12px;
-  color: #666;
-  margin-top: 4px;
-}
-
-.registration-note {
-  text-align: center;
-  margin-top: 10px;
-  font-size: 14px;
-  color: #666;
-}
   /*------------------------------------ Responsive ----------------------------- */
   @media (max-width: 768px) {
-    padding: 30px 15px;
-
-    .heading {
-      margin-bottom: 30px;
-      h1 {
-        font-size: 2.2em;
-      }
-      h2 {
-        font-size: 1.5em;
-      }
-      p {
-        font-size: 1em;
-      }
+   .register-container {
+  padding: 20px 10px;
+  .heading {
+    margin-bottom: 20px;
+    .brand-name {
+      font-weight: 500;
     }
 
-    .register-form-section {
-      padding: 25px 25px;
+    h1 {
+      font-size: 36px;
+    }
+    h2 {
+      font-size: 20px;
+    }
+    p {
+      font-size:16px;
+    }
+  }
 
-      .register-form {
-        .form-grid {
-          grid-template-columns: 1fr;
+  .register-form-section {
+    width: 100%;
+    max-width: 700px;
+    background-color: #ffffff;
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 
-          .form-group.animated-item {
-            animation-delay: unset;
+    opacity: 0;
+    transform: translateY(20px);
+
+    .register-form {
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 30px;
+
+        .form-group {
+          label {
+            font-size:14px;
+            font-weight: 500;
           }
-          .password-group {
-            .password-toggle {
-             bottom:16px;
-              transform: translateY(0);
+
+          input[type="text"],
+          input[type="email"],
+          input[type="password"],
+          input[type="tel"],
+          select {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 12px;
+          }
+
+          select {
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="#555" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
+          }
+
+          .error-message {
+            color: #ff4d4f;
+            font-size:10px;
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            width: 100%;
+            margin-top: 0;
+          }
+
+  
+          // Date of Birth Group Styles
+          &.dob-group {
+            .dob-fields {
+              display: flex;
+              gap: 12px;
+              align-items: flex-start;
+
+              .dob-field {
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                flex: 1;
+
+                input, select {
+                  width: 100%;
+                  padding: 12px 15px;
+                  border: 1px solid #ddd;
+                  border-radius: 8px;
+                  font-size: 1em;
+                  outline: none;
+                  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+                  &:focus {
+                    border-color: var(--primary);
+                    box-shadow: 0 0 0 3px rgba(228, 237, 100, 0.3);
+                  }
+
+                  &.error {
+                    border-color: #ff4d4f;
+                  }
+                }
+
+                select {
+                  appearance: none;
+                  background-image: url('data:image/svg+xml;utf8,<svg fill="#555" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+                  background-repeat: no-repeat;
+                  background-position: right 12px center;
+                  background-size: 20px;
+                  cursor: pointer;
+                }
+
+                // Day
+                &:first-child {
+                  flex: 0 0 120px;
+                }
+
+                // Month
+                &:nth-child(2) {
+                  flex: 0 0 120px;
+                }
+
+                // Year 
+                &:last-child {
+                  flex: 0 0 120px;
+                }
+
+                .error-message {
+                  color: #ff4d4f;
+                  font-size: 0.75em;
+                  position: absolute;
+                  bottom: -18px;
+                  left: 0;
+                  width: 100%;
+                  white-space: nowrap;
+                }
+              }
             }
           }
         }
       }
-      .form-actions.animated-item {
-        animation-delay: unset;
+
+      .form-actions {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+
+        &.animated-item {
+          opacity: 0;
+          transform: translateY(20px);
+          animation: slideFromBottom 0.6s ease-out forwards;
+          animation-delay: 2.5s;
+        }
+
+        .submit-btn {
+          padding: 8px 20px;
+          font-size: px;
+          font-weight: 600;
+          border-radius: 8px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          transition: background-color 0.2s ease, transform 0.2s ease,
+            box-shadow 0.2s ease;
+          box-shadow: 0 4px 15px rgba(228, 237, 100, 0.4);
+        }
       }
-      .register-link.animated-item {
-          animation-delay: unset;
+
+      .register-link {
+        font-size: 16px;
+        a {
+          font-weight: 500;
+        }
       }
     }
   }
 
-  @media (max-width: 480px) {
-    .heading {
-      margin-bottom: 30px;
-      h1 {
-        font-size: 1.8em;
-      }
-      h2 {
-        font-size: 1.3em;
-      }
-      p {
-        font-size: 0.9em;
-      }
+  // Progress Indicator Styles
+  .progress-indicator {
+    margin: 20px 0;
+
+    .progress-bar {
+      width: 100%;
+      height: 5px;
+      background-color: #f0f0f0;
+      border-radius: 3px;
+      overflow: hidden;
+
     }
 
-    .register-form-section {
-      padding: 20px;
-      .register-form {
-        .form-group {
-          label {
-            font-size: 0.9em;
-          }
-          input,
-          select,
-          .date-picker-input {
-            padding: 10px 12px;
-            font-size: 0.95em;
-          }
-        }
-        .form-actions {
-          .submit-btn {
-            padding: 12px 25px;
-            font-size: 1em;
-          }
-        }
-      }
+    .progress-text {
+      text-align: center;
+      margin-top: 8px;
+      font-size: 12px;
+      color: #666;
     }
+  }
+
+  .form-hint {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+  }
+
+  .registration-note {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
   }
 }
+  }
 
 /* Animations */
 @keyframes slideFromBottom {
