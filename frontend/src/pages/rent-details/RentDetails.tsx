@@ -1,9 +1,10 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./RentDetails.scss";
-import { getRentDetails } from "../../services/rentServices";
+import { deleteRentPost, getRentDetails } from "../../services/rentServices";
 import Cookies from "js-cookie";
 import OrbitalSpinner from "../../components/ui/LoadingSpinner";
+import { useNotification } from "../../context/notification/NotificationContext";
 
 const RentDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -12,6 +13,7 @@ const RentDetailsPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const selfId = Cookies.get("zenEasySelfId") || "";
+  const {showSuccess} = useNotification();
 
   // ------scroll to top----------
    useEffect(() => {
@@ -70,10 +72,10 @@ const RentDetailsPage = () => {
 
   if (error) {
     return (
-      <div className="rent-details-container error-state">
+      <div className="rent-details-container text-yellow-500 font-semibold flex justify-center items-center flex-col min-h-screen min-w-[100vw] error-state">
         <p>Error: {error}</p>
-        <button onClick={() => window.location.reload()} className="retry-btn">
-          Retry
+        <button onClick={() => window.location.href="/main/rent"} className="retry-btn">
+          Back
         </button>
       </div>
     );
@@ -83,12 +85,14 @@ const RentDetailsPage = () => {
     return <div className="rent-details-container no-data-state">No details available for this property.</div>;
   }
 
-  const handleEdit = () => {
-    console.log("Edit button clicked for ID:", rentProperty._id);
-  };
-
-  const handleDelete = () => {
-    console.log("Delete button clicked for ID:", rentProperty._id);
+  const handleDelete = async(id:string) => {
+     const result = await deleteRentPost(id); 
+     showSuccess("Rent post deleted successfully", 2000)
+     if(result.success){
+      setTimeout(() => {
+        window.location.href="/main/rent"
+      }, 2000);
+     }
   };
 
   return (
@@ -152,17 +156,16 @@ const RentDetailsPage = () => {
               <li><strong>Available From:</strong> {new Date(rentProperty.rentStartDate).toLocaleDateString('en-GB', {year: 'numeric', month: 'long', day: 'numeric'})}</li>
               <li><strong>Posted On:</strong> {new Date(rentProperty.createdAt).toLocaleDateString('en-GB', {year: 'numeric', month: 'long', day: 'numeric'})}</li>
               <li><strong>Contact:</strong> {rentProperty.contactInfo}</li>
-              <li><strong>Posted by:</strong><Link className="primary font-semibold cursor-pointer" to={`/main/profile/${rentProperty.user._id}`}> {rentProperty.user.name}</Link></li>
+              <li><strong>Posted by:</strong><Link className="primary font-semibold cursor-pointer" to={`/main/profile/${rentProperty?.user?._id}`}> {rentProperty?.user?.name}</Link></li>
             </ul>
           </div>
         </div>
 
         {/* Action Buttons */}
         {
-          selfId === rentProperty.user._id && (
+          selfId === rentProperty?.user?._id && (
             <div className="rent-actions">
-              <button onClick={handleEdit} className="edit-btn">Edit Listing</button>
-              <button onClick={handleDelete} className="delete-btn">Delete Listing</button>
+              <button onClick={()=>handleDelete(rentProperty?._id)} className="delete-btn">Delete Listing</button>
             </div>
           )
         }

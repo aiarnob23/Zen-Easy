@@ -66,7 +66,7 @@ if (loading) {
 
    )
   }
-  console.log(userProfile);
+
 
   // -----------------------------------------//
   return (

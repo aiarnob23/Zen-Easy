@@ -440,7 +440,7 @@ const Register = () => {
                     className={errors.dobMonth ? "error" : ""}
                     disabled={isSubmitting}
                   >
-                    <option value="">Select Month</option>
+                    <option className="" value="">Month</option>
                     {months.map((month) => (
                       <option key={month.value} value={month.value}>
                         {month.label}
@@ -545,7 +545,7 @@ const Register = () => {
 
             {/* Social Media Links */}
             <div className="form-group full-width social-media-group animated-item">
-              <label>Social Media (Optional)</label>
+              <label>Social Media <span className="optional-text">(Optional)</span></label>
               <input
                 type="text"
                 {...register("socialMedia.facebook")}

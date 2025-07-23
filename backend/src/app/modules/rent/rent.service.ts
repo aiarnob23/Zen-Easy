@@ -48,10 +48,17 @@ const viewRentDeails = async (_id: string) => {
   return result;
 };
 
+//delete a rent
+const deleteRent = async(_id:string)=>{
+  const result = await Rent.findByIdAndDelete(_id);
+  return result;
+}
+
 export const rentServices = {
   getRentPosts,
   createRentAd,
   updateRentAd,
   updateRentAdStatus,
   viewRentDeails,
+  deleteRent,
 };

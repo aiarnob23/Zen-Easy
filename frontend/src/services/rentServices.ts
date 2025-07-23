@@ -28,3 +28,16 @@ export const getRentDetails = async(id : string)=>{
     return null;
   }
 }
+
+//delete a rent post
+export const deleteRentPost = async(id:string)=>{
+  try{
+    console.log("request going......");
+    const response = await serverBaseUrl.delete(`/rent/delete/${id}`)
+    const result = response?.data;
+    return result;
+  }catch(error){
+    console.log("Failed to delete rent post");
+    return null;
+  }
+}

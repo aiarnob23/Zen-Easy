@@ -125,10 +125,27 @@ const getRentDetails = catchAsync(async(req,res)=>{
   }
 })
 
+//delete a rent post
+const deleteRentPost = catchAsync(async(req,res)=>{
+  console.log('req accepted....');
+  const id = req?.params?.id;
+  if(id){
+    const result = await rentServices.deleteRent(id as string);
+    sendResponse(res,{
+      success:true,
+      statusCode:200,
+      message:"Post deleted successfully",
+      data:result
+    })
+
+  }
+})
+
 export const rentController = {
     fetchAllRentPosts,
     createNewRentAd,
     updateRentPostStatus,
     updateRentPostDetails,
     getRentDetails,
+    deleteRentPost,
 }

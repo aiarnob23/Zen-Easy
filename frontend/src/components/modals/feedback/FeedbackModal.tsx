@@ -76,7 +76,6 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
       }
     } catch (error: any) {
       console.error("Error submitting feedback:", error);
-      alert(error.message || "Failed to submit feedback. Please try again.");
     }
   };
 
