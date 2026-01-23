@@ -19,6 +19,9 @@ import EditProfile from "../pages/edit-profile/EditProfile";
 import ResetPassword from "../pages/auth/reset-password/ResetPassword";
 import EditService from "../pages/edit-profession/EditProfProfile";
 import NotFoundPage from "../pages/not-found/NotFound";
+import AdminLogin from "../pages/admin/auth/Login";
+import ProfService from "../pages/admin/dashboard/prof-service/ProfService";
+import AdminLayout from "../layouts/AdminLayout";
 
 const router = createBrowserRouter([
   {
@@ -99,9 +102,32 @@ const router = createBrowserRouter([
       },
     ],
   },
+
   {
-    path:"*",
-    element:<NotFoundPage/>,
+    path: "/admin/login",
+    element: <AdminLogin />,
+  },
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    children: [
+      {
+        index: true,
+        element: <ProfService />,
+      },
+      {
+        path: "overview",
+        element: <ProfService />, 
+      },
+      {
+        path: "prof-services",
+        element: <ProfService />,
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);
 

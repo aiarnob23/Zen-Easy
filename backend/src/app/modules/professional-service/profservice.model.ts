@@ -92,6 +92,15 @@ const professionalServiceSchema = new Schema<TProfessinalService>(
       enum: ["active", "inactive"],
       default: "active",
     },
+    certificate: {
+      type: String,
+      required: true,
+    },
+    isApproved: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
   },
   {
     timestamps: true,

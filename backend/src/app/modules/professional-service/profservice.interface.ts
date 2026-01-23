@@ -12,6 +12,8 @@ export type TProfessinalService = {
     coverImage?:string;
     ratings?:TRating[];
     status?:'active' | 'inactive';
+    certificate:string;
+    isApproved: 'pending' | 'approved' | 'reject';
 }
 
 
