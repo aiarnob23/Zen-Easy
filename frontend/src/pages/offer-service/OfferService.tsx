@@ -2,9 +2,10 @@ import { useForm, type SubmitHandler, useFieldArray } from "react-hook-form";
 import "./OfferService.scss";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { getUsersProfessionalInfo } from "../../services/professionalServices"; 
-import { useOfferService } from "../../hooks/useOfferService"; 
+import { getUsersProfessionalInfo } from "../../services/professionalServices";
+import { useOfferService } from "../../hooks/useOfferService";
 import { useNotification } from "../../context/notification/NotificationContext";
+import { uploadCertificate } from "../../services/certificateService";
 
 // ---------------type -------------
 export type TProfessinalService = {
@@ -18,8 +19,9 @@ export type TProfessinalService = {
   maximumPrice: number;
   availableDays: string[];
   availableTime: "day" | "night" | "always";
-  coverImage?: string; 
+  coverImage?: string;
   ratings?: TRating[];
+  certificate: string;
   status?: 'active' | 'inactive';
 };
 
@@ -32,35 +34,37 @@ export type TRating = {
 
 
 type ProfessionalServiceFormData = Omit<TProfessinalService, 'provider' | 'minimumPrice' | 'maximumPrice' | 'availableDays' | 'availableTime' | 'coverImage' | 'ratings' | 'status' | 'serviceArea'> & {
-  serviceAreas: { value: string }[]; 
+  serviceAreas: { value: string }[];
   priceRange: {
     min: number;
     max: number;
   };
   dayOfWeek: string[];
   availableTimes: "day" | "night" | "always";
-  coverImageFile?: FileList; 
+  coverImageFile?: FileList;
+
+  certificateFile: FileList;
+  certificate?: string; // S3 URL
 };
 
 const OfferService = () => {
-  const {showSuccess} = useNotification();
+  const { showSuccess } = useNotification();
   const [professions, setProfessions] = useState<any[]>([]);
   const [coverImagePreview, setCoverImagePreview] = useState<string | null>(null);
   const selfId = Cookies.get("zenEasySelfId");
 
-  const { offerService, loading, success } = useOfferService(); 
+  const { offerService, loading, success } = useOfferService();
 
   const {
     register,
     handleSubmit,
     watch,
     control,
-    setError, 
-    clearErrors,
+    setError,
     formState: { errors },
   } = useForm<ProfessionalServiceFormData>({
     defaultValues: {
-      serviceAreas: [{ value: "" }], 
+      serviceAreas: [{ value: "" }],
     },
   });
 
@@ -77,7 +81,7 @@ const OfferService = () => {
   });
 
   const watchedCoverImageFile = watch("coverImageFile");
-  const firstServiceAreaValue = watch(`serviceAreas.0.value`); 
+  const firstServiceAreaValue = watch(`serviceAreas.0.value`);
 
 
   useEffect(() => {
@@ -94,30 +98,55 @@ const OfferService = () => {
         URL.revokeObjectURL(coverImagePreview);
       }
     };
-  }, [watchedCoverImageFile]);
+  }, [watchedCoverImageFile , coverImagePreview]);
 
   // ---------------Handle form submission----------------
-  const onSubmit: SubmitHandler<ProfessionalServiceFormData> = async (data) => {
+
+
+const onSubmit: SubmitHandler<ProfessionalServiceFormData> = async (data) => {
+  try {
     if (data.priceRange.min >= data.priceRange.max) {
       setError("priceRange.max", {
         type: "manual",
         message: "Maximum price must be greater than minimum price",
       });
       return;
-    } else {
-      clearErrors("priceRange.max");
     }
 
-    await offerService(selfId as string, data);
-  };
-
-  useEffect(()=>{
-    if(success){
-      showSuccess("Professional Profile created" , 1000)
-      window.location.href=`/main/prof-profile/${selfId}`;
+    if (!data.certificateFile?.[0]) {
+      setError("certificateFile", {
+        type: "manual",
+        message: "Certificate is required",
+      });
+      return;
     }
-  },[success])
-// ------------------------
+
+    // 🔥 1️⃣ Upload certificate to S3
+    const certificateUrl = await uploadCertificate(
+      data.certificateFile[0]
+    );
+
+    // 🔥 2️⃣ Inject URL into payload
+    const payload = {
+      ...data,
+      certificate: certificateUrl,
+    };
+
+    // 🔥 3️⃣ Now save service
+    await offerService(selfId as string, payload);
+  } catch (error) {
+    console.error("Offer service failed:", error);
+  }
+};
+
+
+  useEffect(() => {
+    if (success) {
+      showSuccess("Professional Profile created", 1000)
+      window.location.href = `/main/prof-profile/${selfId}`;
+    }
+  }, [success , selfId, showSuccess])
+  // ------------------------
   useEffect(() => {
     const getProfessionalInfo = async () => {
       if (!selfId) {
@@ -133,10 +162,10 @@ const OfferService = () => {
       }
     };
     getProfessionalInfo();
-  }, [selfId]); 
+  }, [selfId]);
 
 
-// ---------------------- return div --------------------
+  // ---------------------- return div --------------------
   return (
     <div className="offer-service-container">
       <div className="header-section">
@@ -274,6 +303,34 @@ const OfferService = () => {
                   {/*  validation message for serviceAreas array */}
                   {errors.serviceAreas && typeof errors.serviceAreas.message === 'string' && (
                     <span className="error-message full-width">{errors.serviceAreas.message}</span>
+                  )}
+                </div>
+
+                {/* certificate field */}
+                <div className="form-group full-width">
+                  <label>Certificate (PDF / Image)</label>
+                  <input
+                    type="file"
+                    accept="application/pdf,image/*"
+                    {...register("certificateFile", {
+                      required: "Certificate is required",
+                      validate: {
+                        fileType: (files) =>
+                          files &&
+                            ["application/pdf", "image/jpeg", "image/png"].includes(files[0].type)
+                            ? true
+                            : "Only PDF or image allowed",
+                        fileSize: (files) =>
+                          files && files[0].size <= 5 * 1024 * 1024
+                            ? true
+                            : "Max 5MB allowed",
+                      },
+                    })}
+                  />
+                  {errors.certificateFile && (
+                    <span className="error-message">
+                      {errors.certificateFile.message}
+                    </span>
                   )}
                 </div>
 
@@ -431,7 +488,7 @@ const OfferService = () => {
               <div className="form-actions">
                 <button
                   type="submit"
-                  disabled={loading} 
+                  disabled={loading}
                   className="submit-btn btn-primary"
                 >
                   {loading ? "Publishing..." : "Publish Service"}

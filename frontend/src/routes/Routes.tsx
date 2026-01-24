@@ -22,6 +22,8 @@ import NotFoundPage from "../pages/not-found/NotFound";
 import AdminLogin from "../pages/admin/auth/Login";
 import ProfService from "../pages/admin/dashboard/prof-service/ProfService";
 import AdminLayout from "../layouts/AdminLayout";
+import Users from "../pages/admin/dashboard/users/Users";
+import DashboardOverview from "../pages/admin/dashboard/overview/Overview";
 
 const router = createBrowserRouter([
   {
@@ -117,11 +119,15 @@ const router = createBrowserRouter([
       },
       {
         path: "overview",
-        element: <ProfService />, 
+        element: <DashboardOverview />, 
       },
       {
         path: "prof-services",
         element: <ProfService />,
+      },
+       {
+        path: "users",
+        element: <Users />,
       },
     ],
   },

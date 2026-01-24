@@ -56,6 +56,7 @@ export function useOfferService() {
         coverImage: coverImageUrl,
         status: 'active', 
         ratings: [], 
+        certificate:formData.certificate,
       };
 
      //------------------ data post -----------------------

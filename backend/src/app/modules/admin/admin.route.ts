@@ -14,7 +14,8 @@ router.patch(`/service-profile/:id`, profHandlerControllers.updateProfessionalPr
 
 /* -------- USERS -------- */
 router.get("/users", adminControllers.getAllUsers);
-router.delete("/users/:id", verifyToken, adminControllers.deleteUser);
+router.patch(`/users/update-details/:id`,adminControllers.editUserDetails);
+router.delete(`/users/:id`, adminControllers.deleteUser);
 
 /* -------- RENTS -------- */
 router.get("/rents", verifyToken, adminControllers.getAllRents);

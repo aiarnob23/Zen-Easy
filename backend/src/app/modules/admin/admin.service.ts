@@ -1,5 +1,6 @@
 import { ProfessionalService } from "../professional-service/profservice.model";
 import Rent from "../rent/rent.model";
+import { TUser } from "../user/user.interface";
 import User from "../user/user.model";
 
 const adminLogin = async (payload: any) => {
@@ -22,6 +23,11 @@ const getAllUsers = async () => {
     return await User.find();
 };
 
+const updateUserDetails = async (_id: string, payload: TUser) => {
+  const result = await User.findByIdAndUpdate(_id, payload, { new: true });
+  return result;
+};
+
 const deleteUser = async (id: string) => {
     return await User.findByIdAndDelete(id);
 };
@@ -40,6 +46,7 @@ export const adminServices = {
     adminLogin,
     getAllProfServices,
     getAllUsers,
+    updateUserDetails,
     deleteUser,
     getAllRents,
     deleteRent,

@@ -24,6 +24,7 @@ export type TProfessinalService = {
   availableDays: string[];
   availableTime: "day" | "night" | "always";
   coverImage?: string;
+  isApproved?:"approved" | "pending" | "rejected";
   ratings?: TRating[];
   status?: "active" | "inactive";
 };
@@ -95,8 +96,12 @@ const FindService = () => {
       try {
         const result = await findServicesByCategory(category as string);
         if (result?.success && Array.isArray(result.data)) {
-          setAllServices(result.data);
-          setDisplayedServices(result.data);
+          const approvedActiveServices = result.data.filter(
+            (service:TProfessinalService)=>
+              service.isApproved==='approved' && service.status==='active'
+          );
+          setAllServices(approvedActiveServices);
+          setDisplayedServices(approvedActiveServices);
         } else {
           setError(
             result?.message ||

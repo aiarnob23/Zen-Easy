@@ -39,6 +39,11 @@ const AdminSidebar = () => {
     setIsMobileOpen(false);
   };
 
+  const handleLogOut = () =>{
+    localStorage.removeItem('isAdmin');
+    navigate('/auth/login');
+  }
+
   return (
     <>
       {/* Mobile Menu Button */}
@@ -117,8 +122,8 @@ const AdminSidebar = () => {
             {!isCollapsed && <span>Settings</span>}
           </button>
 
-          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50">
-            <LogOut className="w-5 h-5" />
+          <button onClick={()=>handleLogOut()} className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50">
+            <LogOut  className="w-5 h-5" />
             {!isCollapsed && <span>Logout</span>}
           </button>
         </div>

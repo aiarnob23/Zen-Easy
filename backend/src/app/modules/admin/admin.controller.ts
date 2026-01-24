@@ -3,6 +3,7 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import { adminServices } from "./admin.service";
+import { errorResponse } from "../../utils/errorResponse";
 
 
 //------------------Login admin ---------------------//
@@ -51,6 +52,23 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const editUserDetails = catchAsync(async (req, res) => {
+  const _id = req?.params?.id;
+  const payload = req?.body;
+
+  const result = await adminServices.updateUserDetails(_id, payload);
+  if (result) {
+    sendResponse(res, {
+      success: true,
+      statusCode: 200,
+      message: "User details updated successfully",
+      data: result,
+    });
+  }
+  errorResponse("User details update failed", 400);
+});
+
+
 const deleteUser = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
     const result = await adminServices.deleteUser(id);
@@ -92,6 +110,7 @@ export const adminControllers = {
     loginAdmin,
     getAllProfServices,
     getAllUsers,
+    editUserDetails,
     deleteUser,
     getAllRents,
     deleteRent,

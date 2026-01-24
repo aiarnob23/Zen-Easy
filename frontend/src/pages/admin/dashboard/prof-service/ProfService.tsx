@@ -6,7 +6,8 @@ import {
   updateProfService,
 } from "../../../../services/adminServices";
 import type { TProfessionalService } from "../../../../utils/types/profServiceTypes";
-import { Search, Edit2, Eye, X, MapPin, Phone, Star } from "lucide-react";
+import { Search, Edit2, Eye, X, MapPin, Phone, Star, Briefcase, Mail, User } from "lucide-react";
+import { GrAchievement } from "react-icons/gr";
 
 const ProfService = () => {
   const [services, setServices] = useState<TProfessionalService[]>([]);
@@ -19,7 +20,6 @@ const ProfService = () => {
   const [filterApproval, setFilterApproval] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
   const [providerInfo, setProviderInfo] = useState<any | null>(null);
-
 
   const fetchServices = async () => {
     setLoading(true);
@@ -105,6 +105,7 @@ const ProfService = () => {
     const sum = ratings.reduce((acc, r) => acc + (r.rating || 0), 0);
     return (sum / ratings.length).toFixed(1);
   };
+
 
   return (
     <div className="prof-service-container">
@@ -197,7 +198,7 @@ const ProfService = () => {
             <span>Contact</span>
             <span>Price Range</span>
             <span>Approval</span>
-            <span>Status</span>
+            <span>Certificate</span>
             <span>Actions</span>
           </div>
 
@@ -209,8 +210,12 @@ const ProfService = () => {
             filteredServices.map((service) => (
               <div key={service._id} className="table-row">
                 <div className="service-info">
-                  {service.coverImage && (
+                  {service.coverImage ? (
                     <img src={service.coverImage} alt={service.category} className="service-thumb" />
+                  ) : (
+                    <div className="service-thumb-placeholder">
+                      <Briefcase size={24} />
+                    </div>
                   )}
                   <div>
                     <div className="service-category">{service.category}</div>
@@ -242,10 +247,20 @@ const ProfService = () => {
                   </span>
                 </div>
 
-                <div>
-                  <span className={`badge ${getStatusBadgeClass(service.status as string)}`}>
-                    {service.status}
-                  </span>
+                <div className="certificate-cell">
+                  {service.certificate ? (
+                    <button
+                      className="btn-icon btn-view"
+                      title="View Certificate"
+                      onClick={() => {
+                        window.open(service.certificate, "_blank");
+                      }}
+                    >
+                      <GrAchievement/> <span className="ml-1">view</span>
+                    </button>
+                  ) : (
+                    <span className="text-muted">No Certificate</span>
+                  )}
                 </div>
 
                 <div className="action-buttons">
@@ -259,7 +274,7 @@ const ProfService = () => {
                           const provider = await getUserById(service.provider as string);
                           setProviderInfo(provider);
                         } catch (err) {
-                          console.error("Provider load failed");
+                          console.error(err);
                           setProviderInfo(null);
                         }
                       }
@@ -300,26 +315,48 @@ const ProfService = () => {
             </div>
 
             <div className="modal-body">
-              {providerInfo && (
-                <div className="detail-item full-width">
-                  <label>Provider Details</label>
-
-                  <p><strong>Name:</strong> {providerInfo.name || "N/A"}</p>
-                  <p><strong>Email:</strong> {providerInfo.email || "N/A"}</p>
-                  <p><strong>Phone:</strong> {providerInfo.phoneNumber || "N/A"}</p>
-
-                  {providerInfo.address && (
-                    <p>
-                      <strong>Address:</strong>{" "}
-                      {providerInfo.address.street}, {providerInfo.address.city},{" "}
-                      {providerInfo.address.postalCode}
-                    </p>
-                  )}
-                </div>
-              )}
-              {viewService.coverImage && (
+              {viewService.coverImage ? (
                 <div className="cover-image-container">
                   <img src={viewService.coverImage} alt={viewService.category} />
+                </div>
+              ) : (
+                <div className="cover-image-placeholder">
+                  <div className="placeholder-icon">
+                    <Briefcase size={48} />
+                  </div>
+                  <p>{viewService.category}</p>
+                </div>
+              )}
+
+              {providerInfo && (
+                <div className="provider-card">
+                  <div className="provider-header">
+                    <User size={20} />
+                    <h4>Provider Information</h4>
+                  </div>
+                  <div className="provider-details">
+                    <div className="provider-item">
+                      <User size={16} />
+                      <span>{providerInfo.name || "N/A"}</span>
+                    </div>
+                    <div className="provider-item">
+                      <Mail size={16} />
+                      <span>{providerInfo.email || "N/A"}</span>
+                    </div>
+                    <div className="provider-item">
+                      <Phone size={16} />
+                      <span>{providerInfo.phoneNumber || "N/A"}</span>
+                    </div>
+                    {providerInfo.address && (
+                      <div className="provider-item">
+                        <MapPin size={16} />
+                        <span>
+                          {providerInfo.address.street}, {providerInfo.address.city},{" "}
+                          {providerInfo.address.postalCode}
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -377,7 +414,7 @@ const ProfService = () => {
               {viewService.description && (
                 <div className="detail-item full-width">
                   <label>Description</label>
-                  <p>{viewService.description}</p>
+                  <p className="description-text">{viewService.description}</p>
                 </div>
               )}
 

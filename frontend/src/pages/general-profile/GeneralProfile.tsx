@@ -23,7 +23,7 @@ const GeneralProfile = () => {
     return <Navigate to={"/auth/login"} />;
   }
 
-  const {logOut} = authContext
+  const { logOut } = authContext
   useEffect(() => {
     const getUserProfile = async () => {
       try {
@@ -45,7 +45,7 @@ const GeneralProfile = () => {
     window.location.href = `/main/edit-profile`;
   };
   //----------handle logout -------------
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     await logOut();
     window.location.href = "/";
   };
@@ -54,17 +54,17 @@ const GeneralProfile = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-if (loading) {
-   return (<div>
-   <div  className="hidden bg-primary min-h-screen min-w-full justify-center items-center lg:flex">
-     <ProfileSkeleton />
-   </div>
-    <div className="flex min-h-screen justify-center items-center lg:hidden">
-      <OrbitalSpinner/>
+  if (loading) {
+    return (<div>
+      <div className="hidden bg-primary min-h-screen min-w-full justify-center items-center lg:flex">
+        <ProfileSkeleton />
+      </div>
+      <div className="flex min-h-screen justify-center items-center lg:hidden">
+        <OrbitalSpinner />
+      </div>
     </div>
-   </div>
 
-   )
+    )
   }
 
 
@@ -240,7 +240,7 @@ if (loading) {
 
             <div className="card-content">
               {userProfile?.professionalProfiles &&
-              userProfile.professionalProfiles.length > 0 ? (
+                userProfile.professionalProfiles.length > 0 ? (
                 <div className="professional-profiles">
                   <h3>Professional Profiles</h3>
                   <div className="profiles-grid">
@@ -255,15 +255,17 @@ if (loading) {
                             <span className="profile-name">
                               {profession.category}
                             </span>
-                            <span
-                              className={`text-[10px] font-semibold absolute -bottom-4 left-[5px] ${
-                                profession.status === "active"
-                                  ? "text-green-600"
-                                  : "text-red-500"
-                              }`}
-                            >
-                              {profession.status}
-                            </span>
+                            {
+                              profession.isApproved == 'approved' ?
+                                <> <span
+                                  className={`text-[10px] font-semibold absolute -bottom-4 left-[5px] ${profession.status === "active"
+                                      ? "text-green-600"
+                                      : "text-red-500"
+                                    }`}
+                                >
+                                  {profession.status}
+                                </span></> : <p className="text-gray-500 text-sm">Pending Approval</p>
+                            }
                           </div>
                           <button className="view-btn">
                             <svg viewBox="0 0 24 24">

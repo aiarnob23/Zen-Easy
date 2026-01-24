@@ -1,88 +1,82 @@
 import { Request, Response } from "express";
 import catchAsync from "../../utils/catchAsync";
-import { ImageService, MulterFile } from "./image.service";
 import sendResponse from "../../utils/sendResponse";
 import { errorResponse } from "../../utils/errorResponse";
+import { ImageService, MulterFile } from "./image.service";
 
-//------------------multiple property images---------------------
+/* ---------- Property Images ---------- */
 const uploadPropertyImages = catchAsync(async (req: Request, res: Response) => {
-  const uploadedFiles = (req.files as MulterFile[]) || [];
-
-  if (!uploadedFiles || uploadedFiles.length === 0) {
-    errorResponse(
-      'No property images found in the request. Ensure "propertyImage" field is used.',
-      400
-    );
-    return;
-  }
-
-  const imageUrls = await ImageService.uploadFilesToS3(
-    uploadedFiles,
-    "property_images"
-  );
-  if (imageUrls.length === 0) {
-    errorResponse("Failed to upload any property images to AWS S3.", 400);
-    return;
-  }
-
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: "Property images uploaded successfully",
-    data: { urls: imageUrls },
-  });
-});
-
-//--------------------single user profile image--------------------
-const uploadProfileImage = catchAsync(async (req: Request, res: Response) => {
-  const file = req.file as MulterFile | undefined;
-
-  if (!file) {
-    errorResponse(
-      'No profile image found in the request. Ensure "profileImage" field is used.',
-      400
-    );
-    return;
-  }
-  const imageUrl = await ImageService.uploadFileToS3(file, "profile_images");
-
-  if (!imageUrl) {
-    errorResponse("Failed to upload profile image to AWS S3.", 400);
-    return;
-  }
-
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: "Profile image uploaded successfully",
-    data: { url: imageUrl },
-  });
-});
-
-//-------------multiple service images---------------------
-const uploadServiceImages = catchAsync(async (req: Request, res: Response) => {
-  const files = (req.files as MulterFile[]) || [];
+  const files = req.files as MulterFile[];
 
   if (!files || files.length === 0) {
-    errorResponse(
-      'No service images found in the request. Ensure "serviceImages" field is used.',
-      400
-    );
+    errorResponse("No property images found", 400);
     return;
   }
 
-  const imageUrls = await ImageService.uploadFilesToS3(files, "service_images");
-
-  if (imageUrls.length === 0) {
-    errorResponse("Failed to upload any service images to AWS S3.", 500);
-    return;
-  }
+  const urls = await ImageService.uploadFilesToS3(files, "property_images");
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Service images uploaded successfully",
-    data: { urls: imageUrls },
+    message: "Property images uploaded",
+    data: { urls },
+  });
+});
+
+/* ---------- Profile Image ---------- */
+const uploadProfileImage = catchAsync(async (req: Request, res: Response) => {
+  const file = req.file as MulterFile;
+
+  if (!file) {
+    errorResponse("Profile image missing", 400);
+    return;
+  }
+
+  const url = await ImageService.uploadFileToS3(file, "profile_images");
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Profile image uploaded",
+    data: { url },
+  });
+});
+
+/* ---------- Service Images ---------- */
+const uploadServiceImages = catchAsync(async (req: Request, res: Response) => {
+  const files = req.files as MulterFile[];
+
+  if (!files || files.length === 0) {
+    errorResponse("Service images missing", 400);
+    return;
+  }
+
+  const urls = await ImageService.uploadFilesToS3(files, "service_images");
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Service images uploaded",
+    data: { urls },
+  });
+});
+
+/* ---------- Certificate ---------- */
+const uploadCertificate = catchAsync(async (req: Request, res: Response) => {
+  const file = req.file as MulterFile;
+
+  if (!file) {
+    errorResponse("Certificate file missing", 400);
+    return;
+  }
+
+  const url = await ImageService.uploadFileToS3(file, "certificates");
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Certificate uploaded",
+    data: { url },
   });
 });
 
@@ -90,4 +84,5 @@ export const imageControllers = {
   uploadPropertyImages,
   uploadProfileImage,
   uploadServiceImages,
+  uploadCertificate,
 };
