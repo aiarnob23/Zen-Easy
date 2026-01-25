@@ -1,7 +1,13 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import AdminSidebar from "../components/admin/AdminSidebar";
 
 const AdminLayout = () => {
+  const isAdmin = JSON.parse(localStorage.getItem("isAdmin")as string);
+
+  if (!isAdmin) {
+    return <Navigate to="/admin/login" replace />;
+  }
+
   return (
     <div className="flex">
       <AdminSidebar />

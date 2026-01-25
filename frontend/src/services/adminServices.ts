@@ -49,3 +49,29 @@ export const deleteUserById = async (id: string) => {
   const res = await serverBaseUrl.delete(`/admin/users/${id}`);
   return res.data.data;
 };
+
+/* ---------------- RENT SERVICES ---------------- */
+export const getAllRents = async () => {
+  const res = await serverBaseUrl.get("/admin/rents");
+  return res.data.data;
+};
+
+export const getRentById = async (id: string) => {
+  const res = await serverBaseUrl.get(`/rent/view-details/${id}`);
+  return res.data.data;
+};
+
+export const updateRentById = async (id: string, payload: any) => {
+  const res = await serverBaseUrl.patch(`/rent/update/${id}`, { rentPostData: payload });
+  return res.data.data;
+};
+
+export const updateRentStatus = async (id: string, status: string) => {
+  const res = await serverBaseUrl.patch(`/rent/update-status/${id}`, { rentPostStatus: status });
+  return res.data.data;
+};
+
+export const deleteRentById = async (id: string) => {
+  const res = await serverBaseUrl.delete(`/admin/rents/${id}`);
+  return res.data.data;
+};

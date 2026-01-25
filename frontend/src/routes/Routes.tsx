@@ -24,6 +24,7 @@ import ProfService from "../pages/admin/dashboard/prof-service/ProfService";
 import AdminLayout from "../layouts/AdminLayout";
 import Users from "../pages/admin/dashboard/users/Users";
 import DashboardOverview from "../pages/admin/dashboard/overview/Overview";
+import Rents from "../pages/admin/dashboard/rents/Rents";
 
 const router = createBrowserRouter([
   {
@@ -128,6 +129,10 @@ const router = createBrowserRouter([
        {
         path: "users",
         element: <Users />,
+      },
+       {
+        path: "rents",
+        element: <Rents />,
       },
     ],
   },

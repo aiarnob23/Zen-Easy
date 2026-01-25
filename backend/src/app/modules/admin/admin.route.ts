@@ -18,7 +18,7 @@ router.patch(`/users/update-details/:id`,adminControllers.editUserDetails);
 router.delete(`/users/:id`, adminControllers.deleteUser);
 
 /* -------- RENTS -------- */
-router.get("/rents", verifyToken, adminControllers.getAllRents);
-router.delete("/rents/:id", verifyToken, adminControllers.deleteRent);
+router.get("/rents", adminControllers.getAllRents);
+router.delete("/rents/:id", adminControllers.deleteRent);
 
 export const adminRoutes = router;

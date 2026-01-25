@@ -31,7 +31,7 @@ const AdminLogin = () => {
                 localStorage.setItem("isAdmin", "true");
             }
             // redirect
-            navigate("/admin/dashboard");
+            navigate("/admin/overview");
         } catch (err: unknown) {
             if (err instanceof Error) {
                 setLoginError(err.message);

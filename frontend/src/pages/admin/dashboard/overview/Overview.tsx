@@ -13,11 +13,14 @@ import {
     XCircle,
     Award,
     Calendar,
+    Home,
+    DollarSign,
 } from "lucide-react";
 import type { TProfessionalService } from "../../../../utils/types/profServiceTypes";
 import {
     getAllProfServices,
     getAllUsers,
+    getAllRents,
 } from "../../../../services/adminServices";
 import { Link } from "react-router-dom";
 
@@ -30,21 +33,35 @@ type TUser = {
     createdAt?: string;
 };
 
+type TRent = {
+    _id: string;
+    category: string;
+    cost: number;
+    city: string;
+    status?: "Active" | "Booked";
+    rentPaymentFrequency: string;
+    imageUrls?: string[];
+    createdAt?: string;
+};
+
 const DashboardOverview = () => {
     const [users, setUsers] = useState<TUser[]>([]);
     const [services, setServices] = useState<TProfessionalService[]>([]);
+    const [rents, setRents] = useState<TRent[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
                 setLoading(true);
-                const [usersRes, servicesRes] = await Promise.all([
+                const [usersRes, servicesRes, rentsRes] = await Promise.all([
                     getAllUsers(),
                     getAllProfServices(),
+                    getAllRents(),
                 ]);
                 setUsers(usersRes);
                 setServices(servicesRes);
+                setRents(rentsRes);
             } catch (err) {
                 console.error("Failed to load dashboard data:", err);
             } finally {
@@ -55,11 +72,12 @@ const DashboardOverview = () => {
         fetchDashboardData();
     }, []);
 
-    // Calculate statistics
+    // Calculate user statistics
     const totalUsers = users.length;
     const activeUsers = users.filter((u) => u.status === "active").length;
     const verifiedUsers = users.filter((u) => u.isVerified).length;
 
+    // Calculate service statistics
     const totalServices = services.length;
     const pendingServices = services.filter(
         (s) => s.isApproved?.toLowerCase() === "pending"
@@ -71,14 +89,27 @@ const DashboardOverview = () => {
         (s) => s.isApproved?.toLowerCase() === "rejected" || s.isApproved?.toLowerCase() === "reject"
     ).length;
 
-    // Get recent users (last 7 days)
+    // Calculate rent statistics
+    const totalRents = rents.length;
+    const activeRents = rents.filter((r) => r.status === "Active").length;
+    const bookedRents = rents.filter((r) => r.status === "Booked").length;
+    
+    // Calculate total rent value
+    const totalRentValue = rents.reduce((sum, r) => sum + (r.cost || 0), 0);
+    
+    // Get recent rents
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const recentRents = rents.filter(
+        (r) => r.createdAt && new Date(r.createdAt) > sevenDaysAgo
+    ).length;
+
+    // Get recent users (last 7 days)
     const recentUsers = users.filter(
         (u) => u.createdAt && new Date(u.createdAt) > sevenDaysAgo
     ).length;
 
-    // Category breakdown
+    // Service category breakdown
     const categoryCount: { [key: string]: number } = {};
     services.forEach((s) => {
         if (s.category) {
@@ -86,6 +117,17 @@ const DashboardOverview = () => {
         }
     });
     const topCategories = Object.entries(categoryCount)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+
+    // Rent category breakdown
+    const rentCategoryCount: { [key: string]: number } = {};
+    rents.forEach((r) => {
+        if (r.category) {
+            rentCategoryCount[r.category] = (rentCategoryCount[r.category] || 0) + 1;
+        }
+    });
+    const topRentCategories = Object.entries(rentCategoryCount)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 5);
 
@@ -122,6 +164,20 @@ const DashboardOverview = () => {
             const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
             return dateB - dateA;
         })
+        .slice(0, 5);
+
+    // Recent rent listings
+    const recentRentListings = [...rents]
+        .sort((a, b) => {
+            const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+            const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+            return dateB - dateA;
+        })
+        .slice(0, 5);
+
+    // Top rental properties by price
+    const topRentalsByPrice = [...rents]
+        .sort((a, b) => b.cost - a.cost)
         .slice(0, 5);
 
     if (loading) {
@@ -174,7 +230,8 @@ const DashboardOverview = () => {
                         <div className="stat-content">
                             <h2>{totalUsers}</h2>
                             <p>Total Users</p>
-                        </div></Link>
+                        </div>
+                    </Link>
                     <div className="stat-footer">
                         <div className="mini-stat">
                             <UserCheck size={14} />
@@ -201,7 +258,8 @@ const DashboardOverview = () => {
                         <div className="stat-content">
                             <h2>{totalServices}</h2>
                             <p>Professional Services</p>
-                        </div></Link>
+                        </div>
+                    </Link>
                     <div className="stat-footer">
                         <div className="mini-stat">
                             <CheckCircle size={14} />
@@ -215,6 +273,34 @@ const DashboardOverview = () => {
                 </div>
 
                 <div className="stat-card gradient-orange">
+                    <div className="stat-header">
+                        <div className="icon-wrapper">
+                            <Home size={24} />
+                        </div>
+                        <div className="trend-badge positive">
+                            <TrendingUp size={14} />
+                            <span>+{recentRents} this week</span>
+                        </div>
+                    </div>
+                    <Link to='/admin/rents'>
+                        <div className="stat-content">
+                            <h2>{totalRents}</h2>
+                            <p>Rental Listings</p>
+                        </div>
+                    </Link>
+                    <div className="stat-footer">
+                        <div className="mini-stat">
+                            <CheckCircle size={14} />
+                            <span>{activeRents} active</span>
+                        </div>
+                        <div className="mini-stat">
+                            <Award size={14} />
+                            <span>{bookedRents} booked</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="stat-card gradient-purple">
                     <div className="stat-header">
                         <div className="icon-wrapper">
                             <Clock size={24} />
@@ -247,7 +333,7 @@ const DashboardOverview = () => {
                     </div>
                 </div>
 
-                <div className="stat-card gradient-purple">
+                <div className="stat-card gradient-teal">
                     <div className="stat-header">
                         <div className="icon-wrapper">
                             <Star size={24} />
@@ -277,17 +363,43 @@ const DashboardOverview = () => {
                         <span>{servicesWithRatings.length} rated services</span>
                     </div>
                 </div>
+
+                <div className="stat-card gradient-indigo">
+                    <div className="stat-header">
+                        <div className="icon-wrapper">
+                            <DollarSign size={24} />
+                        </div>
+                        <div className="trend-badge">
+                            <Activity size={14} />
+                            <span>Total Value</span>
+                        </div>
+                    </div>
+                    <div className="stat-content">
+                        <h2>৳{(totalRentValue / 1000).toFixed(0)}K</h2>
+                        <p>Rent Portfolio</p>
+                    </div>
+                    <div className="stat-footer">
+                        <div className="mini-stat">
+                            <Home size={14} />
+                            <span>{activeRents} listings</span>
+                        </div>
+                        <div className="mini-stat">
+                            <DollarSign size={14} />
+                            <span>৳{totalRents > 0 ? (totalRentValue / totalRents).toFixed(0) : 0} avg</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {/* Two Column Layout */}
             <div className="dashboard-grid">
                 {/* Left Column */}
                 <div className="dashboard-column">
-                    {/* Category Breakdown */}
+                    {/* Service Category Breakdown */}
                     <div className="dashboard-card">
                         <div className="card-header">
                             <h3>
-                                <MapPin size={20} />
+                                <Briefcase size={20} />
                                 Top Service Categories
                             </h3>
                             <span className="badge-info">{topCategories.length} categories</span>
@@ -317,6 +429,44 @@ const DashboardOverview = () => {
                                 </div>
                             ) : (
                                 <div className="empty-state-small">No categories yet</div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Rent Category Breakdown */}
+                    <div className="dashboard-card">
+                        <div className="card-header">
+                            <h3>
+                                <Home size={20} />
+                                Top Rental Categories
+                            </h3>
+                            <span className="badge-info">{topRentCategories.length} types</span>
+                        </div>
+                        <div className="card-body">
+                            {topRentCategories.length > 0 ? (
+                                <div className="category-list">
+                                    {topRentCategories.map(([category, count], index) => (
+                                        <div key={category} className="category-item">
+                                            <div className="category-info">
+                                                <span className="rank rank-orange">#{index + 1}</span>
+                                                <span className="category-name">{category}</span>
+                                            </div>
+                                            <div className="category-stats">
+                                                <div className="category-bar">
+                                                    <div
+                                                        className="category-fill category-fill-orange"
+                                                        style={{
+                                                            width: `${(count / totalRents) * 100}%`,
+                                                        }}
+                                                    />
+                                                </div>
+                                                <span className="category-count">{count}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="empty-state-small">No rental categories yet</div>
                             )}
                         </div>
                     </div>
@@ -420,82 +570,92 @@ const DashboardOverview = () => {
                         </div>
                     </div>
 
-                    {/* Quick Stats */}
+                    {/* Recent Rental Listings */}
                     <div className="dashboard-card">
                         <div className="card-header">
                             <h3>
-                                <Activity size={20} />
-                                Platform Statistics
+                                <Home size={20} />
+                                Recent Rental Listings
                             </h3>
+                            <span className="badge-info">Latest posts</span>
                         </div>
                         <div className="card-body">
-                            <div className="quick-stats">
-                                <div className="quick-stat-item">
-                                    <div className="quick-stat-icon blue">
-                                        <Users size={20} />
-                                    </div>
-                                    <div className="quick-stat-info">
-                                        <span className="quick-stat-value">{verifiedUsers}</span>
-                                        <span className="quick-stat-label">Verified Users</span>
-                                    </div>
-                                    <div className="quick-stat-percent">
-                                        {totalUsers > 0
-                                            ? ((verifiedUsers / totalUsers) * 100).toFixed(0)
-                                            : 0}
-                                        %
-                                    </div>
+                            {recentRentListings.length > 0 ? (
+                                <div className="recent-list">
+                                    {recentRentListings.map((rent) => (
+                                        <div key={rent._id} className="recent-item">
+                                            {rent.imageUrls && rent.imageUrls.length > 0 ? (
+                                                <img
+                                                    src={rent.imageUrls[0]}
+                                                    alt={rent.category}
+                                                    className="recent-thumb"
+                                                />
+                                            ) : (
+                                                <div className="recent-thumb-placeholder rent-placeholder">
+                                                    <Home size={16} />
+                                                </div>
+                                            )}
+                                            <div className="recent-info">
+                                                <div className="recent-name">{rent.category}</div>
+                                                <div className="recent-meta">
+                                                    <MapPin size={12} />
+                                                    {rent.city}
+                                                </div>
+                                            </div>
+                                            <span className="rent-price">
+                                                ৳{rent.cost.toLocaleString()}
+                                            </span>
+                                        </div>
+                                    ))}
                                 </div>
+                            ) : (
+                                <div className="empty-state-small">No rental listings yet</div>
+                            )}
+                        </div>
+                    </div>
 
-                                <div className="quick-stat-item">
-                                    <div className="quick-stat-icon green">
-                                        <CheckCircle size={20} />
-                                    </div>
-                                    <div className="quick-stat-info">
-                                        <span className="quick-stat-value">{approvedServices}</span>
-                                        <span className="quick-stat-label">Active Services</span>
-                                    </div>
-                                    <div className="quick-stat-percent">
-                                        {totalServices > 0
-                                            ? ((approvedServices / totalServices) * 100).toFixed(0)
-                                            : 0}
-                                        %
-                                    </div>
+                    {/* Top Rentals by Price */}
+                    <div className="dashboard-card">
+                        <div className="card-header">
+                            <h3>
+                                <DollarSign size={20} />
+                                Premium Rentals
+                            </h3>
+                            <span className="badge-info">Highest priced</span>
+                        </div>
+                        <div className="card-body">
+                            {topRentalsByPrice.length > 0 ? (
+                                <div className="rated-list">
+                                    {topRentalsByPrice.map((rent, index) => (
+                                        <div key={rent._id} className="rated-item">
+                                            <div className="rated-rank rated-rank-green">#{index + 1}</div>
+                                            {rent.imageUrls && rent.imageUrls.length > 0 ? (
+                                                <img
+                                                    src={rent.imageUrls[0]}
+                                                    alt={rent.category}
+                                                    className="rated-thumb"
+                                                />
+                                            ) : (
+                                                <div className="rated-thumb-placeholder rent-placeholder">
+                                                    <Home size={16} />
+                                                </div>
+                                            )}
+                                            <div className="rated-info">
+                                                <div className="rated-name">{rent.category}</div>
+                                                <div className="rated-rating">
+                                                    <DollarSign size={14} color="#10b981" />
+                                                    <span>৳{rent.cost.toLocaleString()}</span>
+                                                    <span className="rated-reviews">
+                                                        / {rent.rentPaymentFrequency}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-
-                                <div className="quick-stat-item">
-                                    <div className="quick-stat-icon orange">
-                                        <Clock size={20} />
-                                    </div>
-                                    <div className="quick-stat-info">
-                                        <span className="quick-stat-value">{pendingServices}</span>
-                                        <span className="quick-stat-label">Awaiting Review</span>
-                                    </div>
-                                    <div className="quick-stat-percent">
-                                        {totalServices > 0
-                                            ? ((pendingServices / totalServices) * 100).toFixed(0)
-                                            : 0}
-                                        %
-                                    </div>
-                                </div>
-
-                                <div className="quick-stat-item">
-                                    <div className="quick-stat-icon purple">
-                                        <Star size={20} />
-                                    </div>
-                                    <div className="quick-stat-info">
-                                        <span className="quick-stat-value">
-                                            {servicesWithRatings.length}
-                                        </span>
-                                        <span className="quick-stat-label">Rated Services</span>
-                                    </div>
-                                    <div className="quick-stat-percent">
-                                        {totalServices > 0
-                                            ? ((servicesWithRatings.length / totalServices) * 100).toFixed(0)
-                                            : 0}
-                                        %
-                                    </div>
-                                </div>
-                            </div>
+                            ) : (
+                                <div className="empty-state-small">No premium rentals yet</div>
+                            )}
                         </div>
                     </div>
                 </div>

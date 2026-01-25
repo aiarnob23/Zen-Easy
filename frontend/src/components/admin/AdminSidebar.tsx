@@ -27,7 +27,7 @@ const AdminSidebar = () => {
       icon: Briefcase,
       path: "/admin/prof-services",
     },
-    { id: "rent", label: "Rent Properties", icon: Building2, path: "/admin/rent" },
+    { id: "rent", label: "Rent Properties", icon: Building2, path: "/admin/rents" },
   ];
 
   const activeTab = menuItems.find((item) =>
@@ -65,14 +65,14 @@ const AdminSidebar = () => {
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-0 left-0 h-screen bg-white border-r border-gray-300 z-40
+          fixed top-0 left-0 h-screen bg-white border-r border-gray-200  z-40
           transition-all duration-300
           ${isCollapsed ? "w-20" : ""}
           ${isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
           {!isCollapsed && (
             <div>
               <h2 className="text-lg font-bold">Admin Panel</h2>
@@ -116,17 +116,56 @@ const AdminSidebar = () => {
         </nav>
 
         {/* Footer */}
-        <div className="absolute bottom-0 w-full p-3 border-t space-y-1">
-          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-50">
-            <Settings className="w-5 h-5" />
-            {!isCollapsed && <span>Settings</span>}
-          </button>
+      <div className="absolute bottom-0 w-full p-3 bg-gradient-to-t from-white via-white to-transparent border-t border-gray-200/80 backdrop-blur-sm">
+  <div className="space-y-2">
+    {/* Settings Button */}
+    <button 
+      className="w-full group flex items-center gap-3 px-4 py-3 rounded-xl 
+                 bg-white border border-gray-200/60
+                 hover:border-gray-300 hover:bg-gray-50/80
+                 transition-all duration-300 ease-in-out
+                 hover:shadow-md hover:shadow-gray-200/50
+                 active:scale-[0.98]"
+    >
+      <div className="relative">
+        <Settings className="w-5 h-5 text-gray-600 group-hover:text-gray-800 
+                           transition-all duration-300 group-hover:rotate-90" />
+        <div className="absolute inset-0 bg-gray-400/20 rounded-full blur-md 
+                        opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+      {!isCollapsed && (
+        <span className="font-medium text-gray-700 group-hover:text-gray-900 
+                       transition-colors duration-300">
+          Settings
+        </span>
+      )}
+    </button>
 
-          <button onClick={()=>handleLogOut()} className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50">
-            <LogOut  className="w-5 h-5" />
-            {!isCollapsed && <span>Logout</span>}
-          </button>
-        </div>
+    {/* Logout Button */}
+    <button 
+      onClick={() => handleLogOut()} 
+      className="w-full group flex items-center gap-3 px-4 py-3 rounded-xl 
+                 bg-red-50/50 border border-red-200/60
+                 hover:bg-red-100/80 hover:border-red-300
+                 transition-all duration-300 ease-in-out
+                 hover:shadow-md hover:shadow-red-200/50
+                 active:scale-[0.98]"
+    >
+      <div className="relative">
+        <LogOut className="w-5 h-5 text-red-500 group-hover:text-red-600 
+                         transition-all duration-300 group-hover:translate-x-0.5" />
+        <div className="absolute inset-0 bg-red-400/20 rounded-full blur-md 
+                        opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+      {!isCollapsed && (
+        <span className="font-medium text-red-600 group-hover:text-red-700 
+                       transition-colors duration-300">
+          Logout
+        </span>
+      )}
+    </button>
+  </div>
+</div>
       </aside>
     </>
   );
