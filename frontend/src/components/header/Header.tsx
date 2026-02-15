@@ -21,6 +21,9 @@ const Header = ({ bg = 'white' }) => {
   const selfId = Cookies.get('zenEasySelfId');
 
   const authContext = useContext(AuthContext);
+  if (!authContext) {
+    return null;
+  }
   const { user } = authContext;
 
   useEffect(() => {
