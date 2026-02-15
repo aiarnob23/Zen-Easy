@@ -1,8 +1,10 @@
 import Banner from "../../components/home/banner/Banner";
-import Feedback from "../../components/home/feedback/Feedback";
+import WebFeedback from "../../components/home/feedback/webFeedback";
 import Gallery from "../../components/home/gallery/Gallery";
-import OurProperty from "../../components/home/our-property/OurProperty";
+import { PricingBasic } from "../../components/home/membership/membership";
+import OurProperty from "../../components/home/membership/our-property/OurProperty";
 import Service from "../../components/home/service/Service";
+
 
 const Home = () => {
   return (
@@ -17,10 +19,13 @@ const Home = () => {
         <Gallery/>
       </div>
       <div>
+      <PricingBasic/>
+      </div>
+      <div>
         <OurProperty/>
       </div>
       <div>
-        <Feedback/>
+        <WebFeedback/>
       </div>
     </div>
   );
